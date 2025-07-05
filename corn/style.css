@@ -1,0 +1,148 @@
+/* style.css */
+
+/* 全局樣式 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fdf6e3; /* 柔和的米黃色背景 */
+    color: #586e75; /* 柔和的深藍灰色字體 */
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    font-size: 18px; /* 加大基礎字體 */
+}
+
+/* 容器樣式 */
+.container {
+    max-width: 95%; /* 使用百分比實現全寬效果 */
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 25px; /* 稍微增加內邊距 */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* 標題樣式 */
+h1, h2, h3 {
+    color: #859900; /* 橄欖綠 */
+    border-bottom: 3px solid #b58900; /* 濁黃色下邊框 */
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: #cb4b16; /* 橘紅色標題 */
+}
+
+/* 連結樣式 */
+a {
+    color: #268bd2; /* 藍色連結 */
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #2aa198; /* 青色懸停效果 */
+}
+
+/* 圖片樣式 */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    margin: 20px auto;
+}
+
+/* 列表樣式 */
+ul, ol {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+/* 主頁網格佈局 */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.grid-item a {
+    display: block;
+    background-color: #fdf6e3;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #657b83;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.grid-item a:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    color: #002b36;
+}
+
+/* 返回首頁按鈕 */
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #859900;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.back-link:hover {
+    background-color: #93a1a1;
+}
+
+/* 表格樣式 */
+table {
+    width: 100%;
+    border-collapse: collapse; /* 合併邊框 */
+    margin: 25px 0;
+    font-size: 0.9em;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden; /* 確保圓角效果 */
+}
+
+thead tr {
+    background-color: #b58900; /* 濁黃色標題背景 */
+    color: #ffffff; /* 白色字體 */
+    text-align: left;
+    font-weight: bold;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #eee; /* 細緻的淺灰色邊框 */
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f9f9f9; /* 斑馬條紋效果 */
+}
+
+tbody tr:last-of-type {
+    border-bottom: 2px solid #b58900; /* 底部加粗邊框 */
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1; /* 滑鼠懸停效果 */
+    color: #000;
+}
