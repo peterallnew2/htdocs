@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二章：運算式、運算子與資料型態轉換</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', 'Arial', '微軟正黑體', 'Microsoft JhengHei', sans-serif;
+            line-height: 1.8;
+        }
+        .note {
+            background-color: #fffbe6;
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        .best-practice {
+            background-color: #f0fdf4;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        .deep-dive {
+            background-color: #f0f9ff;
+            border-left: 4px solid #38bdf8;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        .tag {
+            background-color: #ffedd5;
+            color: #f97316;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.75rem;
+        }
+        .section-title {
+            border-left: 5px solid #f97316;
+            padding-left: 1rem;
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        code {
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre code {
+            display: block;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-blue-800 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-8">
+            <h1 class="text-4xl font-extrabold">C 語言學習手冊</h1>
+            <p class="mt-2 text-xl">第二章：運算式、運算子與資料型態轉換</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Introduction Card -->
+        <div class="card">
+            <h2 class="section-title">前言：程式的基石</h2>
+            <p>在第一章中，我們學會了如何宣告變數來儲存資料。然而，程式的真正威力在於對這些資料進行處理與運算。本章將深入探討 C 語言的「運算式 (Expression)」與「運算子 (Operator)」，它們是構成程式邏輯運算的基礎。我們也會學習當不同資料型態的變數一起運算時，C 語言是如何處理「型態轉換 (Type Conversion)」的。</p>
+            <div class="note mt-6">
+                <p><strong class="font-bold">學習重點：</strong> 本章結束後，你將能夠：</p>
+                <ul class="list-disc list-inside mt-2">
+                    <li>理解運算式和運算子的基本概念。</li>
+                    <li>熟練使用算術、關係、邏輯等各種運算子。</li>
+                    <li>了解運算子的優先順序與結合性。</li>
+                    <li>掌握自動型態轉換與強制型態轉換的時機與方法。</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Expressions and Operators Card -->
+        <div class="card">
+            <h2 class="section-title">運算式 (Expression) 與運算子 (Operator)</h2>
+            <p>在 C 語言中，一個「運算式」是由運算子、常數和變數所組成的序列，它可以被計算出一個值。例如，<code>5 + 3</code> 就是一個運算式，它的值是 8。</p>
+            <p class="mt-2">而「運算子」則是告訴編譯器要執行特定數學或邏輯操作的符號。例如，<code>+</code> 是一個加法運算子。</p>
+            
+            <h3 class="text-xl font-bold mt-8 mb-4 flex items-center"><span class="tag">分類</span>運算子大家族</h3>
+            <p>C 語言提供了豐富的運算子，我們可以將它們分為以下幾類：</p>
+
+            <!-- Arithmetic Operators -->
+            <div class="mt-6">
+                <h4 class="text-lg font-semibold mb-2">1. 算術運算子 (Arithmetic Operators)</h4>
+                <p>用於執行基本的數學運算。</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>運算子</th>
+                                <th>名稱</th>
+                                <th>範例</th>
+                                <th>說明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>+</code></td>
+                                <td>加法</td>
+                                <td><code>a + b</code></td>
+                                <td>計算 a 與 b 的和</td>
+                            </tr>
+                            <tr>
+                                <td><code>-</code></td>
+                                <td>減法</td>
+                                <td><code>a - b</code></td>
+                                <td>計算 a 與 b 的差</td>
+                            </tr>
+                            <tr>
+                                <td><code>*</code></td>
+                                <td>乘法</td>
+                                <td><code>a * b</code></td>
+                                <td>計算 a 與 b 的積</td>
+                            </tr>
+                            <tr>
+                                <td><code>/</code></td>
+                                <td>除法</td>
+                                <td><code>a / b</code></td>
+                                <td>計算 a 除以 b 的商。若 a 和 b 皆為整數，結果會無條件捨去小數。</td>
+                            </tr>
+                            <tr>
+                                <td><code>%</code></td>
+                                <td>模數 (取餘數)</td>
+                                <td><code>a % b</code></td>
+                                <td>計算 a 除以 b 的餘數。此運算子只能用於整數。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="note mt-4">
+                    <p><strong class="font-bold">初學者注意：整數除法陷阱</strong></p>
+                    <p>當兩個整數相除時，結果會是整數，小數部分會被直接捨棄。例如 <code>7 / 2</code> 的結果是 <code>3</code>，而不是 <code>3.5</code>。如果需要得到浮點數結果，至少要有一個運算元是浮點數，例如 <code>7.0 / 2</code>。</p>
+                </div>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10, b = 3;
+    float c = 10.0, d = 3.0;
+
+    printf("a + b = %d\n", a + b);       // 加法: 13
+    printf("a - b = %d\n", a - b);       // 減法: 7
+    printf("a * b = %d\n", a * b);       // 乘法: 30
+    printf("a / b = %d\n", a / b);       // 整數除法: 3 (小數被捨去)
+    printf("c / d = %f\n", c / d);       // 浮點數除法: 3.333333
+    printf("a %% b = %d\n", a % b);     // 取餘數: 1
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <!-- Increment and Decrement Operators -->
+            <div class="mt-8">
+                <h4 class="text-lg font-semibold mb-2">2. 遞增與遞減運算子 (Increment/Decrement Operators)</h4>
+                <p>這是一元運算子，用於將變數的值加一或減一，是 C 語言的特色之一。</p>
+                <p>它們有兩種形式：「前置 (prefix)」和「後置 (postfix)」。</p>
+                <pre><code class="language-c">int x = 5;
+int y, z;
+
+// 前置遞增：先將 x 加 1，再將結果賦值給 y
+y = ++x; // 此時 x = 6, y = 6
+
+// 重設 x
+x = 5; 
+
+// 後置遞增：先將 x 的原始值賦值給 z，再將 x 加 1
+z = x++; // 此時 z = 5, x = 6
+</code></pre>
+                <div class="deep-dive mt-4">
+                    <p><strong class="font-bold">深度解析：前置 vs. 後置的差異</strong></p>
+                    <p>這個差異在於「運算式的值」是什麼時候被決定的。</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li><strong>前置 (<code>++x</code>)</strong>：運算式的值是變數「更新後」的值。</li>
+                        <li><strong>後置 (<code>x++</code>)</strong>：運算式的值是變數「更新前」的原始值。</li>
+                    </ul>
+                    <p class="mt-2">雖然最終 x 的值都會加 1，但在複合運算式中，這個時機點的差異會導致截然不同的結果。</p>
+                </div>
+                <div class="best-practice mt-4">
+                    <p><strong class="font-bold">最佳實踐：保持簡潔</strong></p>
+                    <p>雖然可以在一個運算式中多次使用遞增/遞減運算子 (如 <code>y = x++ + ++x;</code>)，但這種寫法會導致「未定義行為 (Undefined Behavior)」，在不同編譯器下可能產生不同結果。強烈建議將遞增/遞減操作獨立成一行，以增加程式的可讀性與可預測性。</p>
+                    <p>例如，寫成 <code>x++; y = x;</code> 會比 <code>y = ++x;</code> 更清晰。</p>
+                </div>
+            </div>
+
+            <!-- Relational and Equality Operators -->
+            <div class="mt-8">
+                <h4 class="text-lg font-semibold mb-2">3. 關係與相等運算子 (Relational/Equality Operators)</h4>
+                <p>用於比較兩個值，運算結果為布林值：<code>1</code> (真) 或 <code>0</code> (假)。</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>運算子</th>
+                                <th>名稱</th>
+                                <th>範例</th>
+                                <th>說明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>==</code></td>
+                                <td>等於</td>
+                                <td><code>a == b</code></td>
+                                <td>判斷 a 是否等於 b</td>
+                            </tr>
+                            <tr>
+                                <td><code>!=</code></td>
+                                <td>不等於</td>
+                                <td><code>a != b</code></td>
+                                <td>判斷 a 是否不等於 b</td>
+                            </tr>
+                            <tr>
+                                <td><code>&gt;</code></td>
+                                <td>大於</td>
+                                <td><code>a &gt; b</code></td>
+                                <td>判斷 a 是否大於 b</td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;</code></td>
+                                <td>小於</td>
+                                <td><code>a &lt; b</code></td>
+                                <td>判斷 a 是否小於 b</td>
+                            </tr>
+                            <tr>
+                                <td><code>&gt;=</code></td>
+                                <td>大於等於</td>
+                                <td><code>a &gt;= b</code></td>
+                                <td>判斷 a 是否大於或等於 b</td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;=</code></td>
+                                <td>小於等於</td>
+                                <td><code>a &lt;= b</code></td>
+                                <td>判斷 a 是否小於或等於 b</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="note mt-4">
+                    <p><strong class="font-bold">初學者注意：<code>==</code> 與 <code>=</code> 的天壤之別</strong></p>
+                    <p>這是 C 語言初學者最常犯的錯誤之一！</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li><code>==</code> 是「比較」運算子，用於判斷兩者是否相等。</li>
+                        <li><code>=</code> 是「賦值」運算子，用於將右邊的值指派給左邊的變數。</li>
+                    </ul>
+                    <p class="mt-2">在 <code>if</code> 條件句中誤用 <code>if (a = 5)</code>，會先把 5 賦值給 a，然後判斷賦值後 a 的值 (即 5) 是否為真。在 C 中，任何非零值都被視為真，所以這個條件永遠成立，導致難以察覺的邏輯錯誤。</p>
+                </div>
+            </div>
+
+            <!-- Logical Operators -->
+            <div class="mt-8">
+                <h4 class="text-lg font-semibold mb-2">4. 邏輯運算子 (Logical Operators)</h4>
+                <p>用於結合多個關係運算式的結果。</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>運算子</th>
+                                <th>名稱</th>
+                                <th>範例</th>
+                                <th>說明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>&&</code></td>
+                                <td>邏輯 AND</td>
+                                <td><code>expr1 && expr2</code></td>
+                                <td>若 expr1 和 expr2 皆為真，結果才為真 (1)</td>
+                            </tr>
+                            <tr>
+                                <td><code>||</code></td>
+                                <td>邏輯 OR</td>
+                                <td><code>expr1 || expr2</code></td>
+                                <td>若 expr1 或 expr2 其中一個為真，結果就為真 (1)</td>
+                            </tr>
+                            <tr>
+                                <td><code>!</code></td>
+                                <td>邏輯 NOT</td>
+                                <td><code>!expr1</code></td>
+                                <td>若 expr1 為假 (0)，結果為真 (1)；反之則為假 (0)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="deep-dive mt-4">
+                    <p><strong class="font-bold">深度解析：短路求值 (Short-circuit Evaluation)</strong></p>
+                    <p>邏輯運算子 <code>&&</code> 和 <code>||</code> 有一個非常重要的特性叫做「短路」。</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li>對於 <code>expr1 && expr2</code>，如果 <code>expr1</code> 的結果為假 (0)，那麼整個運算式的結果必定為假，此時 <code>expr2</code> 將「不會」被執行。</li>
+                        <li>對於 <code>expr1 || expr2</code>，如果 <code>expr1</code> 的結果為真 (1)，那麼整個運算式的結果必定為真，此時 <code>expr2</code> 也「不會」被執行。</li>
+                    </ul>
+                    <p class="mt-2">這個特性不僅能提升效率，也常用於保護程式，例如：<code>if (count != 0 && total / count > 10)</code>，可以確保在 <code>count</code> 為 0 時不會執行除法，避免了執行期錯誤。</p>
+                </div>
+            </div>
+            
+            <!-- Assignment Operators -->
+            <div class="mt-8">
+                <h4 class="text-lg font-semibold mb-2">5. 賦值運算子 (Assignment Operators)</h4>
+                <p>用於將一個值指派給一個變數。</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>運算子</th>
+                                <th>範例</th>
+                                <th>等價於</th>
+                                <th>說明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>=</code></td>
+                                <td><code>a = b</code></td>
+                                <td><code>a = b</code></td>
+                                <td>將 b 的值賦予 a</td>
+                            </tr>
+                            <tr>
+                                <td><code>+=</code></td>
+                                <td><code>a += b</code></td>
+                                <td><code>a = a + b</code></td>
+                                <td>將 a+b 的結果賦予 a</td>
+                            </tr>
+                            <tr>
+                                <td><code>-=</code></td>
+                                <td><code>a -= b</code></td>
+                                <td><code>a = a - b</code></td>
+                                <td>將 a-b 的結果賦予 a</td>
+                            </tr>
+                            <tr>
+                                <td><code>*=</code></td>
+                                <td><code>a *= b</code></td>
+                                <td><code>a = a * b</code></td>
+                                <td>將 a*b 的結果賦予 a</td>
+                            </tr>
+                            <tr>
+                                <td><code>/=</code></td>
+                                <td><code>a /= b</code></td>
+                                <td><code>a = a / b</code></td>
+                                <td>將 a/b 的結果賦予 a</td>
+                            </tr>
+                            <tr>
+                                <td><code>%=</code></td>
+                                <td><code>a %= b</code></td>
+                                <td><code>a = a % b</code></td>
+                                <td>將 a%b 的結果賦予 a</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="best-practice mt-4">
+                    <p><strong class="font-bold">最佳實踐：善用複合賦值運算子</strong></p>
+                    <p>使用 <code>+=</code>、<code>-=</code> 等複合賦值運算子，不僅能讓程式碼更簡潔，也更能清楚地表達「更新變數自身」的意圖。例如 <code>total_score += current_score;</code> 比 <code>total_score = total_score + current_score;</code> 更易讀。</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Type Conversion Card -->
+        <div class="card">
+            <h2 class="section-title">資料型態轉換 (Type Conversion)</h2>
+            <p>當一個運算式中包含不同資料型態的運算元時，C 語言會遵循一套規則，自動將「較小」的型態提升為「較大」的型態，以避免資料遺失。這個過程稱為「自動型態轉換」或「隱性轉換 (Implicit Conversion)」。</p>
+
+            <h3 class="text-xl font-bold mt-8 mb-4 flex items-center"><span class="tag">自動</span>自動型態轉換 (Implicit Conversion)</h3>
+            <p>轉換的基本原則是將精度較低的型態轉換為精度較高的型態。轉換層級大致如下：</p>
+            <p class="text-center font-mono bg-gray-100 p-4 rounded-md mt-4">
+                <code>char</code> &rarr; <code>short</code> &rarr; <code>int</code> &rarr; <code>long</code> &rarr; <code>long long</code> &rarr; <code>float</code> &rarr; <code>double</code> &rarr; <code>long double</code>
+            </p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int integer_val = 10;
+    float float_val = 5.5;
+    double result;
+
+    // 在運算 'integer_val + float_val' 中
+    // integer_val (int) 會被自動提升為 float 型態
+    // 然後再與 float_val 相加，結果為 float
+    result = integer_val + float_val; 
+
+    printf("結果是: %f\n", result); // 輸出: 15.500000
+    
+    return 0;
+}</code></pre>
+
+            <h3 class="text-xl font-bold mt-8 mb-4 flex items-center"><span class="tag">手動</span>強制型態轉換 (Explicit Conversion / Casting)</h3>
+            <p>有時候，我們需要明確地將一個運算式或變數的型態轉換為另一種型態，這時就需要使用「強制型態轉換」，也稱為「轉型 (Casting)」。</p>
+            <p>語法為：<code>(目標型態) 運算式;</code></p>
+            <p>最常見的應用場景就是前面提到的整數除法問題。</p>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int total_score = 150;
+    int num_students = 4;
+    double average;
+
+    // 如果直接寫 total_score / num_students，結果會是 37 (整數除法)
+    // 我們需要將其中一個運算元強制轉為 double/float
+    average = (double)total_score / num_students;
+
+    printf("平均分數是: %f\n", average); // 輸出: 37.500000
+    
+    return 0;
+}</code></pre>
+            <div class="best-practice mt-4">
+                <p><strong class="font-bold">最佳實踐：謹慎使用強制轉換</strong></p>
+                <p>強制轉換是一把雙面刃。雖然它很強大，但也可能導致資料遺失。例如，將一個很大的浮點數強制轉換為整數，小數部分會被截斷；如果浮點數超過整數能表示的範圍，更會得到無法預期的結果。</p>
+                <p>只有在你確切知道轉換的目的與後果時，才使用強制轉換。</p>
+            </div>
+        </div>
+        
+        <!-- Operator Precedence Card -->
+        <div class="card">
+            <h2 class="section-title">運算子優先順序與結合性</h2>
+            <p>當一個複雜的運算式中有多個運算子時，哪個先算？哪個後算？這就由「優先順序 (Precedence)」和「結合性 (Associativity)」決定。</p>
+            <p>例如，<code>a = 5 + 3 * 2;</code> 中，乘法 <code>*</code> 的優先順序高於加法 <code>+</code>，所以會先算 <code>3 * 2</code>，結果是 6，再算 <code>5 + 6</code>，最後才執行賦值 <code>=</code>。因此 a 的值是 11。</p>
+            
+            <div class="deep-dive mt-6">
+                <p><strong class="font-bold">結合性 (Associativity)</strong></p>
+                <p>當運算子的優先順序相同時，就由結合性決定計算順序。</p>
+                <ul class="list-disc list-inside mt-2">
+                    <li><strong>由左至右 (Left-to-Right)</strong>：大部分運算子，如 <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>。例如 <code>10 - 5 - 2</code> 會先算 <code>10 - 5</code>。</li>
+                    <li><strong>由右至左 (Right-to-Left)</strong>：賦值運算子 <code>=</code>, <code>+=</code> 等和一元運算子。例如 <code>a = b = 5;</code> 會先算 <code>b = 5</code>，再算 <code>a = b</code>。</li>
+                </ul>
+            </div>
+
+            <div class="best-practice mt-4">
+                <p><strong class="font-bold">最佳實踐：用括號消除疑慮</strong></p>
+                <p>與其去背誦整個複雜的優先順序表，不如養成一個好習慣：<strong>使用括號 <code>()</code> 來明確指定運算順序</strong>。這不僅能保證結果符合你的預期，更能大幅提升程式碼的可讀性，讓其他開發者（以及未來的你）一眼就能看懂程式的意圖。</p>
+                <p>例如，將 <code>a = 5 + 3 * 2;</code> 寫成 <code>a = 5 + (3 * 2);</code>，意圖就變得非常清晰。</p>
+            </div>
+        </div>
+
+        <!-- Practice Questions Card -->
+        <div class="card">
+            <h2 class="section-title">鞏固練習</h2>
+            <p>試著在不執行程式碼的情況下，預測以下程式片段的輸出結果，然後再上機驗證看看是否與你的想法一致。</p>
+
+            <div class="mt-6">
+                <h4 class="font-semibold">問題一：</h4>
+                <pre><code class="language-c">int a = 5, b = 10, c = 3;
+int result = a * b / c + 2;
+printf("%d\n", result);</code></pre>
+            </div>
+
+            <div class="mt-6">
+                <h4 class="font-semibold">問題二：</h4>
+                <pre><code class="language-c">int x = 10;
+printf("%d, %d\n", x++, ++x);</code></pre>
+                <div class="note mt-2">
+                    <p><strong>提示：</strong> 這是一個陷阱題！回想一下關於「未定義行為」的討論。實際結果可能因編譯器而異，這正是我們應該避免的寫法。</p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <h4 class="font-semibold">問題三：</h4>
+                <pre><code class="language-c">int score = 75;
+char grade;
+grade = (score >= 60) ? 'P' : 'F';
+printf("成績: %c\n", grade);</code></pre>
+                 <div class="deep-dive mt-2">
+                    <p><strong>提示：</strong> 這裡用到了一個我們尚未介紹但非常實用的「條件運算子 (Conditional Operator)」或稱「三元運算子」。它的語法是 <code>condition ? value_if_true : value_if_false</code>。試著推斷它的作用。</p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <h4 class="font-semibold">問題四：</h4>
+                <pre><code class="language-c">float val = 2.5;
+int num = 5;
+int result = (int)val * num;
+printf("%d\n", result);</code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-800 text-white mt-12">
+        <div class="container mx-auto px-6 py-4 text-center">
+            <p>&copy; 2024 C 語言學習手冊. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

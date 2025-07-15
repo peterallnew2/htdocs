@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言控制流程 - 深度學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .header {
+            background-color: #1e3a8a; /* 深藍色背景 */
+            color: #ffffff;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .chapter-title {
+            border-left: 5px solid #f97316; /* 橘色左邊框 */
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f97316; /* 橘色標籤 */
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        .code-block {
+            background-color: #1e293b; /* 深色程式碼區塊 */
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        .note {
+            background-color: #fefce8; /* 黃色提示框 */
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .best-practice {
+            background-color: #f0fdf4; /* 綠色提示框 */
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .deep-dive {
+            background-color: #eff6ff; /* 藍色提示框 */
+            border-left: 4px solid #60a5fa;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">C 語言控制流程 (Control Flow)</h1>
+        <p class="text-xl text-gray-200">一份給初學者與專業開發者的深度學習指南</p>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Section: if-else -->
+        <section id="if-else" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">條件判斷：if, if-else, if-else ladder</h2>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">1</span> 基本 if 陳述式</h3>
+                <p>`if` 陳述式用於執行條件性的程式碼。它會評估括號 `()` 中的測試運算式，如果運算式為真 (非零值)，則執行 `if` 區塊內的程式碼。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 語法</span><br>
+                    <span class="text-pink-400">if</span> (測試運��式) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 如果運算式為真，則執行此處的程式碼</span><br>
+                    }
+                </div>
+                <div class="deep-dive">
+                    <p><strong>深度解析：</strong> 在 C 語言中，「真」不僅僅是 `true`。任何非零的數值 (如 1, -5, 100) 在條件判斷中都會被視為「真」。只有 `0` 會被視為「假」。這就是為什麼 `if (pointer)` 可以用來檢查指標是否為 `NULL` (因為 `NULL` 的值就是 0)。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">2</span> if-else 陳述式</h3>
+                <p>`if` 陳述式可以有一個選擇性的 `else` 區塊。當 `if` 的測試運算式為假 (值為 0) 時，就會執行 `else` 區塊內的程式碼。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：檢查一個整數是奇數還是偶數</span><br>
+                    <span class="text-purple-400">#include</span> <span class="text-yellow-400">&lt;stdio.h&gt;</span><br><br>
+                    <span class="text-cyan-400">int</span> <span class="text-green-400">main</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-cyan-400">int</span> number;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"請輸入一個整數: "</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">scanf</span>(<span class="text-yellow-400">"%d"</span>, &number);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 如果數字除以 2 的餘數為 0，則為偶數</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">if</span> (number % 2 == 0) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%d 是一個偶數。\n"</span>, number);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;} <span class="text-pink-400">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%d 是一個奇數。\n"</span>, number);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">return</span> 0;<br>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">3</span> if-else if-else 階梯 (Ladder)</h3>
+                <p>當我們需要從多個可能性中做出選擇時，可以使用 `if-else if-else` 結構。它會依序檢查每個條件，一旦找到為真的條件，就執行對應的程式碼區塊，然後跳過其餘的檢查。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：比較兩個整數的關係</span><br>
+                    <span class="text-pink-400">if</span> (number1 == number2) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"結果: %d = %d"</span>, number1, number2);<br>
+                    } <span class="text-pink-400">else if</span> (number1 > number2) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"結果: %d > %d"</span>, number1, number2);<br>
+                    } <span class="text-pink-400">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"結果: %d < %d"</span>, number1, number2);<br>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">4</span> 巢狀 if-else (Nested if-else)</h3>
+                <p>我們可以在一個 `if` 或 `else` 區塊中，再放入另一個 `if-else` 陳述式，形成巢狀結構。這有助於處理更複雜的邏輯判斷。</p>
+                <div class="best-practice">
+                    <p><strong>最佳實踐：</strong> 過深的巢狀 `if-else` (超過 2-3 層) 會讓程式碼難以閱讀和維護。如果遇到這種情況，可以考慮使用函式、`switch` 陳述式或重新設計邏輯來簡化結構。</p>
+                </div>
+                <div class="note">
+                    <p><strong>初學者注意：</strong> 如果 `if` 或 `else` 的主體只有一行程式碼，可以省略大括號 `{}`。但為了程式碼的一致性和可讀性，並避免未來擴充時出錯，強烈建議**永遠**使用大括號。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Loops -->
+        <section id="loops" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">迴圈結構：for, while, do-while</h2>
+            <p class="mb-6">在程式設計中，迴圈用於重複執行一個程式碼區塊，直到滿足特定條件為止。C 語言提供三種主要的迴圈類型。</p>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">1</span> for 迴圈</h3>
+                <p>`for` 迴圈非常適合在「已知重複次數」的情況下使用。它的語法結構清晰地將迴圈的三個核心要素整合在一起。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 語法</span><br>
+                    <span class="text-pink-400">for</span> (初始化陳述式; 測試運算式; 更新陳述式) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 迴圈主體</span><br>
+                    }
+                </div>
+                <p class="mt-4"><strong>執行流程：</strong></p>
+                <ol class="list-decimal list-inside space-y-2 mt-2">
+                    <li><strong>初始化：</strong>僅在迴圈開始時執行一次。</li>
+                    <li><strong>測試：</strong>在每次迭代前評估測試運算式。若為真，則執行迴圈主體；若為假，則結束迴圈。</li>
+                    <li><strong>執行：</strong>執行迴圈主體內的程式碼。</li>
+                    <li><strong>更新：</strong>執行完迴圈主體後，執行更新陳述式，然後回到第 2 步。</li>
+                </ol>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：計算 1 到 n 的自然數總和</span><br>
+                    <span class="text-purple-400">#include</span> <span class="text-yellow-400">&lt;stdio.h&gt;</span><br><br>
+                    <span class="text-cyan-400">int</span> <span class="text-green-400">main</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-cyan-400">int</span> num, count, sum = 0;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"請輸入一個正整數: "</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">scanf</span>(<span class="text-yellow-400">"%d"</span>, &num);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// for 迴圈在 count 超過 num 時終止</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">for</span> (count = 1; count <= num; ++count) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sum += count;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"總和 = %d\n"</span>, sum);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">return</span> 0;<br>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">2</span> while 迴圈</h3>
+                <p>`while` 迴圈是一種「前測式」迴圈，它在每次迭代開始前檢查條件。如果條件為真，則執行迴圈主體。它適用於「不知道確切重複次數，但知道終止條件」的場景。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：印出 1 到 5</span><br>
+                    <span class="text-cyan-400">int</span> i = 1;<br>
+                    <span class="text-pink-400">while</span> (i <= 5) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%d\n"</span>, i);
+                    &nbsp;&nbsp;&nbsp;&nbsp;++i; <span class="text-gray-400">// 如果沒有這行，會造成無窮迴圈！</span><br>
+                    }
+                </div>
+                <div class="note">
+                    <p><strong>初學者注意：</strong> 使用 `while` 迴圈時，務必確保在迴圈主體內有更新條件變數的程式碼 (如 `++i`)，否則測試運算式將永遠為真，導致「無窮迴圈」(Infinite Loop)，程式會卡住直到被強制終止。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">3</span> do-while 迴圈</h3>
+                <p>`do-while` 迴圈是一種「後測式」迴圈。它與 `while` 迴圈非常相似，但有一個關鍵區別：`do-while` 迴圈的**主體至少會被執行一次**，然後才檢查測試運算式。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 語法</span><br>
+                    <span class="text-pink-400">do</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 迴圈主體 (至少執行一次)</span><br>
+                    } <span class="text-pink-400">while</span> (測試運算式);
+                </div>
+                <p class="mt-4">這在需要先執行某些操作（例如：向使用者請求輸入）再判斷是否重複的場景中非常有用。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：不斷要求使用者輸入數字，直到輸入 0 為止</span><br>
+                    <span class="text-cyan-400">double</span> number, sum = 0.0;<br>
+                    <span class="text-pink-400">do</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"請輸入一個數字 (輸入 0 結束): "</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">scanf</span>(<span class="text-yellow-400">"%lf"</span>, &number);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;sum += number;<br>
+                    } <span class="text-pink-400">while</span> (number != 0.0);<br><br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"總和 = %.2lf\n"</span>, sum);
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: break-continue -->
+        <section id="break-continue" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">迴圈控制：break 與 continue</h2>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">1</span> break 陳述式</h3>
+                <p>`break` 陳述式用於立即**終止**並跳出其所在的整個迴圈 ( `for`, `while`, `do-while` ) 或 `switch` 陳述式。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：最多計算 10 個數字的總和，但如果使用者輸入負數，則提前結束</span><br>
+                    <span class="text-pink-400">for</span> (i = 1; i <= 10; ++i) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"輸入 n%d: "</span>, i);
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">scanf</span>(<span class="text-yellow-400">"%lf"</span>, &number);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 如果使用者輸入負數，就跳出迴圈</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">if</span> (number < 0.0) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">break</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;sum += number;<br>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">2</span> continue 陳述式</h3>
+                <p>`continue` 陳述式用於**跳過**目前這次的迭代，並立即開始**下一次**的迭代。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：計算總和，但忽略所有負數</span><br>
+                    <span class="text-pink-400">for</span> (i = 1; i <= 10; ++i) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"輸入 n%d: "</span>, i);
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">scanf</span>(<span class="text-yellow-400">"%lf"</span>, &number);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 如果數字是負數，跳過這次加總，直接進入下一次迴圈</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">if</span> (number < 0.0) {
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">continue</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;sum += number;<br>
+                    }
+                </div>
+                <div class="deep-dive">
+                    <p><strong>深度解析：</strong> 在 `for` 迴圈中，`continue` 會跳到**更新陳述式** (`++i`)；而在 `while` 或 `do-while` 迴圈中，`continue` 會直接跳到**測試運算式**。這個細微的差別有時會影響迴圈的行為。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: switch-goto -->
+        <section id="switch-goto" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">其他流程控制：switch 與 goto</h2>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">1</span> switch 陳述式</h3>
+                <p>`switch` 陳述式提供了一個比 `if-else if` 階梯更清晰的方式來從多個選項中選擇一個執行路徑。它將一個運算式的值與多個 `case` 標籤進行比較。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 範例：簡易計算機</span><br>
+                    <span class="text-pink-400">switch</span> (operation) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">case</span> <span class="text-yellow-400">'+'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%.1lf + %.1lf = %.1lf"</span>, n1, n2, n1 + n2);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">break</span>;<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">case</span> <span class="text-yellow-400">'-'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%.1lf - %.1lf = %.1lf"</span>, n1, n2, n1 - n2);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">break</span>;<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">case</span> <span class="text-yellow-400">'*'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%.1lf * %.1lf = %.1lf"</span>, n1, n2, n1 * n2);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">break</span>;<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">case</span> <span class="text-yellow-400">'/'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%.1lf / %.1lf = %.1lf"</span>, n1, n2, n1 / n2);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">break</span>;<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">default</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"錯誤！運算子不正確。"</span>);<br>
+                    }
+                </div>
+                <div class="note">
+                    <p><strong>初學者注意 (Fall-through 行為)：</strong> `switch` 的一個重要特性是，如果 `case` 區塊結尾沒有 `break`，程式會繼續執行**下一個** `case` 的程式碼，直到遇到 `break` 或 `switch` 結束為止。這被稱為 "fall-through"。雖然有時可以巧妙運用，但通常是 bug 的來源。**請務必在每個 `case` 的結尾加上 `break`**，除非你非常確定你需要 fall-through 行為。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">2</span> goto 陳述式</h3>
+                <p>`goto` 陳述式允許程式的控制權無條件地轉移到同一個函式內的指定標籤處。</p>
+                <div class="best-practice">
+                    <p><strong>最佳實踐：強烈建議避免使用 `goto`！</strong></p>
+                    <p>濫用 `goto` 會產生所謂的「義大利麵程式碼」(Spaghetti Code)，程式的執行流程像麵條一樣混亂交錯，極難理解、追蹤和維護。幾乎所有的 `goto` 應用場景都有更好、更結構化的替代方案 (如 `if`, `for`, `while`, `break`, `continue` 或將程式碼重構為函式)。</p>
+                    <p class="mt-2">一個極少數被認為可以接受的 `goto` 用法是：從深層巢狀迴圈中一次性跳出到一個統一的錯誤處理或清理區塊。但即便如此，也通常有更好的寫法。</p>
+                </div>
+                <div class="code-block">
+                    <span class="text-gray-400">// 一個可以接受 goto 的罕見範例：從巢狀迴圈中跳出</span><br>
+                    <span class="text-pink-400">for</span> (...) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">for</span> (...) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">while</span> (...) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">if</span> (發生嚴重錯誤) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">goto</span> error_cleanup;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }<br><br>
+                <span class="text-green-400">error_cleanup</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 在這裡執行資源釋放或錯誤回報</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 練習題 -->
+        <section id="exercises" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">互動練習題</h2>
+            <div class="card">
+                <p class="mb-6">來測試一下你學會了多少！(答案在頁尾)</p>
+                <div class="space-y-6">
+                    <div>
+                        <p class="font-semibold mb-2">1. 哪種迴圈結構保證其主體至少會執行一次？</p>
+                        <p class="text-sm text-gray-500">(A) for  (B) while  (C) do-while  (D) if-else</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">2. 在迴圈中遇到 `break` 陳述式會發生什麼事？</p>
+                        <p class="text-sm text-gray-500">(A) 跳過目前這次迭代，進入下一次  (B) 立即終止整個迴圈  (C) 程式發生錯誤  (D) 結束目前的函式</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">3. 在 `switch` 陳述式中，如果一個 `case` 區塊結尾沒有 `break`，會發生什麼？</p>
+                        <p class="text-sm text-gray-500">(A) 程式會報錯  (B) `switch` 結束  (C) 程式會繼續執行下一個 `case` 的程式碼 (Fall-through)  (D) 只有 `default` 區塊會被執行</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">4. 考慮程式碼 `for (i = 0; i < 5; ++i) { if (i == 2) continue; printf("%d ", i); }`，其輸出結果為何？</p>
+                        <p class="text-sm text-gray-500">(A) 0 1 3 4  (B) 0 1 2 3 4  (C) 0 1  (D) 0 1 2</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">5. 對於 `goto` 陳述式，以下哪個說法是最佳實踐？</p>
+                        <p class="text-sm text-gray-500">(A) 應該經常用於簡化程式邏輯  (B) 它是唯一能跳出巢狀迴圈的方法  (C) 應極力避免使用，因其會破壞程式結構  (D) `goto` 和 `if` 的功能完全相同</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-500 py-8">
+            <h3 class="text-xl font-semibold mb-4">練習題解答</h3>
+            <p>1. (C) | 2. (B) | 3. (C) | 4. (A) | 5. (C)</p>
+            <p class="mt-4">這份文件由 Gemini 根據提供的教材與設計指南生成。</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

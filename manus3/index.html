@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C語言互動學習</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            color: #3498db;
+            margin-right: 15px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.8rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: #ecf0f1;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .notice-card {
+            background: linear-gradient(to right, #f9fbe7, #e3f2fd);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-left: 5px solid #e74c3c;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        .notice-card h2 {
+            color: #c0392b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .notice-card h2 i {
+            margin-right: 10px;
+        }
+
+        .notice-card p {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .notice-card ol {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+
+        .notice-card li {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .notice-card a {
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .notice-card a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .nav-tabs li {
+            margin: 5px;
+        }
+
+        .nav-tabs a {
+            display: block;
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-tabs a:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .nav-tabs a i {
+            margin-right: 8px;
+        }
+
+        .chapter-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .chapter-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .chapter-header {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .chapter-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .chapter-header i {
+            font-size: 2rem;
+            margin-right: 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 12px;
+            border-radius: 50%;
+        }
+
+        .chapter-content {
+            padding: 25px;
+        }
+
+        .chapter-content h3 {
+            color: #2c3e50;
+            margin: 20px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .chapter-content p {
+            margin-bottom: 15px;
+            color: #34495e;
+            line-height: 1.8;
+        }
+
+        .code-container {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #2980b9;
+        }
+
+        .code-container pre {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .exercise {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .exercise h4 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .exercise h4 i {
+            margin-right: 10px;
+        }
+
+        .solution-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .solution-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .solution-btn i {
+            margin-right: 8px;
+        }
+
+        .solution {
+            background: #e8f4f8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            display: none;
+            border-left: 4px solid #3498db;
+        }
+
+        .solution.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .code-keyword { color: #f92672; }
+        .code-comment { color: #75715e; }
+        .code-string { color: #e6db74; }
+        .code-function { color: #66d9ef; }
+        .code-include { color: #a6e22e; }
+        .code-preprocessor { color: #ae81ff; }
+        .code-number { color: #ae81ff; }
+        .code-type { color: #66d9ef; }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            margin-top: 40px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tabs a {
+                width: 100%;
+                text-align: center;
+                margin: 5px 0;
+            }
+
+            .chapter-header {
+                padding: 15px;
+            }
+
+            .chapter-header h2 {
+                font-size: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-laptop-code"></i>
+                <h1>C語言互動教學網</h1>
+            </div>
+            <p class="subtitle">從零開始學習C語言程式設計 - 掌握基礎到高級程式設計技巧</p>
+        </header>
+
+        <div class="notice-card">
+            <h2><i class="fas fa-exclamation-triangle"></i> 重要提示</h2>
+            <p>本教學網站主要提供C語言概念學習與範例程式碼展示。網站本身<strong>不直接執行C語言程式碼</strong>。</p>
+            <p>當您遇到教學內容中的程式碼範例或練習題中的代碼片段時，請按照以下步驟操作：</p>
+            <ol>
+                <li><strong>複製程式碼</strong>。</li>
+                <li>將其貼到您本地的C語言開發環境中（例如使用 GCC、Clang、MinGW 編譯器），或一個可靠的線上C語言IDE中（例如 <a href="https://replit.com/languages/c" target="_blank">Replit</a>, <a href="https://www.onlinegdb.com/online_c_compiler" target="_blank">OnlineGDB</a>, <a href="https://www.jdoodle.com/c-online-compiler" target="_blank">JDoodle</a>）進行編譯和執行，以觀察實際運行結果。</li>
+            </ol>
+            <p>這樣能説明您更好地理解程式的運作方式及C語言的實踐。</p>
+        </div>
+
+        <div class="nav-container">
+            <ul class="nav-tabs">
+                <li><a href="#chapter1"><i class="fas fa-book"></i> 第一章 概述</a></li>
+                <li><a href="#chapter2"><i class="fas fa-book"></i> 第二章 C的初步</a></li>
+                <li><a href="#chapter3"><i class="fas fa-book"></i> 第三章 資料型態</a></li>
+                <li><a href="#chapter4"><i class="fas fa-book"></i> 第四章 運算子</a></li>
+                <li><a href="#chapter5"><i class="fas fa-book"></i> 第五章 資料輸入輸出</a></li>
+                <li><a href="#chapter6"><i class="fas fa-book"></i> 第六章 選擇結構</a></li>
+                <li><a href="#chapter7"><i class="fas fa-book"></i> 第七章 重複結構</a></li>
+            </ul>
+        </div>
+
+        <div class="chapter-container">
+            <!-- 第二章內容 -->
+            <div class="chapter-card" id="chapter2">
+                <div class="chapter-header">
+                    <i class="fas fa-code"></i>
+                    <h2>第二章 C的初步</h2>
+                </div>
+                <div class="chapter-content">
+                    <h3>C語言基礎結構</h3>
+                    <p>C語言程式由函數組成，每個程式都必須有一個main()函數作為程式的入口點。</p>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>範例 2-1: Hello World 程式</span>
+                            <button class="copy-btn" onclick="copyCode('code1')">複製代碼</button>
+                        </div>
+                        <pre id="code1"><span class="code-include">#include</span> <span class="code-string">&lt;stdio.h&gt;</span>  <span class="code-comment">// 引入標準輸入輸出庫</span>
+
+<span class="code-type">int</span> <span class="code-function">main</span>() {              <span class="code-comment">// 主函數</span>
+    <span class="code-function">printf</span>(<span class="code-string">"Hello, World!\n"</span>); <span class="code-comment">// 輸出文字到控制台</span>
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;               <span class="code-comment">// 結束程式</span>
+}</pre>
+                    </div>
+
+                    <p>上面的程式是最簡單的C語言程式，功能是在控制台顯示"Hello, World!"字串。</p>
+                    <p>每個C語言程式都包含以下部分：</p>
+                    <ol>
+                        <li><strong>前置處理器指令</strong>：如#include，在編譯前處理</li>
+                        <li><strong>主函數main()</strong>：程式的執行入口</li>
+                        <li><strong>程式主體</strong>：包含在{}內的代碼</li>
+                        <li><strong>函式呼叫</strong>：如printf()，執行特定功能</li>
+                    </ol>
+
+                    <div class="exercise">
+                        <h4><i class="fas fa-pencil-alt"></i> 練習 2-1: 修改Hello World程式</h4>
+                        <p>修改上面的Hello World程式，讓它顯示兩行文字：第一行顯示"歡迎學習C語言"，第二行顯示"這是一個基礎教學"。</p>
+                        <button class="solution-btn" onclick="toggleSolution('sol1')"><i class="fas fa-lightbulb"></i> 顯示解答</button>
+                        <div class="solution" id="sol1">
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>練習解答</span>
+                                    <button class="copy-btn" onclick="copyCode('sol-code1')">複製代碼</button>
+                                </div>
+                                <pre id="sol-code1"><span class="code-include">#include</span> <span class="code-string">&lt;stdio.h&gt;</span>
+
+<span class="code-type">int</span> <span class="code-function">main</span>() {
+    <span class="code-function">printf</span>(<span class="code-string">"歡迎學習C語言\n"</span>);
+    <span class="code-function">printf</span>(<span class="code-string">"這是一個基礎教學\n"</span>);
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="exercise">
+                        <h4><i class="fas fa-pencil-alt"></i> 練習 2-2: 輸出特殊字元</h4>
+                        <p>創建一個程式，輸出以下內容：</p>
+                        <pre>姓名：王小明
+年齡：25歲
+職業："軟體工程師"
+愛好：\籃球/</pre>
+                        <button class="solution-btn" onclick="toggleSolution('sol2')"><i class="fas fa-lightbulb"></i> 顯示解答</button>
+                        <div class="solution" id="sol2">
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>練習解答</span>
+                                    <button class="copy-btn" onclick="copyCode('sol-code2')">複製代碼</button>
+                                </div>
+                                <pre id="sol-code2"><span class="code-include">#include</span> <span class="code-string">&lt;stdio.h&gt;</span>
+
+<span class="code-type">int</span> <span class="code-function">main</span>() {
+    <span class="code-function">printf</span>(<span class="code-string">"姓名：王小明\n"</span>);
+    <span class="code-function">printf</span>(<span class="code-string">"年齡：25歲\n"</span>);
+    <span class="code-function">printf</span>(<span class="code-string">"職業：\"軟體工程師\"\n"</span>);
+    <span class="code-function">printf</span>(<span class="code-string">"愛好：\\籃球/\n"</span>);
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第三章內容 -->
+            <div class="chapter-card" id="chapter3">
+                <div class="chapter-header">
+                    <i class="fas fa-database"></i>
+                    <h2>第三章 資料型態、常數與變數</h2>
+                </div>
+                <div class="chapter-content">
+                    <h3>基本資料型態</h3>
+                    <p>C語言有以下幾種基本資料型態：</p>
+                    <ul>
+                        <li><strong>int</strong> - 整數類型（如：25, -10, 0）</li>
+                        <li><strong>float</strong> - 單精確度浮點數（如：3.14, -0.5）</li>
+                        <li><strong>double</strong> - 雙精度浮點數（更高精度）</li>
+                        <li><strong>char</strong> - 字元類型（如：'A', 'b', '9'）</li>
+                    </ul>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>範例 3-1: 變數宣告與初始化</span>
+                            <button class="copy-btn" onclick="copyCode('code3')">複製代碼</button>
+                        </div>
+                        <pre id="code3"><span class="code-include">#include</span> <span class="code-string">&lt;stdio.h&gt;</span>
+
+<span class="code-type">int</span> <span class="code-function">main</span>() {
+    <span class="code-comment">// 宣告變數</span>
+    <span class="code-type">int</span> age = <span class="code-number">25</span>;
+    <span class="code-type">float</span> height = <span class="code-number">175.5</span>;
+    <span class="code-type">char</span> grade = <span class="code-string">'A'</span>;
+
+    <span class="code-comment">// 輸出變數值</span>
+    <span class="code-function">printf</span>(<span class="code-string">"年齡: %d\n"</span>, age);
+    <span class="code-function">printf</span>(<span class="code-string">"身高: %.1f 公分\n"</span>, height);
+    <span class="code-function">printf</span>(<span class="code-string">"成績等級: %c\n"</span>, grade);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}</pre>
+                    </div>
+
+                    <p>在printf函數中，我們使用格式指定符：%d 表示整數，%f 表示浮點數，%c 表示字元。</p>
+
+                    <div class="exercise">
+                        <h4><i class="fas fa-pencil-alt"></i> 練習 3-1: 基本計算</h4>
+                        <p>創建一個程式，計算並輸出以下數學運算結果：</p>
+                        <ul>
+                            <li>10 + 15 = ?</li>
+                            <li>25.5 × 4 = ?</li>
+                            <li>100 ÷ 3 = ? (顯示到小數點後兩位元)</li>
+                        </ul>
+                        <button class="solution-btn" onclick="toggleSolution('sol3')"><i class="fas fa-lightbulb"></i> 顯示解答</button>
+                        <div class="solution" id="sol3">
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>練習解答</span>
+                                    <button class="copy-btn" onclick="copyCode('sol-code3')">複製代碼</button>
+                                </div>
+                                <pre id="sol-code3"><span class="code-include">#include</span> <span class="code-string">&lt;stdio.h&gt;</span>
+
+<span class="code-type">int</span> <span class="code-function">main</span>() {
+    <span class="code-type">int</span> sum = <span class="code-number">10</span> + <span class="code-number">15</span>;
+    <span class="code-type">float</span> product = <span class="code-number">25.5</span> * <span class="code-number">4</span>;
+    <span class="code-type">float</span> division = <span class="code-number">100.0</span> / <span class="code-number">3</span>;
+
+    <span class="code-function">printf</span>(<span class="code-string">"10 + 15 = %d\n"</span>, sum);
+    <span class="code-function">printf</span>(<span class="code-string">"25.5 × 4 = %.1f\n"</span>, product);
+    <span class="code-function">printf</span>(<span class="code-string">"100 ÷ 3 = %.2f\n"</span>, division);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第四章內容 -->
+            <div class="chapter-card" id="chapter4">
+                <div class="chapter-header">
+                    <i class="fas fa-calculator"></i>
+                    <h2>第四章 運算子、運算式與敘述</h2>
+                </div>
+                <div class="chapter-content">
+                    <h3>運算子類型</h3>
+                    <p>C語言提供多種運算子：</p>
+                    <ul>
+                        <li><strong>算數運算子</strong>：+、-、*、/、%</li>
+                        <li><strong>關係運算子</strong>：&gt;、&lt;、==、!=、&gt;=、&lt;=</li>
+                        <li><strong>邏輯運算子</strong>：&& (AND)、|| (OR)、! (NOT)</li>
+                        <li><strong>賦值運算子</strong>：=、+=、-=、*=、/=</li>
+                        <li><strong>遞増/遞減運算子</strong>：++、--</li>
+                    </ul>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>範例 4-1: 運算式範例</span>
+                            <button class="copy-btn" onclick="copyCode('code4')">複製代碼</button>
+                        </div>
+                        <pre id="code4"><span class="code-include">#include</span> <span class="code-string">&lt;stdio.h&gt;</span>
+
+<span class="code-type">int</span> <span class="code-function">main</span>() {
+    <span class="code-type">int</span> a = <span class="code-number">10</span>, b = <span class="code-number">3</span>;
+
+    <span class="code-comment">// 算數運算</span>
+    <span class="code-function">printf</span>(<span class="code-string">"a + b = %d\n"</span>, a + b);
+    <span class="code-function">printf</span>(<span class="code-string">"a - b = %d\n"</span>, a - b);
+    <span class="code-function">printf</span>(<span class="code-string">"a * b = %d\n"</span>, a * b);
+    <span class="code-function">printf</span>(<span class="code-string">"a / b = %d\n"</span>, a / b);
+    <span class="code-function">printf</span>(<span class="code-string">"a %% b = %d\n"</span>, a % b);
+
+    <span class="code-comment">// 關係運算</span>
+    <span class="code-function">printf</span>(<span class="code-string">"a > b: %d\n"</span>, a > b);
+    <span class="code-function">printf</span>(<span class="code-string">"a == b: %d\n"</span>, a == b);
+
+    <span class="code-comment">// 邏輯運算</span>
+    <span class="code-function">printf</span>(<span class="code-string">"a>5 && b>5: %d\n"</span>, a>5 && b>5);
+    <span class="code-function">printf</span>(<span class="code-string">"a>5 ||

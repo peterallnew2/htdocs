@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言核心：陣列與指標 - 深度學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .header {
+            background-color: #1e3a8a; /* 深藍色背景 */
+            color: #ffffff;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .chapter-title {
+            border-left: 5px solid #f97316; /* 橘色左邊框 */
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f97316; /* 橘色標籤 */
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        .code-block {
+            background-color: #1e293b; /* 深色程式碼區塊 */
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        .note {
+            background-color: #fefce8; /* 黃色提示框 */
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .best-practice {
+            background-color: #f0fdf4; /* 綠色提示框 */
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .deep-dive {
+            background-color: #eff6ff; /* 藍色提示框 */
+            border-left: 4px solid #60a5fa;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">C 語言核心：陣列與指標</h1>
+        <p class="text-xl text-gray-200">一份給初學者與專業開發者的深度學習指南</p>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Section: Array -->
+        <section id="array" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">第一章：陣列 (Array)</h2>
+            <p class="mb-6">陣列是一種基礎且強大的資料結構，它允許我們在一個變數中儲存多筆相同資料型態的資料。這些資料在記憶體中是連續存放的。</p>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">1</span> 一維陣列的宣告與初始化</h3>
+                <p>宣告陣列時，我們需要指定資料型態、陣列名稱和元素個數。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 語法：資料型態 陣列名稱[元素個數];</span><br>
+                    <span class="text-cyan-400">int</span> score[5]; <span class="text-gray-400">// 宣告一個能存放 5 個整數的陣列</span>
+                </div>
+                <p class="mt-4">我們可以在宣告時進行初始化：</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 方法一：指定元素個數與初始值</span><br>
+                    <span class="text-cyan-400">int</span> score[5] = {85, 80, 90, 96, 88};<br><br>
+                    <span class="text-gray-400">// 方法二：不指定元素個數，由編譯器自動計算</span><br>
+                    <span class="text-cyan-400">int</span> lottery[] = {5, 17, 34, 19, 2, 29}; <span class="text-gray-400">// 編譯器會自動設定大小為 6</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">2</span> 存取陣列元素</h3>
+                <p>我們使用**索引 (index)** 來存取陣列中的特定元素。索引是一個從 0 開始的整數。</p>
+                <div class="note">
+                    <p><strong>初學者注意：</strong> C 語言的陣列索引是**從 0 開始**的！這意味著一個大小為 5 的陣列，其合法的索引範圍是 0, 1, 2, 3, 4。試圖存取 score[5] 會導致**陣列越界 (Array Out of Bounds)**，這是一個嚴重且常見的錯誤，會讀寫到未知的記憶體，導致程式崩潰或不可預期的行為。</p>
+                </div>
+                <div class="code-block">
+                    <span class="text-cyan-400">int</span> A[3];<br>
+                    A[0] = 10; <span class="text-gray-400">// 設定第 1 個元素 (索引為 0) 的值</span><br>
+                    A[1] = 20;<br>
+                    A[2] = 30;<br><br>
+                    <span class="text-cyan-400">int</span> first_value = A[0]; <span class="text-gray-400">// 讀取第 1 個元素的值</span><br><br>
+                    <span class="text-gray-400">// 陣列通常與 for 迴圈結合使用，以走訪所有元素</span><br>
+                    <span class="text-pink-400">for</span> (<span class="text-cyan-400">int</span> i = 0; i < 3; i++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"A[%d] = %d\n"</span>, i, A[i]);<br>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">3</span> 字元陣列與字串</h3>
+                <p>在 C 語言中，字串並不是一種原生的資料型態，而是透過**以空字元 \0 結尾的字元陣列**來實現的。</p>
+                <div class="deep-dive">
+                    <p><strong>深度解析：</strong> \0 (發音為 null character) 是一個特殊的字元，其 ASCII 值為 0。它作為字串的結束標記，像 printf、strcpy 等函式都是依靠這個標記來判斷字串在哪裡結束。這也是為什麼儲存 "mario" (5個字元) 的字元陣列，其大小至少需要 6 (5 個字元 + 1 個 \0)。</p>
+                </div>
+                <div class="code-block">
+                    <span class="text-gray-400">// 以下四種宣告方式效果相同，都建立了一個包含 "mario\0" 的字元陣列</span><br>
+                    <span class="text-cyan-400">char</span> name1[6] = {'m', 'a', 'r', 'i', 'o', '\0'};<br>
+                    <span class="text-cyan-400">char</span> name2[6] = "mario"; <span class="text-gray-400">// 雙引號會自動在結尾加上 '\0'</span><br>
+                    <span class="text-cyan-400">char</span> name3[] = {'m', 'a', 'r', 'i', 'o', '\0'};<br>
+                    <span class="text-cyan-400">char</span> name4[] = "mario";<br><br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"%s\n"</span>, name4); <span class="text-gray-400">// 使用 %s 格式指定字元來輸出整個字串</span>
+                </div>
+                <div class="best-practice">
+                    <p><strong>最佳實踐：</strong> 在 C++ 中，強烈建議使用 std::string 型別來處理字串，它更安全、功能更強大，能自動管理記憶體，避免了許多 C 風格字元陣列的陷阱。使用前需 #include <string>。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">4</span> 二維陣列</h3>
+                <p>二維陣列可以想像成一個表格或矩陣，它有「列 (row)」和「行 (column)」兩個維度。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 宣告一個 3 列 4 行的整數二維陣列</span><br>
+                    <span class="text-cyan-400">int</span> ball[3][4] = {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{0, 1, 2, 3},   <span class="text-gray-400">// 第 0 列</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{4, 5, 6, 7},   <span class="text-gray-400">// 第 1 列</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{8, 9, 10, 11}  <span class="text-gray-400">// 第 2 列</span><br>
+                    };
+                    <br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"%d\n"</span>, ball[1][2]); <span class="text-gray-400">// 輸出第 1 列、第 2 行的元素，結果為 6</span>
+                </div>
+                <p class="mt-4">我們通常使用巢狀迴圈來走訪二維陣列：</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 以列為主 (Row-major) 的方式走訪，效率較高</span><br>
+                    <span class="text-pink-400">for</span> (<span class="text-cyan-400">int</span> i = 0; i < 3; i++) { <span class="text-gray-400">// 外層迴圈控制「列」</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">for</span> (<span class="text-cyan-400">int</span> j = 0; j < 4; j++) { <span class="text-gray-400">// 內層迴圈控制「行」</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"%d "</span>, ball[i][j]);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">printf</span>(<span class="text-yellow-400">"\n"</span>); <span class="text-gray-400">// 每印完一列就換行</span><br>
+                    }
+                </div>
+                <div class="deep-dive">
+                    <p><strong>深度解析 (Row-Major vs. Column-Major)：</strong> 儘管我們將二維陣列想像成表格，但在記憶體中它仍然是線性連續儲存的。C/C++ 採用**以列為主 (Row-Major)** 的順序，也就是說，它會先儲存完第 0 列的所有元素，然後是第 1 列，依此類推。因此，使用以列為主的方式（外層迴圈遍歷列，內層迴圈遍歷行）來走訪陣列，其記憶體存取模式是連續的，這能更好地利用 CPU 快取，執行效率更高。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Pointer -->
+        <section id="pointer" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">第二章：指標 (Pointer)</h2>
+            <p class="mb-6">指標是 C/C++ 語言最強大也最容易混淆的特性。簡單來說，**指標就是記憶體位址**。學會指標，意味著你可以更直接地控制記憶體。</p>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">1</span> 記憶體位址與指標變數</h3>
+                <p>電腦的記憶體由許多個儲存單位 (通常是 1 Byte) 組成，每個單位都有一個獨一無二的編號，這個編號就是**位址 (Address)**。當你宣告一個變數時，系統會為它分配一塊記憶體空間。</p>
+                <p class="mt-2">我們使用**取址運算子 &** 來取得一個變數的記憶體位址。而儲存這個位址的特殊變數，就稱為**指標變數 (Pointer Variable)**。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 宣告指標變數的語法：資料型態 *指標變數名稱;</span><br>
+                    <span class="text-cyan-400">int</span> value = 10;<br>
+                    <span class="text-cyan-400">int</span> *ptr;      <span class="text-gray-400">// 宣告一個可以指向 int 型態變數的指標變數 ptr</span><br><br>
+                    ptr = &value;  <span class="text-gray-400">// 將 value 的記憶體位址存入 ptr，我們稱之為 "ptr 指向 value"</span>
+                </div>
+                <div class="note">
+                    <p><strong>初學者注意：</strong> 宣告 int *ptr; 時，* 表示 ptr 是一個指標變數。而 ptr 指向的變數型態是 int。指標變數本身也佔用記憶體空間（用來儲存位址），其大小在 32 位元系統上通常是 4 Bytes，在 64 位元系統上是 8 Bytes。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">2</span> 取值運算子 *</h3>
+                <p>有了指向變數的指標後，我們可以使用**取值運算子 (Dereference Operator) *** 來取得該指標所指向的記憶體位置上的**內容 (值)**。</p>
+                <div class="code-block">
+                    <span class="text-cyan-400">int</span> value = 10;<br>
+                    <span class="text-cyan-400">int</span> *ptr = &value;<br><br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"value 的值: %d\n"</span>, value);      <span class="text-gray-400">// 輸出 10</span><br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"ptr 指向的值: %d\n"</span>, *ptr);     <span class="text-gray-400">// 輸出 10</span><br><br>
+                    *ptr = 20; <span class="text-gray-400">// 透過指標修改 value 的值</span><br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"修改後 value 的值: %d\n"</span>, value); <span class="text-gray-400">// 輸出 20</span>
+                </div>
+                <div class="deep-dive">
+                    <p><strong>深度解析 (& 和 * 的關係)：</strong> & 和 * 是一對互逆的運算子。& 是「取址」，* 是「取其址之內容」。可以想像成：</p>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>&value：告訴我 value 住在哪裡 (門牌號碼)。</li>
+                        <li>*ptr：去 ptr 這個門牌號碼，看看裡面住著誰 (內容)。</li>
+                        <li>因此，*(&value) 就等同於 value。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">3</span> 陣列與指標的親密關係</h3>
+                <p>在 C 語言中，陣列與指標有著密不可分的關係。**陣列的名稱本身，就代表陣列第一個元素的記憶體位址**。</p>
+                <div class="code-block">
+                    <span class="text-cyan-400">int</span> val[3] = {10, 20, 30};<br>
+                    <span class="text-cyan-400">int</span> *ptr;<br><br>
+                    ptr = val; <span class="text-gray-400">// 合法的！這等價於 ptr = &val[0];</span>
+                </div>
+                <p class="mt-4">這意味著，我們可以用指標的算術運算來存取陣列元素：</p>
+                <table>
+                    <thead>
+                        <tr><th>陣列表示法</th><th>指標表示法</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>val[0]</td><td>*val 或 *ptr</td><td>存取第一個元素</td></tr>
+                        <tr><td>val[1]</td><td>*(val + 1) 或 *(ptr + 1)</td><td>存取第二個元素</td></tr>
+                        <tr><td>val[2]</td><td>*(val + 2) 或 *(ptr + 2)</td><td>存取第三個元素</td></tr>
+                    </tbody>
+                </table>
+                <div class="best-practice">
+                    <p><strong>最佳實踐：</strong> 雖然可以用指標算術 *(val + i) 來存取陣列，但在大多數情況下，使用更直觀的陣列索引 val[i] 會讓程式碼更清晰、更易於閱讀。</p>
+                </div>
+                <div class="best-practice">
+                    <h2><p><a href="chap5-add2.html"><font color="blue">--補充教材--</font></a></p>
+                </h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">4</span> 指標的算術運算</h3>
+                <p>指標可以進行加、減運算。對一個指標進行加 1 (ptr++ 或 ptr + 1)，並不是將其位址值單純地加 1，而是讓它**指向下一個元素**。</p>
+                <p class="mt-2">指標移動的步長取決於它所指向的資料型態的大小。例如：</p>
+                <ul class="list-disc list-inside ml-4 mt-2">
+                    <li>一個 int* 指標加 1，位址會增加 sizeof(int) (通常是 4 Bytes)。</li>
+                    <li>一個 char* 指標加 1，位址會增加 sizeof(char) (1 Byte)。</li>
+                    <li>一個 double* 指標加 1，位址會增加 sizeof(double) (8 Bytes)。</li>
+                </ul>
+                <div class="code-block">
+                    <span class="text-cyan-400">int</span> val[] = {10, 20, 30};<br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"val 的位址: %p\n"</span>, val);      <span class="text-gray-400">// 假設輸出 0x7ffc...10</span><br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"val+1 的位址: %p\n"</span>, val + 1);  <span class="text-gray-400">// 輸出 0x7ffc...14 (位址加 4)</span><br>
+                    <span class="text-green-400">printf</span>(<span class="text-yellow-400">"*(val+1) 的值: %d\n"</span>, *(val + 1)); <span class="text-gray-400">// 輸出 20</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 練習題 -->
+        <section id="exercises" class="mb-12">
+            <h2 class="text-3xl font-bold chapter-title">互動練習題</h2>
+            <div class="card">
+                <p class="mb-6">來測試一下你學會了多少！(答案在頁尾)</p>
+                <div class="space-y-6">
+                    <div>
+                        <p class="font-semibold mb-2">1. 宣告一個大小為 10 的整數陣列 arr，其合法的索引範圍為何？</p>
+                        <p class="text-sm text-gray-500">(A) 1 到 10  (B) 0 到 9  (C) 0 到 10  (D) 1 到 9</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">2. 在 C 語言中，用來表示字串結束的特殊字元是什麼？</p>
+                        <p class="text-sm text-gray-500">(A) \n  (B) \t  (C) \0  (D) \e</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">3. 給定 int x = 100; int *p = &x;，*p 的值是什麼？</p>
+                        <p class="text-sm text-gray-500">(A) x 的記憶體位址  (B) p 的記憶體位址  (C) 100  (D) 無法確定</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">4. 給定 int arr[] = {10, 20, 30};，以下哪個運算式與 arr[1] 的值相等？</p>
+                        <p class="text-sm text-gray-500">(A) *arr + 1  (B) *(arr + 1)  (C) &arr + 1  (D) arr</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">5. 假設 int 佔 4 Bytes，int *ptr 指向一個位址 0x1000。執行 ptr++ 後，ptr 的新值會是多少？</p>
+                        <p class="text-sm text-gray-500">(A) 0x1001  (B) 0x1008  (C) 0x1004  (D) 0x2000</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-500 py-8">
+            <h3 class="text-xl font-semibold mb-4">練習題解答</h3>
+            <p>1. (B) | 2. (C) | 3. (C) | 4. (B) | 5. (C)</p>
+            <p class="mt-4">這份文件由 Gemini 根據提供的教材與設計指南生成。</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

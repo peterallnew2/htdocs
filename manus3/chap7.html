@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ 結構與類別 - 深度學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1f2937;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        .header {
+            background-color: #2c3e50; /* 深藍色背景 */
+            color: #ffffff;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+        .header h2 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 2rem;
+            overflow: hidden; /* 確保子元素圓角 */
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .code-block {
+            background-color: #282c34; /* 深色程式碼背景 */
+            color: #abb2bf; /* 淺色字體 */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        .code-block .comment {
+            color: #5c6370; /* 註解顏色 */
+        }
+        .code-block .keyword {
+            color: #c678dd; /* 關鍵字顏色 */
+        }
+        .code-block .string {
+            color: #98c379; /* 字串顏色 */
+        }
+        .code-block .number {
+            color: #d19a66; /* 數字顏色 */
+        }
+        .code-block .type {
+            color: #e5c07b; /* 型別顏色 */
+        }
+        .note {
+            background-color: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        .best-practice {
+            background-color: #f0fdf4;
+            border-left: 5px solid #22c55e;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #fb923c;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.75rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="mb-2">C++ 結構與類別 (struct & class)</h1>
+        <h2>深入探索 C++ 的基石：從結構到物件導向</h2>
+    </header>
+
+    <div class="container mx-auto p-6">
+
+        <section>
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">7-1 結構 (struct)</h2>
+            
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">定義</span>結構 (Structure)</h3>
+                <p class="mb-4">結構 (Structure) 是一種由使用者自行建立的複合資料型態，它能將不同型態的資料組合成一個邏輯上的單元。例如，一個「學生」可以由姓名 (字串)、學號 (整數)、成績 (浮點數) 等多個成員組成。</p>
+                <p class="mb-4">在 C++ 中，建立結構需使用 <code>struct</code> 關鍵字，其語法如下：</p>
+                <div class="code-block">
+<pre><span class="keyword">struct</span> <span class="type">結構名稱</span> {
+    <span class="type">成員1_型態</span> 成員1_名稱;
+    <span class="type">成員2_型態</span> 成員2_名稱;
+    ...
+}; <span class="comment">// 注意：這裡的分號不可省略</span></pre>
+                </div>
+                <div class="note">
+                    <h4 class="font-bold mb-2">深度解析：C 與 C++ 的 struct 差異</h4>
+                    <p>在 C 語言中，<code>struct</code> 只能包含資料成員。但在 C++ 中，<code>struct</code> 的功能被大幅擴展，它不僅可以包含資料成員，還可以包含成員函式 (Member Functions)，這使得 C++ 的 <code>struct</code> 與 <code>class</code> 非常相似。最主要的差別在於預設的存取權限：<code>struct</code> 的成員預設為 <code>public</code> (公開)，而 <code>class</code> 的成員預設為 <code>private</code> (私有)。</p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">宣告</span>宣告與初始化結構變數</h3>
+                <p class="mb-4">定義了結構樣板後，就可以用它來宣告變數，這種變數稱為「結構變數」。宣告時，可以同時使用大括號 <code>{}</code> 來設定成員的初始值。</p>
+                <p class="mb-4">語法如下：</p>
+                <div class="code-block">
+<pre><span class="comment">// 語法 1: 先宣告，後賦值</span>
+<span class="type">struct 結構名稱</span> 變數名稱;
+
+<span class="comment">// 語法 2: 宣告的同時進行初始化</span>
+<span class="type">struct 結構名稱</span> 變數名稱 = {成員1_初始值, 成員2_初始值, ...};</pre>
+                </div>
+                <div class="note">
+                    <h4 class="font-bold mb-2">初學者注意：C++ 中的語法簡化</h4>
+                    <p>在傳統的 C 語言中，每次宣告結構變數都需要寫上 <code>struct</code> 關鍵字。但在 C++ 中，編譯器會自動將結構名稱視為一種型別，因此可以省略 <code>struct</code> 關鍵字，寫法更簡潔。</p>
+                    <p><code>struct Student s1;</code> (C 語言) vs <code>Student s1;</code> (C++)</p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">實作</span>存取結構成員</h3>
+                <p class="mb-4">若要存取結構變數中的特定成員，我們使用「點運算子」(<code>.</code>)。</p>
+                <p class="mb-4">以下是一個完整的範例，示範如何定義、宣告、初始化並存取一個 <code>Student</code> 結構：</p>
+                <div class="code-block">
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+<span class="comment">// 1. 定義 Student 結構</span>
+<span class="keyword">struct</span> <span class="type">Student</span> {
+    <span class="type">int</span> id;
+    <span class="type">std::string</span> name;
+    <span class="type">char</span> sex;
+    <span class="type">float</span> score;
+};
+
+<span class="type">int</span> main() {
+    <span class="comment">// 2. 宣告結構變數並初始化</span>
+    <span class="type">Student</span> s1 = {<span class="number">111001</span>, <span class="string">"王小明"</span>, <span class="string">'M'</span>, <span class="number">85.5f</span>};
+
+    <span class="comment">// 3. 使用點運算子 (.) 存取並印出成員資料</span>
+    std::cout &lt;&lt; <span class="string">"學號: "</span> &lt;&lt; s1.id &lt;&lt; std::endl;
+    std::cout &lt;&lt; <span class="string">"姓名: "</span> &lt;&lt; s1.name &lt;&lt; std::endl;
+    std::cout &lt;&lt; <span class="string">"性別: "</span> &lt;&lt; s1.sex &lt;&lt; std::endl;
+    std::cout &lt;&lt; <span class="string">"分數: "</span> &lt;&lt; s1.score &lt;&lt; std::endl;
+
+    <span class="comment">// 也可以在宣告後，逐一賦值</span>
+    <span class="type">Student</span> s2;
+    s2.id = <span class="number">111002</span>;
+    s2.name = <span class="string">"陳小美"</span>;
+    s2.sex = <span class="string">'F'</span>;
+    s2.score = <span class="number">92.0f</span>;
+    
+    std::cout &lt;&lt; <span class="string">"\n---\n"</span>;
+    std::cout &lt;&lt; <span class="string">"姓名: "</span> &lt;&lt; s2.name &lt;&lt; <span class="string">", 分數: "</span> &lt;&lt; s2.score &lt;&lt; std::endl;
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold my-8 border-l-4 border-orange-500 pl-4">7-2 結構陣列與指標</h2>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">陣列</span>結構陣列 (Struct Array)</h3>
+                <p class="mb-4">如果需要管理多筆相同結構的資料 (例如一個班級的所有學生)，就可以使用「結構陣列」。它的概念與基本型態的陣列完全相同。</p>
+                <div class="code-block">
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+<span class="keyword">struct</span> <span class="type">Student</span> {
+    <span class="type">int</span> id;
+    <span class="type">std::string</span> name;
+};
+
+<span class="type">int</span> main() {
+    <span class="comment">// 宣告一個包含 3 個 Student 的結構陣列，並初始化</span>
+    <span class="type">Student</span> classA[<span class="number">3</span>] = {
+        {<span class="number">101</span>, <span class="string">"張三"</span>},
+        {<span class="number">102</span>, <span class="string">"李四"</span>},
+        {<span class="number">103</span>, <span class="string">"王五"</span>}
+    };
+
+    <span class="comment">// 使用索引存取陣列元素，再用點運算子存取成員</span>
+    std::cout &lt;&lt; <span class="string">"第二位學生的姓名: "</span> &lt;&lt; classA[<span class="number">1</span>].name &lt;&lt; std::endl; <span class="comment">// 索引從0開始</span>
+
+    <span class="comment">// 使用迴圈遍歷結構陣列</span>
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; ++i) {
+        std::cout &lt;&lt; <span class="string">"ID: "</span> &lt;&lt; classA[i].id &lt;&lt; <span class="string">", Name: "</span> &lt;&lt; classA[i].name &lt;&lt; std::endl;
+    }
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">指標</span>結構指標 (Struct Pointer)</h3>
+                <p class="mb-4">結構指標是一個指向結構變數位址的指標。當我們透過指標來存取結構成員時，必須使用「箭頭運算子」(<code>-></code>)。</p>
+                <p class="mb-4">語法 <code>指標->成員</code> 等同於 <code>(*指標).成員</code>，但前者更為常用且直觀。</p>
+                <div class="note">
+                    <h4 class="font-bold mb-2">初學者注意：為何要用箭頭 `->`？</h4>
+                    <p>運算子的優先順序是關鍵。點運算子 <code>.</code> 的優先級高於取值運算子 <code>*</code>。因此，如果寫成 <code>*ptr.id</code>，編譯器會先嘗試計算 <code>ptr.id</code>，但 <code>ptr</code> 是一個指標，不能直接使用點運算子，所以會產生錯誤。必須使用括號 <code>(*ptr).id</code> 強制先對指標取值，得到結構實體後，再用點運算子存取成員。為了簡化這種寫法，C++ 提供了箭頭運算子 <code>-></code>。</p>
+                </div>
+                <div class="code-block">
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+<span class="keyword">struct</span> <span class="type">Student</span> {
+    <span class="type">int</span> id;
+    <span class="type">std::string</span> name;
+};
+
+<span class="type">int</span> main() {
+    <span class="type">Student</span> s1 = {<span class="number">111001</span>, <span class="string">"王小明"</span>};
+    <span class="type">Student*</span> ptr_s; <span class="comment">// 宣告一個指向 Student 結構的指標</span>
+
+    ptr_s = &s1; <span class="comment">// 將指標指向 s1 的記憶體位址</span>
+
+    <span class="comment">// 使用箭頭運算子 -> 透過指標存取成員</span>
+    std::cout &lt;&lt; <span class="string">"透過指標存取學號: "</span> &lt;&lt; ptr_s->id &lt;&lt; std::endl;
+    std::cout &lt;&lt; <span class="string">"透過指標存取姓名: "</span> &lt;&lt; ptr_s->name &lt;&lt; std::endl;
+
+    <span class="comment">// 使用 (*ptr).member 的等效寫法</span>
+    std::cout &lt;&lt; <span class="string">"使用(*ptr).name存取: "</span> &lt;&lt; (*ptr_s).name &lt;&lt; std::endl;
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+            </div>
+        </section>
+        
+        <section>
+            <h2 class="text-3xl font-bold my-8 border-l-4 border-orange-500 pl-4">7-3 結構與函式</h2>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">傳遞</span>傳遞結構至函式</h3>
+                <p class="mb-4">將結構傳遞給函式有兩種主要方式：傳值 (Pass by Value) 和傳指標 (Pass by Pointer)，它們各有優劣。</p>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">1. 傳值 (Pass by Value)</h4>
+                <p class="mb-2">函式會接收到一個結構的完整「複本」。在函式內對這個複本做的任何修改，都不會影響到原始的結構變數。</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li><b>優點：</b>原始資料安全，不會被意外修改。</li>
+                    <li><b>缺點：</b>如果結構很大，複製整個結構會消耗較多的時間和記憶體，效能較差。</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold mt-6 mb-2">2. 傳指標 (Pass by Pointer)</h4>
+                <p class="mb-2">函式只接收到一個指向原始結構的記憶體位址 (指標)。函式透過這個指標可以直接存取並修改原始的結構資料。</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li><b>優點：</b>效能極高，因為只傳遞一個位址，無論結構多大都一樣快。</li>
+                    <li><b>缺點：</b>原始資料可能會被函式修改，需謹慎操作。</li>
+                </ul>
+
+                <div class="best-practice">
+                    <h4 class="font-bold mb-2">最佳實踐：傳遞常數參考 (Pass by const Reference)</h4>
+                    <p>在現代 C++ 中，最推薦的方式是「傳遞常數參考」，例如 <code>void printStudent(const Student& s)</code>。這種方式結合了兩者的優點：</p>
+                    <ul class="list-disc list-inside">
+                        <li><b>高效率</b>：如同傳指標一樣，它只傳遞位址，不複製整個結構。</li>
+                        <li><b>高安全性</b>：<code>const</code> 關鍵字確保函式無法修改原始資料，避免了傳指標的風險。</li>
+                    </ul>
+                    <p>除非你真的需要在函式中修改原始結構，否則應優先考慮使用常數參考。</p>
+                </div>
+
+                <div class="code-block">
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+<span class="keyword">struct</span> <span class="type">Student</span> {
+    <span class="type">std::string</span> name;
+    <span class="type">int</span> score;
+};
+
+<span class="comment">// 1. 傳值 (Pass by Value): 複製整個結構</span>
+<span class="type">void</span> displayByValue(<span class="type">Student</span> s) {
+    std::cout &lt;&lt; <span class="string">"[傳值] 姓名: "</span> &lt;&lt; s.name &lt;&lt; <span class="string">", 分數: "</span> &lt;&lt; s.score &lt;&lt; std::endl;
+    s.score = <span class="number">0</span>; <span class="comment">// 修改的是複本，不影響 main 函式中的 s1</span>
+}
+
+<span class="comment">// 2. 傳指標 (Pass by Pointer): 傳遞記憶體位址</span>
+<span class="type">void</span> displayByPointer(<span class="type">Student*</span> sPtr) {
+    std::cout &lt;&lt; <span class="string">"[傳指標] 姓名: "</span> &lt;&lt; sPtr->name &lt;&lt; <span class="string">", 分數: "</span> &lt;&lt; sPtr->score &lt;&lt; std::endl;
+    sPtr->score = <span class="number">59</span>; <span class="comment">// 直接修改了 main 函式中 s1 的原始資料</span>
+}
+
+<span class="type">int</span> main() {
+    <span class="type">Student</span> s1 = {<span class="string">"高材生"</span>, <span class="number">99</span>};
+
+    std::cout &lt;&lt; <span class="string">"呼叫前: "</span> &lt;&lt; s1.name &lt;&lt; <span class="string">" 的分數是 "</span> &lt;&lt; s1.score &lt;&lt; std::endl;
+
+    displayByValue(s1);
+    std::cout &lt;&lt; <span class="string">"傳值呼叫後: "</span> &lt;&lt; s1.name &lt;&lt; <span class="string">" 的分數是 "</span> &lt;&lt; s1.score &lt;&lt; std::endl;
+
+    displayByPointer(&s1);
+    std::cout &lt;&lt; <span class="string">"傳指標呼叫後: "</span> &lt;&lt; s1.name &lt;&lt; <span class="string">" 的分數是 "</span> &lt;&lt; s1.score &lt;&lt; std::endl;
+    
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2 class="text-3xl font-bold my-8 border-l-4 border-orange-500 pl-4">7-4 類別 (class) - 物件導向的基石</h2>
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">介紹</span>從結構到類別</h3>
+                <p class="mb-4">C++ 是一門物件導向 (Object-Oriented) 的程式語言。物件導向的核心思想是將資料 (屬性) 和操作資料的方法 (函式) 封裝在一起，形成一個獨立的「物件」。在 C++ 中，實現這個構想的藍圖就是「類別 (class)」。</p>
+                <p class="mb-4">類別與 C++ 的結構非常相似，但有一個關鍵的預設差異：</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li><code>class</code> 的成員預設為 <code>private</code> (私有)。</li>
+                    <li><code>struct</code> 的成員預設為 <code>public</code> (公開)。</li>
+                </ul>
+                <p>在物件導向的設計中，我們通常希望將資料隱藏起來 (設為 <code>private</code>)，只提供特定的函式 (設為 <code>public</code>) 來存取和修改資料，這種原則稱為「封裝 (Encapsulation)」。因此，<code>class</code> 是實踐物件導向的首選。</p>
+            </div>
+            
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">權限</span>存取權限：public vs. private</h3>
+                <p class="mb-4">存取權限關鍵字用來控制類別的成員是否能被外部程式碼存取。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>關鍵字</th>
+                            <th>權限</th>
+                            <th>說明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>public</code></td>
+                            <td>公開</td>
+                            <td>宣告為 public 的成員，可以在類別外部被直接存取。通常用於成員函式 (又稱介面)。</td>
+                        </tr>
+                        <tr>
+                            <td><code>private</code></td>
+                            <td>私有</td>
+                            <td>宣告為 private 的成員，只能在類別內部的成員函式中被存取。通常用於資料成員 (屬性)，以達到資料隱藏與保護的目的。</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="code-block mt-6">
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+<span class="keyword">class</span> <span class="type">Box</span> {
+<span class="keyword">private:</span> <span class="comment">// 私有成員，只能在 Box 類別內部存取</span>
+    <span class="type">double</span> width;
+
+<span class="keyword">public:</span>  <span class="comment">// 公開成員，可以在任何地方存取</span>
+    <span class="type">double</span> length;
+    
+    <span class="type">void</span> setWidth(<span class="type">double</span> w) {
+        <span class="comment">// 成員函式可以存取 private 成員</span>
+        <span class="keyword">if</span> (w > <span class="number">0</span>) {
+            width = w;
+        }
+    }
+
+    <span class="type">double</span> getWidth() {
+        <span class="keyword">return</span> width;
+    }
+};
+
+<span class="type">int</span> main() {
+    <span class="type">Box</span> myBox;
+
+    <span class="comment">// 合法操作：length 是 public</span>
+    myBox.length = <span class="number">10.0</span>; 
+    std::cout &lt;&lt; <span class="string">"Length: "</span> &lt;&lt; myBox.length &lt;&lt; std::endl;
+
+    <span class="comment">// 合法操作：透過 public 函式設定 private 成員</span>
+    myBox.setWidth(<span class="number">5.0</span>); 
+    std::cout &lt;&lt; <span class="string">"Width: "</span> &lt;&lt; myBox.getWidth() &lt;&lt; std::endl;
+
+    <span class="comment">// 錯誤！無法在類別外部直接存取 private 成員</span>
+    <span class="comment">// myBox.width = 5.0;  // 這行會導致編譯錯誤</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">函式</span>成員函式與 `this` 指標</h3>
+                <p class="mb-4">成員函式是定義在類別內部的函式，它們可以存取該類別的所有成員 (不論 public 或 private)。成員函式的實作可以放在類別定義的內部或外部。</p>
+                <p class="mb-2"><b>在類別外部定義函式：</b>若要在類別外實作成員函式，必須使用「範圍解析運算子」(<code>::</code>) 來指明該函式屬於哪個類別。</p>
+                 <div class="code-block">
+<pre><code class="language-cpp">
+<span class="keyword">class</span> <span class="type">Calculator</span> {
+<span class="keyword">public:</span>
+    <span class="comment">// 在類別內宣告函式原型</span>
+    <span class="type">void</span> setValue(<span class="type">int</span> v);
+    <span class="type">int</span> getValue();
+<span class="keyword">private:</span>
+    <span class="type">int</span> value;
+};
+
+<span class="comment">// 使用 :: 在類別外實作函式</span>
+<span class="type">void</span> <span class="type">Calculator::</span>setValue(<span class="type">int</span> v) {
+    value = v;
+}
+
+<span class="type">int</span> <span class="type">Calculator::</span>getValue() {
+    <span class="keyword">return</span> value;
+}
+</code></pre>
+                </div>
+
+                <div class="note mt-6">
+                    <h4 class="font-bold mb-2">深度解析：神秘的 `this` 指標</h4>
+                    <p>當你呼叫一個物件的成員函式時 (例如 <code>myBox.setWidth(5.0)</code>)，編譯器會偷偷地傳遞一個隱藏的參數給這個函式，這個參數就是 <code>this</code> 指標。</p>
+                    <p><code>this</code> 指標儲存了呼叫該函式的物件本身的位址 (在此例中是 <code>myBox</code> 的位址)。它有兩個主要用途：</p>
+                    <ul class="list-disc list-inside">
+                        <li><b>區分同名變數：</b>如果成員函式的參數名稱與成員變數相同，可以用 <code>this-></code> 來明確指定要存取的是成員變數。例如：<code>this->width = width;</code>。</li>
+                        <li><b>回傳物件本身：</b>函式可以回傳 <code>*this</code> 來實現鏈式呼叫 (method chaining)。例如：<code>myBox.setWidth(5).setLength(10);</code>。</li>
+                    </ul>
+                </div>
+                <div class="code-block mt-4">
+<pre><code class="language-cpp">
+<span class="keyword">class</span> <span class="type">MyClass</span> {
+<span class="keyword">private:</span>
+    <span class="type">int</span> data;
+<span class="keyword">public:</span>
+    <span class="comment">// 使用 this-> 來區分參數 data 和成員 data</span>
+    <span class="type">void</span> setData(<span class="type">int</span> data) {
+        <span class="keyword">this</span>->data = data; 
+    }
+};
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold my-8 border-l-4 border-orange-500 pl-4">7-5 建構子與解構子</h2>
+            
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">初始化</span>建構子 (Constructor)</h3>
+                <p class="mb-4">建構子是一種特殊的成員函式，它會在物件被建立時「自動」被呼叫。它的主要任務是執行物件的初始化，例如設定成員變數的初始值。</p>
+                <p class="font-semibold mb-2">建構子的特性：</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li>函式名稱必須與類別名稱完全相同。</li>
+                    <li>沒有回傳值，連 <code>void</code> 都不用寫。</li>
+                    <li>可以被重載 (Overloading)，即一個類別可以有多個參數不同的建構子。</li>
+                </ul>
+                <div class="best-practice">
+                    <h4 class="font-bold mb-2">最佳實踐：使用成員初始化列表</h4>
+                    <p>初始化成員變數的最好方法是使用「成員初始化列表」(Member Initializer List)，而不是在建構子的函式主體內賦值。初始化列表的效能更好，且對於 <code>const</code> 或參考型態的成員是唯一合法的初始化方式。</p>
+                    <p><code>Date(int y, int m, int d) : year(y), month(m), day(d) {}</code> <span class="text-green-600 font-bold">(推薦)</span></p>
+                    <p><code>Date(int y, int m, int d) { year = y; month = m; day = d; }</code> <span class="text-gray-500">(不推薦)</span></p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-bold mb-4"><span class="tag">清理</span>解構子 (Destructor)</h3>
+                <p class="mb-4">解構子是建構子的對應。它會在物件的生命週期結束時 (例如離開作用域或被 <code>delete</code>)「自動」被呼叫。它的主要任務是執行清理工作，例如釋放物件在建構時所申請的動態記憶體。</p>
+                 <p class="font-semibold mb-2">解構子的特性：</p>
+                <ul class="list-disc list-inside mb-4">
+                    <li>函式名稱是在類別名稱前加上一個波浪號 <code>~</code>。</li>
+                    <li>沒有回傳值，也沒有任何參數。</li>
+                    <li>不能被重載，一個類別只能有一個解構子。</li>
+                </ul>
+
+                <div class="code-block mt-6">
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+<span class="keyword">class</span> <span class="type">Date</span> {
+<span class="keyword">private:</span>
+    <span class="type">int</span> year, month, day;
+<span class="keyword">public:</span>
+    <span class="comment">// 建構子 1 (無參數，預設建構子)</span>
+    <span class="type">Date</span>() : year(<span class="number">1970</span>), month(<span class="number">1</span>), day(<span class="number">1</span>) {
+        std::cout &lt;&lt; <span class="string">"預設建構子被呼叫！物件已建立。"</span> &lt;&lt; std::endl;
+    }
+
+    <span class="comment">// 建構子 2 (有參數，重載)</span>
+    <span class="type">Date</span>(<span class="type">int</span> y, <span class="type">int</span> m, <span class="type">int</span> d) : year(y), month(m), day(d) {
+        std::cout &lt;&lt; <span class="string">"有參數建構子被呼叫！物件已建立。"</span> &lt;&lt; std::endl;
+    }
+
+    <span class="comment">// 解構子</span>
+    <span class="type">~Date</span>() {
+        std::cout &lt;&lt; <span class="string">"解構子被呼叫！物件 ("</span> &lt;&lt; year &lt;&lt; <span class="string">"/"</span> &lt;&lt; month &lt;&lt; <span class="string">"/"</span> &lt;&lt; day &lt;&lt; <span class="string">") 已銷毀。"</span> &lt;&lt; std::endl;
+    }
+
+    <span class="type">void</span> showDate() {
+        std::cout &lt;&lt; year &lt;&lt; <span class="string">"-"</span> &lt;&lt; month &lt;&lt; <span class="string">"-"</span> &lt;&lt; day &lt;&lt; std::endl;
+    }
+};
+
+<span class="type">int</span> main() {
+    std::cout &lt;&lt; <span class="string">"--- 進入 main 函式 ---"</span> &lt;&lt; std::endl;
+    
+    { <span class="comment">// 建立一個作用域</span>
+        std::cout &lt;&lt; <span class="string">"\n建立 d1 物件..."</span> &lt;&lt; std::endl;
+        <span class="type">Date</span> d1(<span class="number">2024</span>, <span class="number">7</span>, <span class="number">4</span>); <span class="comment">// 呼叫有參數建構子</span>
+        d1.showDate();
+        
+        std::cout &lt;&lt; <span class="string">"\n建立 d2 物件..."</span> &lt;&lt; std::endl;
+        <span class="type">Date</span> d2; <span class="comment">// 呼叫預設建構子</span>
+        d2.showDate();
+
+        std::cout &lt;&lt; <span class="string">"\n即將離開作用域..."</span> &lt;&lt; std::endl;
+    } <span class="comment">// d1 和 d2 在此處離開作用域，它們的解構子會被呼叫</span>
+
+    std::cout &lt;&lt; <span class="string">"\n--- 離開 main 函式 ---"</span> &lt;&lt; std::endl;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold my-8 border-l-4 border-orange-500 pl-4">學習成果檢測</h2>
+            <div class="card p-8">
+                <div class="space-y-6">
+                    <div>
+                        <p class="font-semibold mb-2">1. 假設有結構 <code>struct Point { int x, y; };</code> 和指標 <code>Point* p;</code>，下列何者是存取成員 <code>x</code> 的正確語法？</p>
+                        <p class="text-sm text-gray-500">(A) p.x &nbsp;&nbsp; (B) *p.x &nbsp;&nbsp; (C) p->x &nbsp;&nbsp; (D) p.x()</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">2. 在 C++ 中，<code>class</code> 和 <code>struct</code> 的主要區別是什麼？</p>
+                        <p class="text-sm text-gray-500">(A) class 可以有函式，struct 不行 &nbsp;&nbsp; (B) struct 只能在 C++ 中使用 &nbsp;&nbsp; (C) 預設的成員存取權限不同 &nbsp;&nbsp; (D) class 不能建立陣列</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">3. 在類別的成員函式中，<code>this</code> 指標代表什麼？</p>
+                        <p class="text-sm text-gray-500">(A) 指向父類別的指標 &nbsp;&nbsp; (B) 指向呼叫該函式的物件實體 &nbsp;&nbsp; (C) 一個全域變數 &nbsp;&nbsp; (D) 指向類別定義的指標</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">4. 關於類別的建構子 (Constructor)，下列敘述何者錯誤？</p>
+                        <p class="text-sm text-gray-500">(A) 建構子名稱必須和類別名稱相同 &nbsp;&nbsp; (B) 建構子可以被重載 &nbsp;&nbsp; (C) 建構子必須宣告回傳型別為 void &nbsp;&nbsp; (D) 物件建立時會自動呼叫建構子</p>
+                    </div>
+                     <div>
+                        <p class="font-semibold mb-2">5. 如果一個類別的成員被宣告為 <code>private</code>，這代表什麼？</p>
+                        <p class="text-sm text-gray-500">(A) 該成員只能被整數賦值 &nbsp;&nbsp; (B) 該成員只能在類別外部被存取 &nbsp;&nbsp; (C) 只有該類別的成員函式可以存取它 &nbsp;&nbsp; (D) 該成員不能被初始化</p>
+                    </div>
+                </div>
+                <div class="mt-8 pt-4 border-t border-gray-200">
+                    <p class="font-semibold">參考答案：</p>
+                    <p class="text-gray-600 text-sm">1.(C), 2.(C), 3.(B), 4.(C), 5.(C)</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

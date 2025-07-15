@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言第六章 - 函式深度學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .dark body {
+            background-color: #1f2937;
+            color: #f8fafc;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 1.5rem;
+        }
+        .dark .card {
+            background-color: #2d3748;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .note {
+            background-color: #fffbeb;
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .note {
+            background-color: #3a3a3a;
+            border-left-color: #f97316;
+        }
+        .best-practice {
+            background-color: #f0fdf4;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .best-practice {
+            background-color: #224433;
+            border-left-color: #4ade80;
+        }
+        .header {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f97316;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">C 語言第六章 - 函式 (Functions)</h1>
+        <p class="text-xl text-gray-200">一份為 C 語言學習者打造的專業級學習教材</p>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <section id="section-6-1" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">6-1 函式基礎</h2>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">1</span> 什麼是函式？</h3>
+                <p class="mb-2">在 C 語言中，函式 (Function) 是一個獨立的、可重複使用的程式碼區塊，用於執行特定的任務。您可以把它想像成一個小工具，當您需要它時，就呼叫它的名字，它會幫您完成工作，並可能回傳一個結果給您。</p>
+                <p>在程式中，函式可以被：</p>
+                <ul class="list-disc list-inside space-y-2 mt-2">
+                    <li>主函式 `main()` 呼叫。</li>
+                    <li>另一個自訂函式呼叫。</li>
+                    <li>函式自己呼叫自己，這種特殊情況稱為「遞迴 (Recursion)」。</li>
+                </ul>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">2</span> 函式的三個核心部分</h3>
+                <p class="mb-4">一個完整的函式使用流程包含三個核心部分：<strong>宣告 (Declaration)</strong>、<strong>定義 (Definition)</strong> 和 <strong>呼叫 (Call)</strong>。</p>
+
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3">A. 函式宣告 (Function Prototype)</h4>
+                    <p class="mb-3">函式宣告，也稱為函式原型，目的是在函式被呼叫前，先告訴編譯器 (Compiler) 這個函式的「長相」，包含：</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>函式名稱</li>
+                        <li>回傳值的資料型態 (若不回傳任何值，則為 `void`)</li>
+                        <li>傳入參數的數量與資料型態</li>
+                    </ul>
+                    <p class="mt-3">宣告通常放在 `main()` 函式之前或是一個共用的標頭檔 (.h) 中。</p>
+                    <div class="code-block mt-4">
+                        <pre><code><span class="text-gray-400">// 語法: 回傳資料型態 函式名稱(參數資料型態1, 參數資料型態2, ...);</span>
+
+<span class="text-gray-400">// 宣告一個沒有參數，也沒有回傳值的函式 A</span>
+<span class="text-cyan-400">void</span> <span class="text-yellow-400">A</span>();
+
+<span class="text-gray-400">// 宣告一個需要傳入兩個整數，沒有回傳值的函式 B</span>
+<span class="text-cyan-400">void</span> <span class="text-yellow-400">B</span>(<span class="text-cyan-400">int</span>, <span class="text-cyan-400">int</span>);
+
+<span class="text-gray-400">// 宣告一個需要傳入一個浮點數，並回傳一個整數的函式 C</span>
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">C</span>(<span class="text-cyan-400">float</span>);</code></pre>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3">B. 函式定義 (Function Definition)</h4>
+                    <p class="mb-3">函式定義是實作函式功能的程式碼本體。它詳細說明了函式接收到參數後，應該執行哪些操作。</p>
+                    <div class="note">
+                        <p><strong>初學者注意：</strong> 如果您將函式的完整定義寫在 `main()` 函式之前，那麼您可以省略函式宣告。因為在編譯器讀到 `main()` 之前，就已經知道函式的完整資訊了。</p>
+                    </div>
+                    <div class="code-block mt-4">
+                        <pre><code><span class="text-gray-400">// 語法: 回傳資料型態 函式名稱(參數資料型態1 參數名稱1, ...) { ...程式碼... }</span>
+
+<span class="text-gray-400">// 定義函式 A</span>
+<span class="text-cyan-400">void</span> <span class="text-yellow-400">A</span>() {
+    printf(<span class="text-green-400">"這是函式A。\n"</span>);
+}
+
+<span class="text-gray-400">// 定義函式 B，並為參數命名為 a 和 b</span>
+<span class="text-cyan-400">void</span> <span class="text-yellow-400">B</span>(<span class="text-cyan-400">int</span> a, <span class="text-cyan-400">int</span> b) {
+    printf(<span class="text-green-400">"傳入的值是 %d 和 %d。\n"</span>, a, b);
+}
+
+<span class="text-gray-400">// 定義函式 C，參數命名為 x，並使用 return 回傳處理結果</span>
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">C</span>(<span class="text-cyan-400">float</span> x) {
+    <span class="text-cyan-400">int</span> result = (<span class="text-cyan-400">int</span>)(x * 100);
+    <span class="text-pink-400">return</span> result; <span class="text-gray-400">// 回傳整數結果，函式執行到此結束</span>
+}</code></pre>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-bold mb-3">C. 函式呼叫 (Function Call)</h4>
+                    <p class="mb-3">當需要執行函式時，我們透過「呼叫」它來達成。呼叫時傳遞的值稱為**引數 (Argument)**，而函式定義中用來接收這些值的變數則稱為**參數 (Parameter)**。</p>
+                    <div class="best-practice">
+                      <p><strong>最佳實踐：</strong> 雖然口語上有時會混用，但精確區分「引數」和「參數」有助於更清晰地溝通。<br>
+- <strong>引數 (Argument)</strong>：您「傳進去」的實際值，例如 `10`, `3.14`。 <br>
+- <strong>參數 (Parameter)</strong>：函式內部用來「接收」值的變數，例如 `int a`, `float x`。</p>
+                    </div>
+                    <div class="code-block mt-4">
+                        <pre><code><span class="text-gray-400">// 假設以上函式都已宣告和定義</span>
+
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">main</span>() {
+    <span class="text-gray-400">// 呼叫函式 A，不需任何引數</span>
+    <span class="text-yellow-400">A</span>();
+
+    <span class="text-gray-400">// 呼叫函式 B，傳入 10 和 20 作為引數</span>
+    <span class="text-yellow-400">B</span>(10, 20);
+
+    <span class="text-gray-400">// 呼叫函式 C，傳入 3.14，並用變數 i 接收回傳值</span>
+    <span class="text-cyan-400">int</span> i = <span class="text-yellow-400">C</span>(3.14);
+    printf(<span class="text-green-400">"函式 C 的回傳值是: %d\n"</span>, i); <span class="text-gray-400">// 將會印出 314</span>
+
+    <span class="text-pink-400">return</span> 0;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-6-2" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">6-2 變數的範圍與生命週期</h2>
+            
+            <div class="card p-6">
+                <p class="mb-4">在 C 語言中，變數並非在程式的任何地方都可存取，其有效範圍稱為**範疇 (Scope)**，而其存在於記憶體中的時間則稱為**生命週期 (Lifetime)**。主要分為**區域變數**和**全域變數**。</p>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-gray-700">
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">種類</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">定義位置</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">存取範圍 (Scope)</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">生命週期 (Lifetime)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 font-bold">區域變數 (Local)</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">函式內部，或 `for`, `if` 等程式區塊 `{}` 內</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">只能在宣告它的 `{}` 區塊內存取</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">進入區塊時誕生，離開區塊時消亡</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 font-bold">全域變數 (Global)</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">所有函式外部</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">整個程式的所有函式皆可存取</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">程式啟動時誕生，程式結束時消亡</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="note mt-6">
+                    <h4 class="font-bold mb-2">深度解析：變數遮蔽 (Variable Shadowing)</h4>
+                    <p>如果一個區域變數和一個全域變數同名，在該區域變數的範疇內，它將會「遮蔽」全域變數。也就是說，當您使用該名稱時，會優先存取到區域變數。</p>
+                </div>
+                
+                <div class="code-block mt-4">
+                    <pre><code>#include &lt;stdio.h&gt;
+
+<span class="text-cyan-400">int</span> global_var = 100; <span class="text-gray-400">// 這是一個全域變數</span>
+
+<span class="text-cyan-400">void</span> <span class="text-yellow-400">someFunction</span>() {
+    <span class="text-cyan-400">int</span> local_var = 20; <span class="text-gray-400">// 這是一個區域變數，僅在 someFunction 內有效</span>
+    printf(<span class="text-green-400">"在函式中, local_var = %d\n"</span>, local_var);
+    printf(<span class="text-green-400">"在函式中, global_var = %d\n"</span>, global_var); <span class="text-gray-400">// 可以存取全域變數</span>
+}
+
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">main</span>() {
+    <span class="text-cyan-400">int</span> local_var = 10; <span class="text-gray-400">// 這是另一個區域變數，僅在 main 內有效</span>
+    
+    <span class="text-yellow-400">someFunction</span>();
+    
+    printf(<span class="text-green-400">"在 main 中, local_var = %d\n"</span>, local_var);
+    <span class="text-gray-400">// printf("%d", another_local_var); // 錯誤！無法存取 aFunction 的區域變數</span>
+    
+    <span class="text-pink-400">return</span> 0;
+}</code></pre>
+                </div>
+                 <div class="best-practice mt-6">
+                    <p><strong>最佳實踐：</strong> 盡量減少全域變數的使用。過多的全域變數會讓程式碼的依賴關係變得複雜，難以追蹤和維護，也容易在不經意間被修改，導致難以察覺的錯誤。應優先使用函式參數和回傳值來傳遞資料。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="section-6-3" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">6-3 遞迴函式 (Recursive Function)</h2>
+
+            <div class="card p-6">
+                 <p class="mb-4">遞迴函式是一種特殊的函式，它會在其定義中**直接或間接地呼叫自己**。使用遞迴可以將複雜的問題分解成結構相似的、規模更小的子問題，讓程式碼更加簡潔優雅。</p>
+                 <p class="font-bold">一個正確的遞迴函式必須包含兩個要素：</p>
+                 <ul class="list-disc list-inside space-y-2 mt-2 mb-4">
+                    <li><strong>基礎情況 (Base Case)</strong>: 也稱為終止條件，它定義了問題的最簡單形式，可以直接求解，不再進行遞迴呼叫。這是防止無限迴圈的關鍵。</li>
+                    <li><strong>遞迴步驟 (Recursive Step)</strong>: 將原問題分解成一個或多個規模更小的子問題，並透過呼叫自身來解決這些子問題。</li>
+                 </ul>
+                 <h4 class="text-xl font-bold mb-3">範例：計算階乘 (Factorial)</h4>
+                 <p class="mb-3">n 的階乘 (表示為 n!) 的定義是 `n * (n-1) * (n-2) * ... * 1`。我們可以用遞迴來實現：</p>
+                 <div class="code-block">
+                     <pre><code>#include &lt;stdio.h&gt;
+
+<span class="text-cyan-400">long long</span> <span class="text-yellow-400">factorial</span>(<span class="text-cyan-400">int</span> n) {
+    <span class="text-gray-400">// 基礎情況：當 n 為 0 或 1 時，階乘為 1</span>
+    <span class="text-pink-400">if</span> (n <= 1) {
+        <span class="text-pink-400">return</span> 1;
+    }
+    <span class="text-gray-400">// 遞迴步驟：n! = n * (n-1)!</span>
+    <span class="text-pink-400">else</span> {
+        <span class="text-pink-400">return</span> n * <span class="text-yellow-400">factorial</span>(n - 1);
+    }
+}
+
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">main</span>() {
+    <span class="text-cyan-400">int</span> num = 5;
+    printf(<span class="text-green-400">"%d 的階乘是 %lld\n"</span>, num, <span class="text-yellow-400">factorial</span>(num)); <span class="text-gray-400">// 結果為 120</span>
+    <span class="text-pink-400">return</span> 0;
+}</code></pre>
+                 </div>
+                 <div class="note mt-6">
+                     <h4 class="font-bold mb-2">深度解析：呼叫堆疊 (Call Stack)</h4>
+                     <p>每次呼叫函式時，系統都會在一個稱為「呼叫堆疊」的記憶體區域中，為該次呼叫分配一個空間（堆疊框），用來儲存函式的區域變數、參數和返回地址。遞迴呼叫 `factorial(5)` 的過程就像這樣：</p>
+                     <ol class="list-decimal list-inside mt-2">
+                         <li>`main` 呼叫 `factorial(5)`</li>
+                         <li>`factorial(5)` 呼叫 `factorial(4)`</li>
+                         <li>`factorial(4)` 呼叫 `factorial(3)`</li>
+                         <li>`factorial(3)` 呼叫 `factorial(2)`</li>
+                         <li>`factorial(2)` 呼叫 `factorial(1)` (觸發基礎情況，回傳 1)</li>
+                         <li>`factorial(2)` 收到 1，計算 2 * 1 並回傳 2</li>
+                         <li>`factorial(3)` 收到 2，計算 3 * 2 並回傳 6</li>
+                         <li>`factorial(4)` 收到 6，計算 4 * 6 並回傳 24</li>
+                         <li>`factorial(5)` 收到 24，計算 5 * 24 並回傳 120</li>
+                         <li>`main` 收到 120</li>
+                     </ol>
+                     [cite_start]<p class="mt-2">遞迴的優點是程式碼簡潔，缺點是若遞迴深度太深，可能導致堆疊溢位 (Stack Overflow) 的錯誤，且效能通常不如迴圈。 [cite: 162]</p>
+                 </div>
+            </div>
+        </section>
+        
+        <section id="section-6-4" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">6-4 函式重載 (Function Overloading)</h2>
+            <div class="card p-6">
+                <div class="note">
+                    <p><strong>注意：</strong> 函式重載是 C++ 的特性，標準的 C 語言並不支援。</p>
+                </div>
+                <p class="my-4">函式重載允許在同一個範疇內，定義多個同名但參數列表不同的函式。編譯器會根據您呼叫時提供的**引數型態、數量或順序**，自動選擇要執行的版本。</p>
+                <div class="code-block">
+                    <pre><code><span class="text-gray-400">// 以下是 C++ 程式碼範例</span>
+#include &lt;iostream&gt;
+
+<span class="text-gray-400">// 版本 1: 計算兩個整數相加</span>
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">add</span>(<span class="text-cyan-400">int</span> a, <span class="text-cyan-400">int</span> b) {
+    std::cout << <span class="text-green-400">"執行 (int, int) 版本"</span> << std::endl;
+    <span class="text-pink-400">return</span> a + b;
+}
+
+<span class="text-gray-400">// 版本 2: 計算兩個浮點數相加</span>
+<span class="text-cyan-400">double</span> <span class="text-yellow-400">add</span>(<span class="text-cyan-400">double</span> a, <span class="text-cyan-400">double</span> b) {
+    std::cout << <span class="text-green-400">"執行 (double, double) 版本"</span> << std::endl;
+    <span class="text-pink-400">return</span> a + b;
+}
+
+<span class="text-gray-400">// 版本 3: 計算三個整數相加</span>
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">add</span>(<span class="text-cyan-400">int</span> a, <span class="text-cyan-400">int</span> b, <span class="text-cyan-400">int</span> c) {
+    std::cout << <span class="text-green-400">"執行 (int, int, int) 版本"</span> << std::endl;
+    <span class="text-pink-400">return</span> a + b + c;
+}
+
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">main</span>() {
+    <span class="text-yellow-400">add</span>(5, 10);      <span class="text-gray-400">// 呼叫版本 1</span>
+    <span class="text-yellow-400">add</span>(3.5, 2.7);   <span class="text-gray-400">// 呼叫版本 2</span>
+    <span class="text-yellow-400">add</span>(1, 2, 3);    <span class="text-gray-400">// 呼叫版本 3</span>
+    <span class="text-pink-400">return</span> 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-6-5" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">6-5 互動練習題</h2>
+            <div class="card p-6">
+                <div class="mb-6">
+                    <p class="font-semibold mb-2">1. 函式改錯：下面的程式碼有什麼問題？應該如何修正？</p>
+                    <div class="code-block">
+<pre><code>void print_number(int num) {
+    printf("The number is: %d");
+}
+
+int main() {
+    int my_num = 10;
+    print_number();
+    return 0;
+}
+</code></pre>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <p class="font-semibold mb-2">2. 變數範疇：執行下面的程式碼後，`main` 函式中的 `x` 和 `y` 的值分別是多少？</p>
+                    <div class="code-block">
+<pre><code>int x = 10;
+int y = 20;
+
+void change_values() {
+    int x = 50;
+    y = 60;
+}
+
+int main() {
+    change_values();
+    // 請問此時 x 和 y 的值是多少？
+    return 0;
+}
+</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <p class="font-semibold mb-2">3. 遞迴思考：請嘗試用遞迴的方式，寫一個函式 `power(base, exp)` 來計算 `base` 的 `exp` 次方。</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

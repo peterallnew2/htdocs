@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言函式與程式結構 - 深度學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .dark body {
+            background-color: #1f2937;
+            color: #f8fafc;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 1.5rem;
+        }
+        .dark .card {
+            background-color: #2d3748;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #fffbeb;
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .note {
+            background-color: #3a3a3a;
+            border-left-color: #f97316;
+        }
+        .best-practice {
+            background-color: #f0fdf4;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .best-practice {
+            background-color: #224433;
+            border-left-color: #4ade80;
+        }
+        .header {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f97316;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        .section-title {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #f97316;
+            padding-left: 1rem;
+        }
+        table {
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+        .dark th, .dark td {
+            border-color: #4a5568;
+        }
+        thead {
+            background-color: #f1f5f9;
+        }
+        .dark thead {
+            background-color: #2d3748;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">C 語言第六章：函式與程式結構</h1>
+        <p class="text-xl text-gray-200">從模組化到遞迴，深入理解 C 語言的核心建構</p>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Section 1: 函式基礎 -->
+        <section id="function-basics" class="mb-12">
+            <h2 class="section-title">函式 (Function) 基礎</h2>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">觀念</span>什麼是函式？</h3>
+                <p class="mb-4">在 C 語言中，<strong>函式 (Function)</strong>，也稱為<strong>副程式 (Subroutine)</strong>，是將特定功能或一段常用的程式碼獨立出來的區塊。你可以把它想像成一個小工具，當你需要它時，就呼叫它的名字，它會幫你完成指定的工作。</p>
+                <p class="mb-2">主函式 <code>main()</code> 本身就是一個特殊的函式，它是整個程式執行的起點。</p>
+                <h4 class="font-semibold mt-4 mb-2">使用函式的優點：</h4>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>程式模組化、結構化：</strong> 將大問題分解成許多小問題，每個小問題由一個函式解決，讓程式結構更清晰。</li>
+                    <li><strong>增加程式的可讀性：</strong> 有意義的函式名稱可以讓程式碼像在閱讀文章一樣，容易理解。</li>
+                    <li><strong>易於維護與重用：</strong> 當需要修改某個功能時，只需修改對應的函式即可。同樣的功能也可以在不同地方重複呼叫，不需一再撰寫。</li>
+                </ul>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">核心</span>標準函式庫與標頭檔</h3>
+                <p class="mb-4">C/C++ 語言本身提供了一套功能強大的<strong>標準函式庫 (Standard Library)</strong>，也稱為公用函式或內建函式。一個函式庫是多個同類型函式的集合。</p>
+                <p class="mb-4">要使用這些函式庫，我們必須先引入對應的<strong>標頭檔 (Header File)</strong>。標頭檔的副檔名通常是 <code>.h</code>，它描述了函式庫內所有函式的名稱、參數和回傳值等資訊。</p>
+                <div class="best-practice">
+                    <p><strong>最佳實踐：</strong> 使用 <code>#include <標頭檔></code> 這個前置處理器指令來引用函式庫。將所有需要用到的 <code>#include</code> ���句放在程式碼的最上方，這是一個良好的程式設計習慣。</p>
+                </div>
+                <div class="code-block mt-4">
+                    <span class="text-gray-400">// 引入標準輸入輸出函式庫</span><br>
+                    <span class="text-pink-400">#include</span> <span class="text-green-400">&lt;stdio.h&gt;</span><br>
+                    <span class="text-gray-400">// 引入數學函式庫</span><br>
+                    <span class="text-pink-400">#include</span> <span class="text-green-400">&lt;math.h&gt;</span><br>
+                    <span class="text-gray-400">// 引入 C++ 的輸入輸出流</span><br>
+                    <span class="text-pink-400">#include</span> <span class="text-green-400">&lt;iostream&gt;</span>
+                </div>
+                <h4 class="font-semibold mt-6 mb-2">常見的標準函式庫：</h4>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr><th>功能</th><th>C 標頭檔</th><th>C++ 標頭檔</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>數學運算</td><td><code>&lt;math.h&gt;</code></td><td><code>&lt;cmath&gt;</code></td></tr>
+                            <tr><td>輸入、輸出</td><td><code>&lt;stdio.h&gt;</code></td><td><code>&lt;iostream&gt;</code></td></tr>
+                            <tr><td>日期、時間</td><td><code>&lt;time.h&gt;</code></td><td><code>&lt;ctime&gt;</code></td></tr>
+                            <tr><td>數值轉換、亂數、動態記憶體</td><td><code>&lt;stdlib.h&gt;</code></td><td><code>&lt;cstdlib&gt;</code></td></tr>
+                            <tr><td>字串處理</td><td><code>&lt;string.h&gt;</code></td><td><code>&lt;cstring&gt;</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: 常用標準函式 -->
+        <section id="standard-functions" class="mb-12">
+            <h2 class="section-title">常用標準函式詳解</h2>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">&lt;math.h&gt;</span>數學函式</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr><th>函式</th><th>說明</th><th>範例</th><th>結果</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>double exp(double x)</code></td><td>指數 e<sup>x</sup></td><td><code>exp(1.0)</code></td><td>2.71828</td></tr>
+                            <tr><td><code>double log(double x)</code></td><td>自然對數 log<sub>e</sub>x (lnx)</td><td><code>log(2.71828)</code></td><td>1.0</td></tr>
+                            <tr><td><code>double log10(double x)</code></td><td>常用對數 log<sub>10</sub>x</td><td><code>log10(100.0)</code></td><td>2.0</td></tr>
+                            <tr><td><code>double pow(double x, double y)</code></td><td>計算 x<sup>y</sup></td><td><code>pow(10.0, 2.0)</code></td><td>100.0</td></tr>
+                            <tr><td><code>double sqrt(double x)</code></td><td>計算 x 的平方根</td><td><code>sqrt(100.0)</code></td><td>10.0</td></tr>
+                            <tr><td><code>double ceil(double x)</code></td><td>大於或等於 x 的最小整數 (無條件進位)</td><td><code>ceil(5.4)</code> / <code>ceil(-5.4)</code></td><td>6.0 / -5.0</td></tr>
+                            <tr><td><code>double floor(double x)</code></td><td>小於或等於 x 的最大整數 (無條件捨去)</td><td><code>floor(5.4)</code> / <code>floor(-5.4)</code></td><td>5.0 / -6.0</td></tr>
+                            <tr><td><code>double round(double x)</code></td><td>四捨五入</td><td><code>round(4.5)</code> / <code>round(-4.5)</code></td><td>5.0 / -5.0</td></tr>
+                            <tr><td><code>double abs(double x)</code></td><td>絕對值</td><td><code>abs(-3.0)</code></td><td>3.0</td></tr>
+                            <tr><td><code>double sin(double A)</code></td><td>正弦函式 sin(A)，A 為徑度</td><td><code>sin(45 * 3.14159 / 180)</code></td><td>~0.707</td></tr>
+                            <tr><td><code>double cos(double A)</code></td><td>餘弦函式 cos(A)，A 為徑度</td><td><code>cos(45 * 3.14159 / 180)</code></td><td>~0.707</td></tr>
+                            <tr><td><code>double tan(double A)</code></td><td>正切函式 tan(A)，A 為徑度</td><td><code>tan(45 * 3.14159 / 180)</code></td><td>~1.0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="note mt-4">
+                    <p><strong>初學者注意：</strong> 三角函式 (<code>sin</code>, <code>cos</code>, <code>tan</code>) 的參數單位<strong>勁度 (radian)</strong>，不是角度 (degree)。如果你的輸入是角度，記得要先轉換成徑度：<code>徑度 = 角度 * PI / 180</code>。</p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">&lt;stdlib.h&gt;</span>亂數函式</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr><th>函式</th><th>說明</th><th>範例</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>void srand(unsigned int seed)</code></td><td>初始化亂數產生器，設定亂數種子。</td><td><code>srand(time(NULL));</code></td></tr>
+                            <tr><td><code>int rand(void)</code></td><td>產生一個介於 0 到 <code>RAND_MAX</code> (通常是 32767) 之間的偽隨機整數。</td><td><code>rand() % 100; // 產生 0~99 的亂數</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="best-practice mt-4">
+                    <p><strong>最佳實踐：</strong> 為了讓每次程式執行時都能產生不同的亂數序列，通常會使用目前的時間作為亂數種子。<code>time(NULL)</code> 會回傳從 1970 年 1 月 1 日到現在的總秒數，這是一個很好的、不斷變化的種子來源。記得要引入 <code>&lt;time.h&gt;</code> 標頭檔。</p>
+                    <p class="mt-2"><code>srand()</code> 只需要在程式中呼叫一次，通常放在 <code>main</code> 函式的開頭。</p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">&lt;string.h&gt;</span>字串處理函式</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr><th>函式</th><th>說明</th><th>範例 (假設 <code>s1="LeBron", s2="James"</code>)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>size_t strlen(char s[])</code></td><td>回傳字串長度 (不含結尾的 <code>\0</code>)</td><td><code>strlen(s1)</code> 回傳 6</td></tr>
+                            <tr><td><code>char* strcpy(char dest[], char src[])</code></td><td>將 src 字串完整複製到 dest</td><td><code>strcpy(s3, s1)</code> s3 變成 "LeBron"</td></tr>
+                            <tr><td><code>char* strncpy(char dest[], char src[], size_t n)</code></td><td>將 src 的前 n 個字元複製到 dest</td><td><code>strncpy(s3, s1, 2)</code> s3 變成 "Le"</td></tr>
+                            <tr><td><code>char* strcat(char dest[], char src[])</code></td><td>將 src 字串串接到 dest 之後</td><td><code>strcat(s1, s2)</code> s1 變成 "LeBronJames"</td></tr>
+                            <tr><td><code>char* strncat(char dest[], char src[], size_t n)</code></td><td>將 src 的前 n 個字元串接到 dest 之後</td><td><code>strncat(s1, s2, 2)</code> s1 變成 "LeBronJa"</td></tr>
+                            <tr><td><code>int strcmp(char s1[], char s2[])</code></td><td>比較 s1 和 s2。s1>s2 回傳正數, s1<s2 回傳負數, s1==s2 回傳 0</td><td><code>strcmp("b", "a")</code> 回傳正數</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="note mt-4">
+                    <p><strong>深度解析：</strong> <code>char* strcpy(...)</code> 和 <code>char s[]</code> 其實都與指標有關。當陣列被當作函式參數傳遞時，實際上传遞的是該陣列第一個元素的記憶體位址。所以 <code>char s[]</code> 和 <code>char *s</code> 在函式參數中是等價的，都代表一個「指向字元的指標」。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: 自訂函式 -->
+        <section id="custom-functions" class="mb-12">
+            <h2 class="section-title">自訂函式 (User-Defined Functions)</h2>
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">語法</span>宣告與定義</h3>
+                <p class="mb-4">自訂函式包含兩個主要部分：<strong>宣告 (Declaration)</strong> 和 <strong>定義 (Definition)</strong>。</p>
+                <ul class="list-disc list-inside space-y-4">
+                    <li>
+                        <strong>函式原型宣告 (Prototype Declaration):</strong>
+                        <p class="text-gray-600 dark:text-gray-400 ml-2">告訴編譯器這個函式的「長相」，包含它的回傳值資料型態、函式名稱以及參數的資料型態。宣告通常放在 <code>main()</code> 函式之前。</p>
+                        <div class="code-block mt-2">
+                            <span class="text-cyan-400">回傳資料型態</span> <span class="text-yellow-400">函式名稱</span>(<span class="text-cyan-400">參數資料型態</span>, ...);<br>
+                            <span class="text-cyan-400">double</span> <span class="text-yellow-400">calculateBMI</span>(<span class="text-cyan-400">double</span>, <span class="text-cyan-400">double</span>); <span class="text-gray-400">// 宣告一個名為 calculateBMI 的函式</span>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>函式定義 (Definition):</strong>
+                        <p class="text-gray-600 dark:text-gray-400 ml-2">函式的實際內容，包含參數的名稱和要執行的程式碼區塊。</p>
+                        <div class="code-block mt-2">
+                            <span class="text-cyan-400">回傳資料型態</span> <span class="text-yellow-400">函式名稱</span>(<span class="text-cyan-400">參數資料型態</span> <span class="text-purple-400">參數名稱</span>, ...){<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 程式碼區塊</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">return</span> 回傳值;<br>
+                            }
+                        </div>
+                    </li>
+                </ul>
+                 <div class="best-practice mt-4">
+                    <p><strong>最佳實踐：</strong> 如果將函式定義完整地寫在 <code>main()</code> 函式之前，可以省略函式原型的宣告。然而，將宣告和定義分開，並把 <code>main()</code> 放在最前面，可以讓程式的主要邏輯一目了然，是更常見且推薦的風格。</p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">流程</span>呼叫與回傳</h3>
+                <p class="mb-2"><strong>引數 (Argument) vs. 參數 (Parameter):</strong></p>
+                <ul class="list-disc list-inside space-y-2 mb-4">
+                    <li><strong>引數 (Argument):</strong> 在<em>呼叫</em>函式時，傳遞給函式的值。</li>
+                    <li><strong>參數 (Parameter):</strong> 在<em>定義</em>函式時，用來接收引數的變數。</li>
+                </ul>
+                <p class="mb-2">當函式被呼叫時，程式會暫停目前的工作，跳到該函式去執行。執行完畢後，透過 <code>return</code> 關鍵字將一個值回傳給呼叫者，然後程式會回到原本暫停的地方繼續執行。</p>
+                <div class="note">
+                    <p><strong>重點：</strong> <code>return</code> 語句會立即結束函式的執行。寫在 <code>return</code> 之後的任何程式碼都不會被執行。</p>
+                    <p class="mt-2">如果函式不需要回傳任何值，應使用 <code>void</code> 關鍵字作為回傳型態。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: 變數作用域 -->
+        <section id="variable-scope" class="mb-12">
+            <h2 class="section-title">變數的生命週期與作用域</h2>
+            <div class="card p-6">
+                <p class="mb-4">變數在程式中能夠被存取的範圍稱為<strong>作用域 (Scope)</strong>，而變數存在於記憶體中的時間則稱為<strong>生命週期 (Lifetime)</strong>。</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2">區域變數 (Local Variables)</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>宣告位置：</strong> 在函式內部或某個程式區塊 (如 <code>if</code>, <code>for</code> 的 <code>{}</code> 內) 宣告。</li>
+                            <li><strong>存取權：</strong> 只能在宣告它的那個區塊內被存取。</li>
+                            <li><strong>生命週期：</strong> 當程式執行進入該區塊時被建立，離開該區塊時就被銷毀。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2">全域變數 (Global Variables)</h4>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>宣告位置：</strong> 在所有函式之外宣告。</li>
+                            <li><strong>存取權：</strong> 可以在程式的任何位置被存取。</li>
+                            <li><strong>生命週期：</strong> 程式一開始執行就被建立，直到整個程式結束時才消失。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="best-practice mt-6">
+                    <p><strong>最佳實踐：</strong> 盡量避免使用全域變數。全域變數會讓程式的狀態變得難以追蹤，因為任何函式都可能在任何時候修改它，這會導致所謂的「副作用」，是許多程式 bug 的根源。優先使用函式參數和回傳值來傳遞資料。</p>
+                </div>
+                <div class="note mt-4">
+                    <p><strong>變數遮蔽 (Variable Shadowing)：</strong> 如果在內層作用域宣告了一個與外層作用域同名的變數，內層的變數會「遮蔽」外層的變數。在內層作用域中存取該名稱時，會優先存取到內層的區域變數。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: 進階函式主題 -->
+        <section id="advanced-topics" class="mb-12">
+            <h2 class="section-title">進階函式主題</h2>
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">C++</span>重載函式 (Function Overloading)</h3>
+                <p class="mb-4">在 <strong>C++</strong> 中，允許定義多個名稱相同但參數個數或參數資料型態不同的函式，這稱為<strong>函式重載</strong>。編譯器會根據你呼叫時提供的引數來自動選擇正確的函式版本。</p>
+                <div class="code-block">
+                    <span class="text-gray-400">// 三個名稱相同但參數不同的重載函式</span><br>
+                    <span class="text-cyan-400">void</span> <span class="text-yellow-400">print</span>(<span class="text-cyan-400">int</span> i) { ... }<br>
+                    <span class="text-cyan-400">void</span> <span class="text-yellow-400">print</span>(<span class="text-cyan-400">double</span> f) { ... }<br>
+                    <span class="text-cyan-400">void</span> <span class="text-yellow-400">print</span>(<span class="text-cyan-400">const char*</span> s) { ... }<br><br>
+                    <span class="text-yellow-400">print</span>(<span class="text-yellow-400">10</span>);       <span class="text-gray-400">// 呼叫第一個版本</span><br>
+                    <span class="text-yellow-400">print</span>(<span class="text-yellow-400">3.14</span>);    <span class="text-gray-400">// 呼叫第二個版本</span><br>
+                    <span class="text-yellow-400">print</span>(<span class="text-green-400">"Hello"</span>); <span class="text-gray-400">// 呼叫第三個版本</span>
+                </div>
+                <div class="note mt-4">
+                    <p><strong>注意：</strong> 標準 C 語言不支援函式重載。這是 C++ 提供的特性。</p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4"><span class="tag">遞迴</span>遞迴函式 (Recursive Function)</h3>
+                <p class="mb-4">一個函式直接或間接地呼叫自己，就稱為<strong>遞迴函式</strong>。遞迴是解決某些問題的強大技巧，特別是那些可以被分解為與原問題結構相同但規模更小的子問題的場景 (例如：階層、費式數列)。</p>
+                <p class="font-semibold mb-2">遞迴函式的兩個必要條件：</p>
+                <ol class="list-decimal list-inside space-y-2">
+                    <li><strong>終止條件 (Base Case):</strong> 必須有一個或多個不再進行遞迴呼叫的條件，否則函式將無限呼叫下去，直到耗盡記憶體 (稱為堆疊溢位 Stack Overflow)。</li>
+                    <li><strong>遞迴步驟 (Recursive Step):</strong> 函式呼叫自己，但傳遞的引數必須朝著終止條件的方向改變，使問題的規模不斷縮小。</li>
+                </ol>
+                <div class="code-block mt-4">
+                    <span class="text-gray-400">// 使用遞迴計算 n 的階層 (n!)</span><br>
+                    <span class="text-cyan-400">int</span> <span class="text-yellow-400">factorial</span>(<span class="text-cyan-400">int</span> n) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 終止條件</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">if</span> (n == 0) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">return</span> 1;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-400">// 遞迴步驟</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">return</span> n * <span class="text-yellow-400">factorial</span>(n - 1);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }
+                </div>
+                <div class="note mt-4">
+                    <p><strong>優點與缺點：</strong> 遞迴的優點是程式碼通常更簡潔、更貼近數學定義，可讀性高。缺點是執行效率通常比迴圈低，因為每次函式呼叫都有額外的開銷，並且會佔用較多的記憶體空間。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: 參數傳遞 -->
+        <section id="parameter-passing" class="mb-12">
+            <h2 class="section-title">參數傳遞機制</h2>
+            <div class="card p-6">
+                <p class="mb-4">將資料傳遞給函式的方式主要有兩種，理解它們的區別是掌握 C 語言指標的關鍵。</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2">傳值呼叫 (Call by Value)</h4>
+                        <p class="mb-2">這是 C 語言的預設方式。當你傳遞一個變數給函式時，實際上传遞的是該變數的「副本」。</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>函式的參數會得到一個與引數完全相同的值。</li>
+                            <li>參數和引數是兩個獨立的變數，儲存在不同的記憶體位置。</li>
+                            <li>在函式內部修改參數的值，<strong>不會</strong>影響到函式外部的原始引數。</li>
+                        </ul>
+                        <div class="code-block mt-2">
+                            <span class="text-cyan-400">void</span> <span class="text-yellow-400">modify</span>(<span class="text-cyan-400">int</span> x) {<br>
+                            &nbsp;&nbsp;x = 100; <span class="text-gray-400">// 只改變了副本 x</span><br>
+                            }<br><br>
+                            <span class="text-cyan-400">int</span> main() {<br>
+                            &nbsp;&nbsp;<span class="text-cyan-400">int</span> a = 10;<br>
+                            &nbsp;&nbsp;<span class="text-yellow-400">modify</span>(a);<br>
+                            &nbsp;&nbsp;<span class="text-gray-400">// 此時 a 的值仍然是 10</span><br>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2">傳址呼叫 (Call by Address)</h4>
+                        <p class="mb-2">透過傳遞變數的「記憶體位址」(也就是指標)，讓函式能夠直接存取並修改原始變數。</p>
+                         <ul class="list-disc list-inside space-y-2">
+                            <li>函式的參數是一個指標變數，它儲存了引數的記憶體位址。</li>
+                            <li>參數和引數指向同一塊記憶體。</li>
+                            <li>在函式內部透過指標修改記憶體的內容，<strong>會</strong>直接影響到函式外部的原始引數。</li>
+                        </ul>
+                        <div class="code-block mt-2">
+                            <span class="text-gray-400">// 參數是一個指向 int 的指標</span><br>
+                            <span class="text-cyan-400">void</span> <span class="text-yellow-400">modify</span>(<span class="text-cyan-400">int*</span> p) {<br>
+                            &nbsp;&nbsp;*p = 100; <span class="text-gray-400">// 修改 p 指向的記憶體內容</span><br>
+                            }<br><br>
+                            <span class="text-cyan-400">int</span> main() {<br>
+                            &nbsp;&nbsp;<span class="text-cyan-400">int</span> a = 10;<br>
+                            &nbsp;&nbsp;<span class="text-yellow-400">modify</span>(&amp;a); <span class="text-gray-400">// 傳遞 a 的位址</span><br>
+                            &nbsp;&nbsp;<span class="text-gray-400">// 此時 a 的值變成了 100</span><br>
+                            }
+                        </div>
+                    </div>
+                </div>
+                 <div class="note mt-6">
+                    <p><strong>深度解析：傳遞陣列：</strong> 在 C 語言中，當你將一個陣列作為引數傳遞給函式時，實際上是進行了<strong>傳址呼叫</strong>。你傳遞的是陣列第一個元素的記憶體位址。因此，在函式內部對陣列元素的任何修改，都會直接反映在原始陣列上。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 練習題 -->
+        <section id="exercises" class="mb-12">
+            <h2 class="section-title">互動練習題</h2>
+            <div class="card p-6">
+                <p class="mb-6">檢驗一下你的學習成果！(答案在頁尾)</p>
+                <div class="space-y-6">
+                    <div>
+                        <p class="font-semibold mb-2">1. 下列關於函式的敘述，何者錯誤？</p>
+                        <p class="text-sm text-gray-500">(A) 使用函式可以讓程式模組化 (B) <code>main()</code> 也是一種函式 (C) 函式定義可以省略回傳型態 (D) <code>#include &lt;math.h&gt;</code> 是為了引入數學函式庫</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">2. <code>floor(-3.14)</code> 的執行結果為何？</p>
+                        <p class="text-sm text-gray-500">(A) -3.0 (B) -4.0 (C) 3.0 (D) 4.0</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">3. 若要產生 1 到 10 之間的隨機整數，下列哪個運算式是正確的？</p>
+                        <p class="text-sm text-gray-500">(A) <code>rand() % 9</code> (B) <code>rand() % 10</code> (C) <code>rand() % 10 + 1</code> (D) <code>rand() % 11</code></p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">4. 關於變數作用域，下列敘述何者正確？</p>
+                        <p class="text-sm text-gray-500">(A) 區域變數可以在任何地方存取 (B) 全域變數在程式結束後依然存在 (C) 應多加利用全域變數方便存取 (D) 在函式內宣告的變數是區域變數</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">5. 考慮以下程式碼：<br><code>void swap(int x, int y) { int t=x; x=y; y=t; }</code><br><code>int main() { int a=5, b=10; swap(a, b); printf("%d %d", a, b); }</code><br>請問輸出結果為何？</p>
+                        <p class="text-sm text-gray-500">(A) 5 10 (B) 10 5 (C) 5 5 (D) 10 10</p>
+                    </div>
+                     <div>
+                        <p class="font-semibold mb-2">6. 為了讓上一題的 <code>swap</code> 函式能成功交換 a 和 b 的值，函式宣告應修改為？</p>
+                        <p class="text-sm text-gray-500">(A) <code>void swap(int* x, int* y)</code> (B) <code>void swap(int& x, int& y)</code> (C) <code>int swap(int x, int y)</code> (D) A 和 B 皆可</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-500 dark:text-gray-400 py-8">
+            <h3 class="text-xl font-semibold mb-4">練習題解答</h3>
+            <p>1. (C) | 2. (B) | 3. (C) | 4. (D) | 5. (A) (因為是傳值呼叫) | 6. (D) (A是C語言的傳址, B是C++的傳參考)</p>
+            <p class="mt-4">這份文件由 Gemini 根據提供的教材與設計指南生成。</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

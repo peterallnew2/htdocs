@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ 物件導向進階測驗 (EE7-6)</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="simple-nav">
+        <a href="index.php">返回主頁</a>
+        | <a href="ee7-1.php">EE7-1 C++ OOP測驗 I</a>
+        | <a href="ee7-5.php">EE7-5 C/C++綜合測驗</a>
+        | EE7-6 C++ OOP測驗 II (本頁)
+    </nav>
+    <div class="container">
+        <main class="tutorial-content">
+            <h1>C++ 物件導向進階測驗 (EE7-6)</h1>
+            <p>本頁面包含一系列 C++ 物件導向程式設計的進階練習題，涵蓋類別、物件、繼承、建構子、解構子、this 指標、封裝等重要概念。請仔細研讀每個題目和程式碼片段，並利用右側的沙箱進行實作與驗證。</p>
+
+            <div class="quiz-section" id="quiz-section-dynamic">
+                <h2>C++ 物件導向進階練習題組 (EE7-6)</h2>
+                <p>請挑戰下面的題目，檢驗您的 C++ OOP 知識！ (共 28 題)</p>
+
+                                        <div id="q1" class="quiz-card">
+                        <h3>1. 關於 C++語言的結構(struct)和類別(class)，下列哪一個敘述正確？</h3>
+
+                                                        <div class="quiz-options" data-correct="D">
+                                                            <div class="option" data-option="A">
+                                            (A) C++是物件導向語言，使用類別來定義資料和操作資料的方法
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B) 結構是使用者自已建立的資料型態，包含多個成員
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C) 一個類別可以有多個物件的實作
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D) 以上皆是
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解 (C++ Context)</h4>
+<p><strong>1. 關鍵概念：C++ 結構 (struct) 與類別 (class)</strong></p>
+<ul>
+    <li><strong>類別 (Class)：</strong> 是C++物件導向程式設計的核心。它是一個藍圖，用於定義物件的屬性 (資料成員) 和行為 (成員函式/方法)。C++ 使用類別來實現封裝、繼承和多型等物件導向特性。</li>
+    <li><strong>結構 (Struct)：</strong> 在C++中，結構與類別非常相似。主要的預設差異在於成員的存取權限：
+        <ul>
+            <li><code>struct</code> 的成員預設是 <code>public</code>。</li>
+            <li><code>class</code> 的成員預設是 <code>private</code>。</li>
+        </ul>
+        除此之外，<code>struct</code> 也可以有成員函式、建構子、解構子，並且可以參與繼承。結構本質上也是一種使用者自訂的資料型態，可以將多個不同型別的資料組合成一個單元。
+    </li>
+    <li><strong>物件 (Object)：</strong> 是類別的一個實例 (instance)。一個類別定義了物件的規格，而程式可以根據這個規格創建多個具有相同結構和行為的物件。</li>
+</ul>
+
+<p><strong>2. 選項分析：</strong></p>
+<ul>
+    <li><strong>(A) C++是物件導向語言，使用類別來定義資料和操作資料的方法：</strong>正確。這是C++作為物件導向語言的基本特徵，類別是定義物件藍圖的方式，包含資料 (attributes) 和方法 (behaviors)。</li>
+    <li><strong>(B) 結構是使用者自已建立的資料型態，包含多個成員：</strong>正確。結構允許使用者將不同型別的資料組合成一個新的、自訂的資料型態。</li>
+    <li><strong>(C) 一個類別可以有多個物件的實作：</strong>正確。類別是模板，可以根據這個模板創建任意數量的物件實例。例如，可以有一個 <code>Car</code> 類別，然後創建多個 <code>Car</code> 物件，如 <code>myCar</code>, <code>yourCar</code>。</li>
+    <li><strong>(D) 以上皆是：</strong>因為 (A), (B), (C) 都正確，所以此選項正確。</li>
+</ul>
+
+<p><strong>3. 結論：</strong></p>
+<p>所有敘述都是正確的。</p>
+                        </div>
+                        <div class="next-btn-container">
+                                                        <button class="next-btn" data-target="#q2">下一題</button>
+                                                    </div>
+                    </div>
+                                        <div id="q2" class="quiz-card">
+                        <h3>2. 有關 C++語言的類別描述，下列何者錯誤？</h3>
+
+                                                        <div class="quiz-options" data-correct="B">
+                                                            <div class="option" data-option="A">
+                                            (A) 類別可以實現 C++物件導向的特性
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B) 一個類別只能產生一個物件實例
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C) 類別的建構子可以重載
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D) 類別的解構子只能有一個
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解 (C++ Context)</h4>
+<p><strong>1. 關鍵概念：C++ 類別特性</strong></p>
+<ul>
+    <li><strong>物件導向特性：</strong>類別是C++實現物件導向三大特性 (封裝、繼承、多型) 的基礎。</li>
+    <li><strong>物件實例：</strong>一個類別是創建物件的模板。根據一個類別，可以創建任意多個物件實例。例如，<code>class Dog {...}; Dog dog1, dog2, dog3;</code> 這樣就從 <code>Dog</code> 類別產生了三個物件實例。</li>
+    <li><strong>建構子 (Constructor)：</strong>是一種特殊的成員函式，在創建類別的物件時自動被呼叫，主要用於初始化物件的資料成員。
+        <ul>
+            <li>建構子的名稱與類別名稱完全相同。</li>
+            <li>建構子沒有回傳型別 (連 <code>void</code> 都不寫)。</li>
+            <li>一個類別可以有多個建構子，只要它們的參數列表不同 (個數、型態、順序不同)，這稱為<strong>建構子重載 (overloading)</strong>。</li>
+        </ul>
+    </li>
+    <li><strong>解構子 (Destructor)：</strong>也是一種特殊的成員函式，在物件的生命週期結束時 (例如，物件離開其作用域或被 <code>delete</code> 刪除時) 自動被呼叫，主要用於釋放物件在建構時可能獲取的資源 (如動態分配的記憶體)。
+        <ul>
+            <li>解構子的名稱是在類別名稱前加上波浪號 <code>~</code> (例如 <code>~MyClass()</code>)。</li>
+            <li>解構子沒有回傳型別，也沒有參數。</li>
+            <li>一個類別<strong>只能有一個解構子</strong>。解構子不能被重載。</li>
+        </ul>
+    </li>
+</ul>
+
+<p><strong>2. 選項分析：</strong></p>
+<ul>
+    <li><strong>(A) 類別可以實現 C++物件導向的特性：</strong>正確。類別是實現封裝、繼承、多型的基礎。</li>
+    <li><strong>(B) 一個類別只能產生一個物件實例：</strong>錯誤。一個類別是藍圖，可以根據這個藍圖創建任意數量的物件實例。如果一個類別只能產生一個物件，那通常是透過設計模式 (如單例模式 Singleton Pattern) 來刻意限制的，而非類別本身的固有特性。</li>
+    <li><strong>(C) 類別的建構子可以重載：</strong>正確。只要參數列表不同，一個類別可以有多個建構子。</li>
+    <li><strong>(D) 類別的解構子只能有一個：</strong>正確。解構子不能有參數，因此不能被重載，每個類別最多只有一個解構子。</li>
+</ul>
+
+<p><strong>3. 結論：</strong></p>
+<p>敘述「(B) 一個類別只能產生一個物件實例」是錯誤的。</p>
+                        </div>
+                        <div class="next-btn-container">
+                                                        <button class="next-btn" data-target="#q3">下一題</button>
+                                                    </div>
+                    </div>
+                                        <div id="q3" class="quiz-card">
+                        <h3>3. 有關 C++語言的物件導向功能，下列何者正確？</h3>
+
+                                                        <div class="quiz-options" data-correct="C">
+                                                            <div class="option" data-option="A">
+                                            (A) C 語言繼承 C++語言，所以 C 語言也是物件導向語言
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B) 使用「..」表示類別之間的繼承關係
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C) 一個子類別可以繼承多個父類別
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D) 類別就是物件的實作
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解 (C++ Context)</h4>
+<p><strong>1. 關鍵概念：C++ 物件導向特性</strong></p>
+<ul>
+    <li><strong>C 與 C++ 的關係：</strong>C++ 是在 C 語言的基礎上發展起來的，它擴展了 C 語言並增加了物件導向的特性。C 語言本身是一種程序導向 (procedural) 語言，不直接支援物件導向的核心概念如類別、繼承和多型。所以 C++ 繼承並擴展了 C，而不是反過來。</li>
+    <li><strong>繼承語法：</strong>在 C++ 中，表示類別之間的繼承關係使用冒號 <code>:</code>，後面跟著存取修飾詞 (如 <code>public</code>, <code>protected</code>, <code>private</code>) 和父類別的名稱。例如：<code>class DerivedClass : public BaseClass { ... };</code>。</li>
+    <li><strong>多重繼承 (Multiple Inheritance)：</strong>C++ 語言支援多重繼承，這意味著一個子類別 (derived class) 可以同時繼承自多個父類別 (base classes)。語法如：<code>class Child : public Parent1, public Parent2 { ... };</code>。</li>
+    <li><strong>類別與物件：</strong>
+        <ul>
+            <li><strong>類別 (Class)：</strong>是一個藍圖、模板或定義。它描述了一類物件共同具有的屬性 (資料成員) 和行為 (成員函式)。類別本身不是一個具體的實體。</li>
+            <li><strong>物件 (Object)：</strong>是類別的一個具體實例 (instance)。物件是根據類別的定義在記憶體中創建的實體。可以說，物件是類別的「實作」或「實例化」。</li>
+        </ul>
+    </li>
+</ul>
+
+<p><strong>2. 選項分析：</strong></p>
+<ul>
+    <li><strong>(A) C 語言繼承 C++語言，所以 C 語言也是物件導向語言：</strong>錯誤。C++ 是基於 C 發展並增加了物件導向特性。C 語言本身不是物件導向語言。</li>
+    <li><strong>(B) 使用「..」表示類別之間的繼承關係：</strong>錯誤。C++ 使用冒號 <code>:</code> 來表示繼承關係。<code>..</code> 運算子通常用於範圍解析 (scope resolution operator 是 <code>::</code>) 或其他語言的特定語法，與 C++ 繼承無關。</li>
+    <li><strong>(C) 一個子類別可以繼承多個父類別：</strong>正確。這是 C++ 的多重繼承特性。</li>
+    <li><strong>(D) 類別就是物件的實作：</strong>這個說法不夠精確，容易混淆。更準確地說，物件是類別的實作 (或實例)。類別是定義，物件是根據該定義創建的實體。</li>
+</ul>
+
+<p><strong>3. 結論：</strong></p>
+<p>敘述「(C) 一個子類別可以繼承多個父類別」是正確的，描述了 C++ 的多重繼承能力。</p>
+                        </div>
+                        <div class="next-btn-container">
+                                                        <button class="next-btn" data-target="#q4">下一題</button>
+                                                    </div>
+                    </div>
+                                        <div id="q4" class="quiz-card">
+                        <h3>4. 一程式片段如下，關於程式碼的說明，何者錯誤？<pre><code class="language-cpp">class I : public J { public: void beep(); };</code></pre></h3>
+
+                                                        <pre><code class="language-cpp">class J { /* ... J members ... */ };
+class I : public J {
+public:
+    void beep() { /* ... beep implementation ... */ }
+    // I will have J's public (and protected) members
+};</code></pre>
+                                                        <div class="quiz-options" data-correct="C">
+                                                            <div class="option" data-option="A">
+                                            (A) I 類別繼承 J 類別
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B) I 類別會擁有 J 類別的公有成員
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C) J 類別擁有 beep( )成員函式
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D) I 和 J 是物件導向的繼承關係
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解 (C++ Context)</h4>
+<p><strong>1. 關鍵概念：C++ 類別繼承</strong></p>
+<p>程式碼片段 <code>class I : public J { public: void beep(); };</code> 描述了類別繼承關係。</p>
+<ul>
+    <li><strong><code>class I : public J</code>：</strong>這表示類別 <code>I</code> 公開繼承 (publicly inherits) 自類別 <code>J</code>。
+        <ul>
+            <li><code>I</code> 被稱為子類別 (derived class 或 child class)。</li>
+            <li><code>J</code> 被稱為父類別 (base class 或 parent class)。</li>
+        </ul>
+    </li>
+    <li><strong>公開繼承 (<code>public J</code>)：</strong>
+        <ul>
+            <li>父類別 <code>J</code> 的 <code>public</code> 成員在子類別 <code>I</code> 中仍然是 <code>public</code>。</li>
+            <li>父類別 <code>J</code> 的 <code>protected</code> 成員在子類別 <code>I</code> 中變成 <code>protected</code>。</li>
+            <li>父類別 <code>J</code> 的 <code>private</code> 成員對子類別 <code>I</code> 是不可直接存取的 (但它們仍然是子類別物件的一部分)。</li>
+        </ul>
+        因此，子類別 <code>I</code> "擁有" (繼承了) 父類別 <code>J</code> 的公有 (public) 和保護 (protected) 成員。
+    </li>
+    <li><strong><code>public: void beep();</code>：</strong>這是在子類別 <code>I</code> 中宣告了一個名為 <code>beep</code> 的公有成員函式。這個函式是類別 <code>I</code> 特有的 (或可能是對父類別中同名函式的覆寫，但題目未提供 <code>J</code> 的定義)。</li>
+</ul>
+
+<p><strong>2. 選項分析：</strong></p>
+<ul>
+    <li><strong>(A) I 類別繼承 J 類別：</strong>正確。語法 <code>class I : public J</code> 明確表示 <code>I</code> 繼承自 <code>J</code>。</li>
+    <li><strong>(B) I 類別會擁有 J 類別的公有成員：</strong>正確。由於是公開繼承，<code>J</code> 的公有成員會成為 <code>I</code> 的公有成員，<code>J</code> 的保護成員會成為 <code>I</code> 的保護成員。所以 <code>I</code> 確實 "擁有" (可以存取和使用) <code>J</code> 的公有成員。</li>
+    <li><strong>(C) J 類別擁有 beep( )成員函式：</strong>錯誤。<code>beep()</code> 函式是在類別 <code>I</code> 的定義中宣告的，因此它是類別 <code>I</code> 的成員函式。除非類別 <code>J</code> 自身也定義了一個名為 <code>beep</code> 的函式 (題目未顯示)，否則不能說 <code>J</code> 擁有這個在 <code>I</code> 中定義的 <code>beep()</code>。</li>
+    <li><strong>(D) I 和 J 是物件導向的繼承關係：</strong>正確。這正是程式碼所展示的。</li>
+</ul>
+
+<p><strong>3. 結論：</strong></p>
+<p>敘述「(C) J 類別擁有 beep( )成員函式」是錯誤的。<code>beep()</code> 是在 <code>I</code> 類別中定義的。</p>
+                        </div>
+                        <div class="next-btn-container">
+                                                        <button class="next-btn" data-target="#q5">下一題</button>
+                                                    </div>
+                    </div>
+                                        <div id="q5" class="quiz-card">
+                        <h3>5. 小雪在 C/C++語言中宣告一個結構 box，程式碼如下，請問該結構會佔用多少的記憶體空間？<pre><code class="language-c">struct box{
+    int hight, length, width;
+};</code></pre></h3>
+
+                                                        <pre><code class="language-c">struct box{
+    int hight, length, width;
+};</code></pre>
+                                                        <div class="quiz-options" data-correct="B">
+                                                            <div class="option" data-option="A">
+                                            (A)3Byte
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B)12Byte
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C)24Byte
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D)48Byte
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解</h4>
+<p><strong>1. 關鍵概念：結構 (struct) 的記憶體大小與 <code>sizeof</code></strong></p>
+<p>結構 (<code>struct</code>) 是一種使用者自訂的資料型態，它可以將多個不同型別的資料成員組合成一個單一的單元。</p>
+<p>結構所佔用的總記憶體空間通常是其所有成員大小的總和。然而，由於<strong>記憶體對齊 (memory alignment)</strong> 的要求，編譯器有時可能會在成員之間或結構末尾插入一些額外的填充位元組 (padding bytes)，以確保每個成員都位於適合其型態的記憶體位址上，從而提高存取效率。</p>
+<p>對於這個特定的結構：</p>
+<pre><code class="language-c">
+struct box{
+    int hight;
+    int length;
+    int width;
+};
+</code></pre>
+<ul>
+    <li>它包含三個 <code>int</code> 型別的成員：<code>hight</code>, <code>length</code>, <code>width</code>。</li>
+    <li>在大多數現代系統上，一個 <code>int</code> 型別通常佔用 4 bytes。</li>
+</ul>
+<p>如果沒有記憶體對齊的填充，該結構的大小將是：<br>
+Size = sizeof(hight) + sizeof(length) + sizeof(width)<br>
+Size = sizeof(int) + sizeof(int) + sizeof(int)<br>
+Size = 4 bytes + 4 bytes + 4 bytes = 12 bytes。</p>
+<p>由於所有成員都是 <code>int</code> 型別，它們通常具有相同的對齊要求 (例如，4位元組對齊)，並且它們可以連續排列而不需要額外的填充位元組。</p>
+
+<p><strong>2. 選項分析 (假設 <code>int</code> 為 4 bytes)：</strong></p>
+<ul>
+    <li><strong>(A) 3Byte：</strong>太小了，一個 <code>int</code> 通常就比這大。</li>
+    <li><strong>(B) 12Byte：</strong>這是 3 個 4-byte <code>int</code> 成員的總和 (3 * 4 = 12)。這在沒有額外填充的情況下是正確的。</li>
+    <li><strong>(C) 24Byte：</strong>太大，除非 <code>int</code> 是 8 bytes (不常見，通常 <code>long long</code> 才是)。</li>
+    <li><strong>(D) 48Byte：</strong>遠大於預期。</li>
+</ul>
+
+<p><strong>3. 結論：</strong></p>
+<p>假設在一個 <code>int</code> 型別佔用 4 bytes 的常見系統中，並且沒有因特殊對齊需求而產生額外填充，<code>struct box</code> 將佔用 12 bytes 的記憶體空間。</p>
+                        </div>
+                        <div class="next-btn-container">
+                                                        <button class="next-btn" data-target="#q6">下一題</button>
+                                                    </div>
+                    </div>
+                                        <div id="q6" class="quiz-card">
+                        <h3>6. 承上題，使用 box 結構宣告 a 和 b 兩個結構變數，何者才是正確的語法？</h3>
+
+                                                        <pre><code class="language-c">// struct box{
+// int hight, length, width;
+// };</code></pre>
+                                                        <div class="quiz-options" data-correct="B">
+                                                            <div class="option" data-option="A">
+                                            (A) a=struct(box)， b=struct(box)，
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B) struct box a， b，
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C) box struct a， b，
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D) #struct box a<br>#struct box b
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解</h4>
+<p><strong>1. 關鍵概念：C/C++ 結構變數的宣告</strong></p>
+<p>在 C 和 C++ 中，一旦定義了一個結構型態，就可以使用該型態來宣告變數。</p>
+<p>假設我們有以下結構定義 (來自上一題)：</p>
+<pre><code class="language-c">
+struct box {
+    int hight, length, width;
+};
+</code></pre>
+
+<p>宣告該結構型態的變數的語法是：</p>
+<p><code>struct <結構名稱> <變數名1>, <變數名2>, ...;</code></p>
+<p>所以，要宣告兩個名為 <code>a</code> 和 <code>b</code> 的 <code>box</code> 結構變數，正確的語法是：</p>
+<p><code>struct box a, b;</code></p>
+<p>或者可以分開宣告：</p>
+<p><code>struct box a;</code><br>
+<code>struct box b;</code></p>
+
+<p><strong>在 C++ 中，</strong> 一旦結構 (或類別) 被定義，你也可以省略 <code>struct</code> (或 <code>class</code>) 關鍵字來宣告變數，直接使用結構名作為型態名：</p>
+<p><code>box a, b; // C++ only, after struct box is defined</code></p>
+<p>然而，題目中的選項更偏向 C 語言的傳統風格，並且選項 (B) 是 C 和 C++ 都完全正確的語法。</p>
+
+<p><strong>2. 選項分析：</strong></p>
+<p>注意：選項中的逗號 <code>，</code> 應為半形 <code>,</code>。</p>
+<ul>
+    <li><strong>(A) <code>a=struct(box)， b=struct(box)，</code>：</strong>這是錯誤的語法。<code>struct(box)</code> 不是一個有效的型態轉換或賦值語法。變數宣告不使用賦值符號來指定型態。</li>
+    <li><strong>(B) <code>struct box a， b，</code> (應為 <code>struct box a, b;</code>)：</strong>這是正確的 C/C++ 語法，用於宣告兩個 <code>struct box</code> 型態的變數 <code>a</code> 和 <code>b</code> (忽略行末多餘的逗號)。</li>
+    <li><strong>(C) <code>box struct a， b，</code>：</strong>這是錯誤的語法。<code>struct</code> 關鍵字應該在結構名稱之前。</li>
+    <li><strong>(D) <code>#struct box a</code><br><code>#struct box b</code>：</strong>這是錯誤的語法。<code>#</code> 符號在 C/C++ 中用於前置處理指令 (如 <code>#include</code>, <code>#define</code>)，不適用於變數宣告。</li>
+</ul>
+
+<p><strong>3. 結論：</strong></p>
+<p>選項 (B) <code>struct box a, b;</code> (修正標點後) 是宣告結構變數 <code>a</code> 和 <code>b</code> 的正確語法。</p>
+                        </div>
+                        <div class="next-btn-container">
+                                                        <button class="next-btn" data-target="#q7">下一題</button>
+                                                    </div>
+                    </div>
+                                        <div id="q7" class="quiz-card">
+                        <h3>7. 承上題，完成結構變數 a 和 b 的宣告後，執行下列程式片段的輸出為何？<pre><code class="language-cpp">a.width = 50;
+b = a;
+cout << b.width;</code></pre></h3>
+
+                                                        <pre><code class="language-cpp">struct box { int hight, length, width; };
+// ... in main or a function ...
+struct box a, b;
+a.width = 50;
+b = a;
+// std::cout << b.width; // Using C++ for cout</code></pre>
+                                                        <div class="quiz-options" data-correct="A">
+                                                            <div class="option" data-option="A">
+                                            (A)50
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B)40
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C)30
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D)20
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解 (C++/C Context)</h4>
+<p><strong>1. 關鍵概念：結構賦值 (Structure Assignment)</strong></p>
+<p>在 C 和 C++ 中，可以直接將一個結構變數的值賦給另一個相同型態的結構變數。這種賦值操作會執行<strong>成員對成員的複製 (memberwise copy)</strong>。也就是說，來源結構的每個成員的值都會被複製到目標結構的相應成員中。</p>
+<p>假設結構 <code>box</code> 定義如下：</p>
+<pre><code class="language-c">
+struct box {
+    int hight, length, width;
+};
+</code></pre>
+<p>以及變數宣告：</p>
+<pre><code class="language-c">
+struct box a, b;
+</code></pre>
+
+<p><strong>2. 程式碼分析：</strong></p>
+<ol>
+    <li><strong><code>a.width = 50;</code></strong>
+        <ul><li>將結構變數 <code>a</code> 的成員 <code>width</code> 設定為 50。此時 <code>a</code> 的狀態可能是 (假設其他成員未明確初始化，它們的值是不確定的，但這不影響 <code>width</code>)：<br>
+            <code>a = { hight: (不確定), length: (不確定), width: 50 }</code></li></ul>
+    </li>
+    <li><strong><code>b = a;</code></strong>
+        <ul><li>這是一個結構賦值操作。結構 <code>a</code> 的所有成員的值都會被複製到結構 <code>b</code> 的對應成員中。</li>
+        <li>所以，<code>b.hight</code> 會得到 <code>a.hight</code> 的值，<code>b.length</code> 會得到 <code>a.length</code> 的值，而重要的是 <code>b.width</code> 會得到 <code>a.width</code> 的值。</li>
+        <li>此時 <code>b</code> 的狀態是：<br>
+        <code>b = { hight: (a.hight的值), length: (a.length的值), width: 50 }</code></li></ul>
+    </li>
+    <li><strong><code>cout << b.width;</code> (題目使用 <code>cout</code>，暗示 C++ 環境)</strong>
+        <ul><li>這行程式碼會輸出結構變數 <code>b</code> 的成員 <code>width</code> 的值。</li>
+        <li>由於 <code>b.width</code> 在上一步被賦值為 50，所以輸出結果是 50。</li></ul>
+    </li>
+</ol>
+
+<p><strong>3. 選項分析：</strong></p>
+<ul>
+    <li><strong>(A) 50：</strong>正確。</li>
+    <li><strong>(B) 40：</strong>錯誤。</li>
+    <li><strong>(C) 30：</strong>錯誤。</li>
+    <li><strong>(D) 20：</strong>錯誤。</li>
+</ul>
+
+<p><strong>4. 結論：</strong></p>
+<p>執行完程式片段後，<code>b.width</code> 的值是 50，因此輸出為 50。</p>
+                        </div>
+                        <div class="next-btn-container">
+                                                        <button class="next-btn" data-target="#q8">下一題</button>
+                                                    </div>
+                    </div>
+                                        <div id="q8" class="quiz-card">
+                        <h3>8. 一程式片段如下，試問執行後的輸出為何？<pre><code class="language-cpp">struct item{
+    int x, y;
+};
+
+int main()
+{
+    struct item items[10];
+    for (int i=0; i<10; i++){
+        items[i].x = i / 2;
+        items[i].y = i % 2;
+    }
+    std::cout << items[9].x + items[9].y << std::endl;
+    return 0;
+}</code></pre></h3>
+
+                                                        <pre><code class="language-cpp">struct item{
+    int x, y;
+};
+
+int main()
+{
+    struct item items[10];
+    for (int i=0; i<10; i++){
+        items[i].x = i / 2; // Integer division
+        items[i].y = i % 2; // Modulo operator
+    }
+    // For items[9]:
+    // items[9].x = 9 / 2 = 4 (integer division)
+    // items[9].y = 9 % 2 = 1 (remainder)
+    // items[9].x + items[9].y = 4 + 1 = 5
+    std::cout << items[9].x + items[9].y << std::endl;
+    return 0;
+}</code></pre>
+                                                        <div class="quiz-options" data-correct="C">
+                                                            <div class="option" data-option="A">
+                                            (A)3
+                                        </div>
+                                                                <div class="option" data-option="B">
+                                            (B)4
+                                        </div>
+                                                                <div class="option" data-option="C">
+                                            (C)5
+                                        </div>
+                                                                <div class="option" data-option="D">
+                                            (D)6
+                                        </div>
+                                                    </div>
+                        <div class="explanation">
+                            <h4>詳解 (C++ Context)</h4>
+<p><strong>1. 關鍵概念：結構陣列、整數除法、模除運算子</strong></p>
+<ul>
+    <li><strong>結構陣列：</strong><code>struct item items[10];</code> 宣告

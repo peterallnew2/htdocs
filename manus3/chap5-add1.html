@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ 核心解析：指標與陣列的共舞</title>
+    <style>
+        :root {
+            --main-blue: #1e3a8a;
+            --accent-orange: #f97316;
+            --bg-light-gray: #f8fafc;
+            --text-dark-gray: #1f2937;
+            --text-light: #ffffff;
+            --border-color: #e5e7eb;
+            --success-green: #16a34a;
+            --error-red: #dc2626;
+        }
+        body {
+            font-family: 'Segoe UI', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            background-color: var(--bg-light-gray);
+            color: var(--text-dark-gray);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            color: var(--main-blue);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            font-size: 1.1rem;
+            color: #4b5563;
+        }
+        .card {
+            background-color: var(--text-light);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        .card-header {
+            background-color: var(--main-blue);
+            color: var(--text-light);
+            padding: 1rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .card-body {
+            padding: 1.5rem 2rem;
+        }
+        .card-body h3 {
+            color: var(--main-blue);
+            border-left: 4px solid var(--accent-orange);
+            padding-left: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        .code-block .keyword { color: #c678dd; }
+        .code-block .type { color: #56b6c2; }
+        .code-block .comment { color: #61afef; font-style: italic; }
+        .code-block .string { color: #98c379; }
+        .code-block .number { color: #d19a66; }
+        .code-block .operator { color: #f97316; }
+        .console-output {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .console-output .prompt { color: #60a5fa; }
+        .console-output .output-line { display: block; }
+        .emphasis {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+        .note {
+            background-color: #eef2ff;
+            border-left: 4px solid #4f46e5;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .note .note-title {
+            font-weight: bold;
+            color: #312e81;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .memory-visualization {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background-color: #f9fafb;
+        }
+        .memory-visualization h4 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: var(--main-blue);
+            font-size: 1.2rem;
+        }
+        .mem-container {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        .mem-block {
+            flex-grow: 1;
+        }
+        .mem-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .mem-table th, .mem-table td {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .mem-table th {
+            background-color: #e5e7eb;
+        }
+        .mem-table .address {
+            color: #6b7280;
+            font-family: 'Fira Code', monospace;
+        }
+        .mem-table .value {
+            font-weight: bold;
+            color: var(--accent-orange);
+        }
+        .pointer-viz {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .pointer-box {
+            padding: 1rem;
+            border: 2px solid var(--main-blue);
+            border-radius: 4px;
+            background: #eef2ff;
+            min-width: 150px;
+            text-align: center;
+        }
+        .pointer-box .label {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--main-blue);
+        }
+        .pointer-box .address {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-orange);
+            margin-top: 0.5rem;
+        }
+        .arrow {
+            font-size: 2.5rem;
+            color: var(--main-blue);
+            font-weight: bold;
+        }
+
+        .interactive-quiz {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .interactive-quiz h3 { margin-top: 0; }
+        .quiz-question { margin-bottom: 1rem; font-weight: 500; }
+        .quiz-options div { margin-bottom: 0.5rem; }
+        .quiz-options input { margin-right: 0.5rem; }
+        .quiz-feedback {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+        .quiz-feedback.correct {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            display: block;
+        }
+        .quiz-feedback.incorrect {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            display: block;
+        }
+        button {
+            background-color: var(--accent-orange);
+            color: var(--text-light);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #ea580c;
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header class="header">
+            <h1>C++ 核心解析：指標與陣列的共舞</h1>
+            <p>從記憶體佈局到動態配置，一次搞懂指標與陣列的底層運作原理</p>
+        </header>
+
+        <div class="card">
+            [cite_start]<div class="card-header">前言：為何要用指標操作陣列？ [cite: 1, 3, 15]</div>
+            <div class="card-body">
+                [cite_start]<p>在 C++ 的世界裡，直接使用陣列是直觀且高效的。然而，透過指標來操作陣列，能賦予我們更強大的記憶體控制能力。 [cite: 16] [cite_start]指標允許我們利用記憶體中可能不連續的零碎空間，這在管理複雜的資料結構時尤其重要。 [cite: 16]</p>
+                [cite_start]<p>當然，這份能力也伴隨著責任。指標本身需要佔用記憶體來儲存位址，不當使用（例如忘記釋放記憶體）會導致記憶體洩漏 (Memory Leak)。 [cite: 16, 93] [cite_start]因此，選擇使用一般陣列還是指標陣列，完全取決於你的應用場景與效能需求。 [cite: 16] 這份教學將帶你深入底層，徹底理解它們之間的關係。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            [cite_start]<div class="card-header">觀念釐清：陣列之名，即為指標 [cite: 4, 5, 17, 18]</div>
+            <div class="card-body">
+                <h3>陣列名稱的本質</h3>
+                <p>一個關鍵且必須牢記在心的觀念：<strong class="emphasis">陣列的名稱，在大多數表達式中，會「衰變 (decay)」成一個指向其第一個元素的指標。</strong></p>
+                <div class="note">
+                    <span class="note-title">專業剖析</span>
+                    [cite_start]<p>這裡要精確地區分「指標」與「指標變數」。陣列名稱像一個<span class="emphasis">指標常數 (pointer constant)</span>，它代表一個位址，但你不能修改它 (例如你不能寫 `a = another_address;`)。而我們宣告的 `int *p` 則是<span class="emphasis">指標變數 (pointer variable)</span>，它可以被賦值以指向不同的位址。 [cite: 19]</p>
+                </div>
+                [cite_start]<p>考慮以下程式碼。當我們將陣列 `a` 賦值給指標 `p` 時，實際上是將 `a` 的起始記憶體位址交給了 `p`。 [cite: 27, 32] [cite_start]這就是為什麼指標 `p` 隨後也能像陣列一樣，使用中括號 `[]` 來存取元素。 [cite: 29, 33]</p>
+
+                <div class="code-block">
+<pre><span class="keyword">#include</span> <span class="string">&lt;iostream&gt;</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="type">int</span> <span class="function">main</span>(){
+    <span class="type">int</span> a[<span class="number">10</span>];
+    <span class="type">int</span> *p;
+
+    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++){
+        a[i] = i; <span class="comment">// 初始化陣列 a</span>
+    }
+
+    p = a; <span class="comment">// 關鍵：將 a 的起始位址賦值給 p</span>
+
+    cout &lt;&lt; <span class="string">"Using pointer p to access array: "</span> &lt;&lt; endl;
+    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++){
+        cout &lt;&lt; p[i] &lt;&lt; <span class="string">" "</span>; [cite_start]<span class="comment">// 會印出 0 1 2 3 4 5 6 7 8 9 [cite: 29]</span>
+    }
+    cout &lt;&lt; endl;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre>
+                </div>
+                
+                <h3>中括號 `[]` 的真相：位址的位移</h3>
+                [cite_start]<p>中括號 `[]` 運算子本質上是一種語法糖，它表示<strong class="emphasis">相對於基準位址的位移量</strong>。 [cite: 34] 當我們寫 `a[i]` 或 `p[i]` 時，編譯器會將其轉換為 `*(a + i)` 或 `*(p + i)`。計算方式如下：</p>
+                <p><code class="emphasis">位移後的位址 = 基礎位址 + i * sizeof(元素型別)</code></p>
+                [cite_start]<p>以 `int a[10]` 為例，假設 `sizeof(int)` 為 4 bytes，`a` 的起始位址在 `0x7ffdc0`： [cite: 34]</p>
+                <ul>
+                    [cite_start]<li>`a[0]` 的位址 = `0x7ffdc0 + 0 * 4` = `0x7ffdc0` [cite: 34]</li>
+                    [cite_start]<li>`a[1]` 的位址 = `0x7ffdc0 + 1 * 4` = `0x7ffdc4` [cite: 34]</li>
+                    <li>`a[2]` 的位址 = `0x7ffdc0 + 2 * 4` = `0x7ffdc8`</li>
+                </ul>
+                [cite_start]<p>這就是為什麼指標 `p` 在儲存了 `a` 的起始位址後，也能用 `p[i]` 進行同樣的位移運算來存取正確的元素。 [cite: 38, 39]</p>
+
+                <div class="memory-visualization">
+                    <h4>視覺化重製：陣列的記憶體佈局</h4>
+                    [cite_start]<p class="text-center" style="margin-bottom: 1rem;">下圖展示了整數陣列 `a[10]` 在記憶體中是<span class="emphasis">連續配置</span>的。`a[1]` 的位址正好比 `a[0]` 多了 4 bytes。 [cite: 34]</p>
+                    <table class="mem-table">
+                        <thead>
+                            <tr>
+                                <th>表達式</th>
+                                <th>索引</th>
+                                <th>儲存的值</th>
+                                <th>記憶體位址 (範例)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>a[0]</td>
+                                <td>0</td>
+                                <td class="value">0</td>
+                                <td class="address">0x7ffdc0</td>
+                            </tr>
+                            <tr>
+                                <td>a[1]</td>
+                                <td>1</td>
+                                <td class="value">1</td>
+                                <td class="address">0x7ffdc4</td>
+                            </tr>
+                            <tr>
+                                <td>a[2]</td>
+                                <td>2</td>
+                                <td class="value">2</td>
+                                <td class="address">0x7ffdc8</td>
+                            </tr>
+                             <tr>
+                                <td>...</td>
+                                <td>...</td>
+                                <td class="value">...</td>
+                                <td class="address">...</td>
+                            </tr>
+                            <tr>
+                                <td>a[9]</td>
+                                <td>9</td>
+                                <td class="value">9</td>
+                                <td class="address">0x7ffde4</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            [cite_start]<div class="card-header">指標與一維陣列的結合 [cite: 7, 45]</div>
+            <div class="card-body">
+                [cite_start]<p>現在，我們透過一個更完整的範例來驗證上述觀念。下面的程式碼中，我們宣告了一個陣列 `a` 和一個指標 `p`，並讓 `p` 指向 `a`。 [cite: 48, 49] 我們分別印出 `a[i]` 和 `p[i]` 的值與位址。</p>
+                <div class="code-block">
+<pre><span class="type">int</span> a[<span class="number">10</span>];
+<span class="type">int</span> *p = a; [cite_start]<span class="comment">// p 儲存 a 的起始位址 [cite: 49]</span>
+
+<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++){
+    a[i] = i;
+    cout &lt;&lt; <span class="string">"a["</span> &lt;&lt; i &lt;&lt; <span class="string">"]: Value="</span> &lt;&lt; a[i] &lt;&lt; <span class="string">", Address="</span> &lt;&lt; &a[i] &lt;&lt; endl;
+}
+cout &lt;&lt; endl;
+<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++){
+    cout &lt;&lt; <span class="string">"p["</span> &lt;&lt; i &lt;&lt; <span class="string">"]: Value="</span> &lt;&lt; p[i] &lt;&lt; <span class="string">", Address="</span> &lt;&lt; &p[i] &lt;&lt; endl;
+}</pre>
+                </div>
+                <h4>執行結果分析</h4>
+                [cite_start]<p>你會發現，兩組迴圈的輸出結果<strong class="emphasis">完全相同</strong>。 [cite: 61] 這證明了 `p` 和 `a` 確實指向並操作著同一塊記憶體區域。</p>
+                <div class="console-output">
+                    <span class="output-line">a[0]: Value=0, Address=0x6ffdd0</span>
+                    <span class="output-line">a[1]: Value=1, Address=0x6ffdd4</span>
+                    <span class="output-line">...</span>
+                    <span class="output-line">a[9]: Value=9, Address=0x6ffdf4</span>
+                    <br>
+                    <span class="output-line">p[0]: Value=0, Address=0x6ffdd0</span>
+                    <span class="output-line">p[1]: Value=1, Address=0x6ffdd4</span>
+                    <span class="output-line">...</span>
+                    <span class="output-line">p[9]: Value=9, Address=0x6ffdf4</span>
+                </div>
+                
+                <div class="memory-visualization">
+                    <h4>視覺化重製：指標 `p` 如何指向陣列 `a`</h4>
+                    [cite_start]<p class="text-center" style="margin-bottom: 1.5rem;">指標變數 `p` 自己佔有一塊記憶體空間 (例如位址在 `0x300`)。它的<span class="emphasis">內容(值)</span>，是陣列 `a` 的起始位址 (例如 `0x123`)。因此，透過 `p` 存取 `p[0]`，就是存取位址 `0x123` 上的資料。 [cite: 62]</p>
+                    <div class="mem-container">
+                        <div class="mem-block">
+                            <h4>指標變數 `p` (在 Stack 上)</h4>
+                            <table class="mem-table">
+                                <thead><tr><th>變數名</th><th>儲存的位址 (值)</th><th>自己的位址</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>p</td>
+                                        <td class="value">0x7ffdc0</td>
+                                        <td class="address">0x7ffda8</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pointer-viz">
+                            <div class="arrow">➔</div>
+                        </div>
+                        <div class="mem-block">
+                            <h4>陣列 `a` (在 Stack 上)</h4>
+                            <table class="mem-table">
+                                <thead><tr><th>索引</th><th>值</th><th>位址</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>0</td>
+                                        <td class="value">0</td>
+                                        <td class="address">0x7ffdc0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td class="value">1</td>
+                                        <td class="address">0x7ffdc4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>...</td>
+                                        <td class="value">...</td>
+                                        <td class="address">...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            [cite_start]<div class="card-header">進階應用：一維動態陣列 (1-D Dynamic Array) [cite: 8, 64]</div>
+            <div class="card-body">
+                [cite_start]<p>動態陣列的威力在於，我們可以在<strong class="emphasis">程式執行期間</strong>才決定陣列的大小，這給予了極大的彈性。 [cite: 65] 這是透過 `new` 運算子在<strong class="emphasis">堆 (Heap)</strong> 上配置記憶體來實現的。</p>
+                
+                <h3>語法解析</h3>
+                <div class="code-block">
+<pre><span class="comment">// 配置一個整數大小的空間，並將其位址存於 p1，初始值為 5</span>
+[cite_start]<span class="type">int</span> *p1 = <span class="keyword">new</span> <span class="type">int</span>(<span class="number">5</span>); [cite: 68]
+
+<span class="comment">// 配置一個能容納 5 個整數的連續空間(陣列)，並將其起始位址存於 p2</span>
+[cite_start]<span class="type">int</span> *p2 = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">5</span>]; [cite: 70]
+</pre>
+                </div>
+                [cite_start]<p>對於 `p2`，雖然我們配置了 5 個整數的空間，但指標變數 `p2` 本身仍然只儲存一個位址——也就是這塊連續空間的<strong class="emphasis">起始位址</strong>。 [cite: 71, 72] [cite_start]然後我們可以用 `p2[0]` 到 `p2[4]` 來進行位移存取。 [cite: 71]</p>
+
+                <div class="memory-visualization">
+                    <h4>視覺化重製：動態陣列的記憶體模型</h4>
+                    <p class="text-center" style="margin-bottom: 1.5rem;">指標 `p2` 位於 Stack，它儲存的值 (`0x100`) 是 Heap 中一塊連續記憶體的起始位址。</p>
+                    <div class="mem-container">
+                        <div class="mem-block">
+                            <h4>指標 `p2` (Stack)</h4>
+                            <div class="pointer-box">
+                                <div class="label">p2</div>
+                                <div class="address">0x100</div>
+                            </div>
+                        </div>
+                         <div class="pointer-viz">
+                            <div class="arrow">➔</div>
+                        </div>
+                        <div class="mem-block">
+                            <h4>動態配置的記憶體 (Heap)</h4>
+                            <table class="mem-table">
+                                <thead><tr><th>索引</th><th>位址 (範例)</th></tr></thead>
+                                <tbody>
+                                    <tr><td>p2[0]</td><td class="address">0x100</td></tr>
+                                    <tr><td>p2[1]</td><td class="address">0x104</td></tr>
+                                    <tr><td>p2[2]</td><td class="address">0x108</td></tr>
+                                    <tr><td>p2[3]</td><td class="address">0x10C</td></tr>
+                                    <tr><td>p2[4]</td><td class="address">0x110</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                [cite_start]<h3>養成好習慣：`delete` 釋放記憶體 [cite: 9, 92]</h3>
+                <div class="note">
+                    <span class="note-title">最佳實踐</span>
+                    [cite_start]<p>使用 `new` 配置的記憶體<strong class="emphasis">必須</strong>手動使用 `delete` 來釋放，否則會造成記憶體洩漏。 [cite: 93] 電腦不會自動回收這塊記憶體，直到程式結束。在大型或長時間執行的應用程式中，這是致命的錯誤。</p>
+                    <p>配對原則：`new` 對應 `delete`，`new []` 對應 `delete []`。用錯了會導致未定義行為。</p>
+                </div>
+                <div class="code-block">
+<pre><span class="comment">// 語法：delete 後面加上中括號，再接上你的指標變數名稱</span>
+[cite_start]<span class="keyword">delete</span> [] p; [cite: 95]</pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            [cite_start]<div class="card-header">補充：指標的運算 (Pointer Arithmetic) [cite: 11, 99]</div>
+            <div class="card-body">
+                [cite_start]<p>指標運算讓我們能以更底層的方式在記憶體位址上移動。之前範例中出現的 `&p+i` 就屬於這個範疇。 [cite: 88, 100]</p>
+
+                <h3>`*(p + i)` vs `p[i]` (取值)</h3>
+                <p>這兩者是完全等價的。`*(p + i)` 的意思是：</p>
+                <ol>
+                    <li>取得指標 `p` 儲存的位址。</li>
+                    <li>將該位址加上 `i * sizeof(指向的型別)` 的位移量。</li>
+                    <li>對計算出的新位址進行<strong class="emphasis">取值 (dereference)</strong> 操作。</li>
+                </ol>
+                [cite_start]<p>例如，若 `p` 指向一個 `int` 陣列，`*(p+1)` 就是取得陣列第二個元素的值。 [cite: 105]</p>
+                <div class="code-block">
+<pre><span class="type">int</span> *p = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">10</span>];
+<span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++){
+    *(p+i) = i; [cite_start]<span class="comment">// 等價於 p[i] = i; [cite: 109]</span>
+}</pre>
+                </div>
+
+                <h3>`&p + i` (取址) - 一個常見的誤解</h3>
+                <p>初學者常將 `&p[i]` 和 `&p + i` 混淆。它們的意義天差地遠：</p>
+                <ul>
+                    <li>`&p[i]`：這是 `&(*(p+i))` 的縮寫。意思是取得<strong class="emphasis">p所指向的陣列中第 i 個元素的位址</strong>。</li>
+                    [cite_start]<li>`&p + i`：這是取得<strong class="emphasis">指標變數 p 本身的位址</strong>，然後再進行位移。位移的單位是 `sizeof(int*)` (指標本身的大小，在 64-bit 系統通常是 8 bytes)。 [cite: 102, 103]</li>
+                </ul>
+
+                <div class="memory-visualization">
+                    <h4>視覺化重製：`&p[i]` vs `&p + i` 的天壤之別</h4>
+                    <p class="text-center" style="margin-bottom: 1.5rem;">以下圖為例，`p` 的值是 `0xca1510`，而 `p` 自己的位址是 `0x6ffdf0`。</p>
+                    <div class="mem-container">
+                        <div class="mem-block">
+                            <h4>指標 `p` 本身 (Stack)</h4>
+                            <table class="mem-table">
+                                <thead><tr><th>變數/運算</th><th>代表的位址</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>&p</td>
+                                        <td class="address">0x6ffdf0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&p + 1</td>
+                                        <td class="address">0x6ffdf8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&p + 2</td>
+                                        <td class="address">0x6ffe00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="note" style="margin-top:1rem">注意：位址每次 +8 bytes (sizeof(int*))</p>
+                        </div>
+                        <div class="mem-block">
+                            <h4>`p` 指向的記憶體 (Heap)</h4>
+                            <table class="mem-table">
+                                 <thead><tr><th>運算</th><th>值</th><th>代表的位址</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>p[0] 或 *p</td>
+                                        <td class="value">0</td>
+                                        <td class="address">0xca1510</td>
+                                    </tr>
+                                     <tr>
+                                        <td>p[1] 或 *(p+1)</td>
+                                        <td class="value">1</td>
+                                        <td class="address">0xca1514</td>
+                                    </tr>
+                                    <tr>
+                                        <td>p[2] 或 *(p+2)</td>
+                                        <td class="value">2</td>
+                                        <td class="address">0xca1518</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                             <p class="note" style="margin-top:1rem">注意：位址每次 +4 bytes (sizeof(int))</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">互動練習：鞏固你的知識</div>
+            <div class="card-body">
+                <div class="interactive-quiz">
+                    <h3>小測驗</h3>
+                    <p class="quiz-question">考慮以下程式碼，請問 `cout << *(ptr + 2);` 會輸出什麼？</p>
+                    <div class="code-block" style="background-color: #f8fafc; color: var(--text-dark-gray);">
+<pre><span class="type">int</span> arr[] = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>};
+<span class="type">int</span>* ptr = arr;</pre>
+                    </div>
+                    <div class="quiz-options" id="quiz1-options">
+                        <div><label><input type="radio" name="quiz1" value="a"> a) 20</label></div>
+                        <div><label><input type="radio" name="quiz1" value="b"> b) 30</label></div>
+                        <div><label><input type="radio" name="quiz1" value="c"> c) 40</label></div>
+                        <div><label><input type="radio" name="quiz1" value="d"> d) arr 的記憶體位址</label></div>
+                    </div>
+                    <button onclick="checkQuiz1()">檢查答案</button>
+                    <div id="quiz1-feedback" class="quiz-feedback"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function checkQuiz1() {
+            const selected = document.querySelector('input[name="quiz1"]:checked');
+            const feedbackEl = document.getElementById('quiz1-feedback');
+            if (!selected) {
+                feedbackEl.innerHTML = '<strong>請選擇一個答案！</strong>';
+                feedbackEl.className = 'quiz-feedback incorrect';
+                return;
+            }
+
+            const answer = selected.value;
+            if (answer === 'b') {
+                feedbackEl.innerHTML = '<strong>正確！</strong><br>解析：`ptr` 指向 `arr` 的第一個元素 (10)。`ptr + 2` 會將指標位移 2 個 `int` 的單位，指向 `arr[2]`，也就是 30。`*` 運算子再取出該位址的值，所以結果是 30。';
+                feedbackEl.className = 'quiz-feedback correct';
+            } else {
+                feedbackEl.innerHTML = '<strong>不正確，再試一次！</strong><br>提示：`ptr + 2` 是指指標的位移，不是數值的加法。它會指向陣列中的哪一個元素呢？';
+                feedbackEl.className = 'quiz-feedback incorrect';
+            }
+        }
+    </script>
+
+</body>
+</html>

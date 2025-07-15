@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言互動式教學 - 流程控制</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #212529;
+            --code-bg-color: #e9ecef;
+            --border-color: #dee2e6;
+            --white-color: #ffffff;
+            --success-color: #28a745;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--white-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h3 {
+            color: #343a40;
+        }
+        p, ul {
+            margin-bottom: 15px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .concept {
+            background-color: #fdfdff;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .expert-insight {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .expert-insight h4 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .code-container {
+            position: relative;
+            background-color: var(--code-bg-color);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+        .code-container pre {
+            margin: 0;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 14px;
+        }
+        .code-container code {
+            color: #c7254e;
+            background: none;
+            padding: 0;
+        }
+        .code-output {
+            background-color: #212529;
+            color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 14px;
+        }
+        .code-output kbd {
+            display: block;
+        }
+        .toggle-btn, .copy-btn {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            margin-right: 10px;
+        }
+        .toggle-btn:hover, .copy-btn:hover {
+            background-color: #0056b3;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--secondary-color);
+        }
+        .copy-btn:hover {
+            background-color: #5a6268;
+        }
+        .copy-btn.copied {
+            background-color: var(--success-color);
+        }
+        .hidden-code {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>C 語言互動式教學：流程控制</h1>
+            <p>深入理解 C/C++ 中的條件、迴圈與控制流程</p>
+        </header>
+
+        <main>
+            <section id="ch4-1">
+                <h2>4-1 流程指令</h2>
+                <p>在 C/C++ 中，流程指令用於根據特定條件控制程式的執行路徑。最核心的流程控制結構是 <code>if</code> 和 <code>switch</code>，它們讓程式能夠做出決策。</p>
+
+                <div class="concept">
+                    <h3>條件式 (Conditional Expressions)</h3>
+                    <p>條件式是流程指令的基礎，其結果（成立或不成立）決定了程式的走向。條件式主要由「關係運算子」和「邏輯運算子」組成。</p>
+                    
+                    <h4>關係運算子 (Relational Operators)</h4>
+                    <table>
+                        <thead><tr><th>運算子</th><th>說明</th><th>範例</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>==</code></td><td>等於</td><td><code>a == b</code></td></tr>
+                            <tr><td><code>!=</code></td><td>不等於</td><td><code>a != b</code></td></tr>
+                            <tr><td><code>></code></td><td>大於</td><td><code>a > b</code></td></tr>
+                            <tr><td><code><</code></td><td>小於</td><td><code>a < b</code></td></tr>
+                            <tr><td><code>>=</code></td><td>大於等於</td><td><code>a >= b</code></td></tr>
+                            <tr><td><code><=</code></td><td>小於等於</td><td><code>a <= b</code></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>邏輯運算子 (Logical Operators)</h4>
+                    <table>
+                        <thead><tr><th>運算子</th><th>說明</th><th>範例</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>&&</code></td><td>AND (且)</td><td><code>(a > b) && (b > c)</code></td></tr>
+                            <tr><td><code>||</code></td><td>OR (或)</td><td><code>(a > b) || (b < c)</code></td></tr>
+                            <tr><td><code>!</code></td><td>NOT (非)</td><td><code>!(a == b)</code></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="expert-insight">
+                        <h4>專家見解：短路求值 (Short-circuit Evaluation)</h4>
+                        <p>C/C++ 的邏輯運算子 <code>&&</code> 和 <code>||</code> 遵循「短路求值」原則。這是一個非常重要的特性：</p>
+                        <ul>
+                            <li>對於 <code>&&</code>，如果左側的表達式為假 (false)，則右側的表達式將不會被求值，因為整個條件必定為假。</li>
+                            <li>對於 <code>||</code>，如果左側的表達式為真 (true)，則右側的表達式將不會被求值，因為整個條件必定為真。</li>
+                        </ul>
+                           <h1>C/C++ 短路求值 (Short-circuit Evaluation)</h1>
+
+    <p>在 C/C++ 語言中，<strong>短路求值 (Short-circuit Evaluation)</strong> 是指在邏輯運算式（例如 <code>&&</code> 邏輯與、<code>||</code> 邏輯或）中，當運算結果已經可以確定時，就不再對運算式後面的部分進行求值的行為。這個特性不僅是為了效率，更重要的是它能避免一些潛在的執行錯誤。</p>
+
+    <hr>
+
+    <h2>1. 邏輯與 <code>&&</code> (AND) 的短路求值</h2>
+
+    <p>對於邏輯與 <code>&&</code> 運算子，它的規則是：<strong>只有當所有條件都為真時，結果才為真。</strong></p>
+    <ul>
+        <li>如果 <code>&&</code> 左邊的表達式已經是 <strong>假 (false)</strong>，那麼無論右邊的表達式是什麼，整個運算式的結果都必定是假。此時，C/C++ 就會「短路」，不再去評估右邊的表達式。</li>
+    </ul>
+
+    <h3>舉例說明：</h3>
+    <pre><code>
+#include &lt;iostream&gt;
+
+int main() {
+    int a = 10;
+    int b = 0; // b 是 0，在邏輯判斷中為假
+
+    // 範例 1: && 的短路求值
+    if (b != 0 && a / b &gt; 5) { // b != 0 是 false
+        std::cout &lt;&lt; "這行不會被執行。\n";
+    } else {
+        std::cout &lt;&lt; "範例 1: 由於 b 等於 0 (false)，&& 右邊的 a / b 語句沒有被執行。\n";
+    }
+
+    // 範例 2: 沒有短路的情況
+    if (a &gt; 5 && b == 0) { // a &gt; 5 是 true，b == 0 也是 true
+        std::cout &lt;&lt; "範例 2: 兩個條件都為真，這行會被執行。\n";
+    }
+
+    return 0;
+}
+    </code></pre>
+
+    <div class="example-output">
+        <p><strong>輸出結果：</strong></p>
+        <pre><code>
+範例 1: 由於 b 等於 0 (false)，&& 右邊的 a / b 語句沒有被執行。
+範例 2: 兩個條件都為真，這行會被執行。
+        </code></pre>
+    </div>
+
+    <p><strong>解釋：</strong></p>
+    <p>在 <code>if (b != 0 && a / b &gt; 5)</code> 這個判斷中：</p>
+    <ol>
+        <li>首先判斷 <code>b != 0</code>。由於 <code>b</code> 是 <code>0</code>，所以 <code>b != 0</code> 的結果是 <code>false</code>。</li>
+        <li>因為 <code>&&</code> 左邊的條件已經是 <code>false</code>，整個 <code>&&</code> 運算式的結果就確定是 <code>false</code> 了。</li>
+        <li>此時，C/C++ 會立即「短路」，<strong>不會執行</strong>右邊的 <code>a / b &gt; 5</code>。這避免了在 <code>b</code> 為 <code>0</code> 時執行除以零 (division by zero) 的錯誤，這通常會導致程式崩潰。</li>
+    </ol>
+
+    <hr>
+
+    <h2>2. 邏輯或 <code>||</code> (OR) 的短路求值</h2>
+
+    <p>對於邏輯或 <code>||</code> 運算子，它的規則是：<strong>只要有一個條件為真，結果就為真。</strong></p>
+    <ul>
+        <li>如果 <code>||</code> 左邊的表達式已經是 <strong>真 (true)</strong>，那麼無論右邊的表達式是什麼，整個運算式的結果都必定是真。此時，C/C++ 就會「短路」，不再去評估右邊的表達式。</li>
+    </ul>
+
+    <h3>舉例說明：</h3>
+    <pre><code>
+#include &lt;iostream&gt;
+
+bool checkFunction() {
+    std::cout &lt;&lt; "執行了 checkFunction()。\n";
+    return true; // 假設這個函數總是返回 true
+}
+
+int main() {
+    int x = 20;
+
+    // 範例 3: || 的短路求值
+    if (x &gt; 10 || checkFunction()) { // x &gt; 10 是 true
+        std::cout &lt;&lt; "範例 3: 由於 x &gt; 10 為真，|| 右邊的 checkFunction() 沒有被執行。\n";
+    } else {
+        std::cout &lt;&lt; "這行不會被執行。\n";
+    }
+
+    // 範例 4: 沒有短路的情況
+    if (x &lt; 5 || checkFunction()) { // x &lt; 5 是 false，所以必須執行右邊的 checkFunction()
+        std::cout &lt;&lt; "範例 4: x &lt; 5 為假，所以執行了 checkFunction()，並使得整個條件為真。\n";
+    }
+
+    return 0;
+}
+    </code></pre>
+
+    <div class="example-output">
+        <p><strong>輸出結果：</strong></p>
+        <pre><code>
+範例 3: 由於 x &gt; 10 為真，|| 右邊的 checkFunction() 沒有被執行。
+執行了 checkFunction()。
+範例 4: x &lt; 5 為假，所以執行了 checkFunction()，並使得整個條件為真。
+        </code></pre>
+    </div>
+
+    <p><strong>解釋：</strong></p>
+    <p>在 <code>if (x &gt; 10 || checkFunction())</code> 這個判斷中：</p>
+    <ol>
+        <li>首先判斷 <code>x &gt; 10</code>。由於 <code>x</code> 是 <code>20</code>，所以 <code>x &gt; 10</code> 的結果是 <code>true</code>。</li>
+        <li>因為 <code>||</code> 左邊的條件已經是 <code>true</code>，整個 <code>||</code> 運算式的結果就確定是 <code>true</code> 了。</li>
+        <li>此時，C/C++ 會立即「短路」，<strong>不會執行</strong>右邊的 <code>checkFunction()</code>。這顯示了短路求值不僅影響數值判斷，也影響函數的執行。</li>
+    </ol>
+
+    <hr>
+
+    <h2>短路求值的應用和注意事項</h2>
+
+    <p>短路求值是一個非常實用且重要的特性，特別是在以下情況：</p>
+    <ol>
+        <li><strong>安全檢查</strong>：如上述 <code>a / b</code> 的例子，可以用 <code>if (b != 0 && a / b &gt; 5)</code> 來防止除以零的錯誤。</li>
+        <li><strong>效率提升</strong>：避免執行不必要的計算或函數呼叫，尤其當這些操作耗時或有副作用時。</li>
+        <li><strong>副作用管理</strong>：如果運算式的一部分有副作用（例如修改變數值、進行 I/O 操作），那麼短路求值可能會導致這些副作用不被執行。這點需要特別注意，避免因為短路而產生未預期的行為。</li>
+    </ol>
+
+    <p>理解短路求值能幫助你寫出更安全、更有效率的 C/C++ 程式碼。</p>
+						
+						</p>
+                    </div>
+                </div>
+				<div class="concept">
+				  <h1>C/C++ 語言中的 0、非0 與邏輯真假</h1>
+
+    <p>在 C/C++ 語言中，理解<strong>數字 0、非零值</strong>以及它們與<strong>邏輯真假</strong>的關係對於初學者來說非常重要，因為這直接影響到程式中的條件判斷和流程控制。</p>
+
+    <hr>
+
+    <h2>數字與邏輯值的關係</h2>
+
+    <p>在 C/C++ 中，數字 <code>0</code> 和任何<strong>非零（non-zero）</strong>的數字在邏輯判斷中扮演著特殊的角色：</p>
+
+    <ul>
+        <li><strong><code>0</code> (零)</strong>：
+            <ul>
+                <li>在數值上，它就是數字零。</li>
+                <li>在邏輯判斷中，<code>0</code> 被解釋為<strong>假（false）</strong>。</li>
+                <li>舉例：如果你寫 <code>if (0)</code>，這個條件永遠不會成立。</li>
+            </ul>
+        </li>
+        <li><strong>非零 (任何非0的數字)</strong>：
+            <ul>
+                <li>任何不等於 <code>0</code> 的數字，無論是正數（如 <code>1</code>、<code>10</code>、<code>100</code>）還是負數（如 <code>-1</code>、<code>-50</code>），都屬於非零。</li>
+                <li>在邏輯判斷中，任何非零的數字都被解釋為<strong>真（true）</strong>。</li>
+                <li>舉例：如果你寫 <code>if (1)</code>、<code>if (10)</code> 或 <code>if (-5)</code>，這些條件都會成立。其中，<code>1</code> 經常被用來明確表示真。</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>專業知識：布林型態 (<code>bool</code>)</h2>
+
+    <p>雖然 C/C++ 長期以來都使用 <code>0</code> 和非零來表示真假，但自 C++98 標準（以及 C99 標準）起，引入了<strong>布林型別 <code>bool</code></strong> 來更明確地表示邏輯值：</p>
+
+    <ul>
+        <li><strong><code>true</code> (真)</strong>：
+            <ul>
+                <li>這是 <code>bool</code> 型別的兩個可能值之一。</li>
+                <li>在內部，<code>true</code> 通常會被編譯器轉換成 <code>1</code>。</li>
+            </ul>
+        </li>
+        <li><strong><code>false</code> (假)</strong>：
+            <ul>
+                <li>這是 <code>bool</code> 型別的另一個可能值。</li>
+                <li>在內部，<code>false</code> 通常會被編譯器轉換成 <code>0</code>。</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p>雖然有了 <code>bool</code> 型別，C/C++ 仍然保持了與舊有習慣的兼容性。這意味著：</p>
+    <ul>
+        <li>你可以將一個數字賦值給 <code>bool</code> 變數：
+            <ul>
+                <li><code>bool isTrue = 10;</code> // <code>isTrue</code> 會被賦值為 <code>true</code></li>
+                <li><code>bool isFalse = 0;</code> // <code>isFalse</code> 會被賦值為 <code>false</code></li>
+            </ul>
+        </li>
+        <li>你可以在需要數字的地方使用 <code>bool</code> 變數：
+            <ul>
+                <li><code>int x = true;</code> // <code>x</code> 會被賦值為 <code>1</code></li>
+                <li><code>int y = false;</code> // <code>y</code> 會被賦值為 <code>0</code></li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>實際範例</h2>
+
+    <p>讓我們通過一些程式碼範例來理解這些概念：</p>
+
+    <pre><code>
+#include &lt;iostream&gt; // 引入輸入輸出函式庫
+
+int main() {
+    // 範例 1: 使用數字進行條件判斷
+    if (1) { // 1 被解釋為真
+        std::cout &lt;&lt; "範例 1: 1 是真的。\n";
+    }
+
+    if (0) { // 0 被解釋為假
+        std::cout &lt;&lt; "範例 2: 0 是真的。（這行不會被印出）\n";
+    }
+
+    int myNumber = 5;
+    if (myNumber) { // 5 是非零，被解釋為真
+        std::cout &lt;&lt; "範例 3: " &lt;&lt; myNumber &lt;&lt; " 是非零，所以是真的。\n";
+    }
+
+    int zeroNumber = 0;
+    if (zeroNumber) { // 0 是零，被解釋為假
+        std::cout &lt;&lt; "範例 4: " &lt;&lt; zeroNumber &lt;&lt; " 是零，所以是真的。（這行不會被印出）\n";
+    }
+
+    // 範例 5: 使用布林型別
+    bool isConditionMet = true;
+    if (isConditionMet) {
+        std::cout &lt;&lt; "範例 5: isConditionMet 是 true。\n";
+    }
+
+    bool isConditionNotMet = false;
+    if (!isConditionNotMet) { // !表示邏輯非，!false 變為 true
+        std::cout &lt;&lt; "範例 6: isConditionNotMet 是 false，所以 !isConditionNotMet 是 true。\n";
+    }
+
+    // 範例 7: 數字和布林之間的轉換
+    int a = 10;
+    bool b = (a &gt; 5); // (a &gt; 5) 是 true
+    std::cout &lt;&lt; "範例 7: a &gt; 5 的結果是 " &lt;&lt; b &lt;&lt; " (這裡 true 通常顯示為 1)。\n";
+
+    int c = 3;
+    bool d = (c &gt; 5); // (c &gt; 5) 是 false
+    std::cout &lt;&lt; "範例 8: c &gt; 5 的結果是 " &lt;&lt; d &lt;&lt; " (這裡 false 通常顯示為 0)。\n";
+
+    return 0; // 主函式成功結束
+}
+    </code></pre>
+
+    <div class="example-output">
+        <p><strong>輸出結果：</strong></p>
+        <pre><code>
+範例 1: 1 是真的。
+範例 3: 5 是非零，所以是真的。
+範例 5: isConditionMet 是 true。
+範例 6: isConditionNotMet 是 false，所以 !isConditionNotMet 是 true。
+範例 7: a &gt; 5 的結果是 1 (這裡 true 通常顯示為 1)。
+範例 8: c &gt; 5 的結果是 0 (這裡 false 通常顯示為 0)。
+        </code></pre>
+    </div>
+
+    <hr>
+
+    <h2>總結</h2>
+
+    <p>簡而言之：</p>
+    <ul>
+        <li><strong><code>0</code> 等同於 <code>false</code> (假)</strong></li>
+        <li><strong>任何非零值（包括 <code>1</code>、正數、負數）等同於 <code>true</code> (真)</strong></li>
+        <li><code>bool</code> 型別明確提供了 <code>true</code> 和 <code>false</code> 關鍵字，使程式碼更具可讀性，但底層仍然基於 <code>0</code> 和 <code>1</code> 的概念。</li>
+    </ul>
+
+    <p>理解這點對於編寫正確的條件語句（<code>if</code>、<code>while</code> 等）和邏輯運算式至關重要，這是 C/C++ 程式設計的基礎。</p>
+
+				</div>
+                <div class="concept">
+                    <h3><code>if</code> 條件敘述</h3>
+                    <p><code>if</code> 是最基本的條件判斷結構。當條件式成立 (結果為 true) 時，執行其後的程式區塊。</p>
+                    <button class="toggle-btn" data-target="code1">顯示範例</button>
+                    <div id="code1" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-1">複製</button>
+                            <pre id="code-block-1"><code>#include <stdio.h>
+
+int main() {
+    int x = 10;
+    int y = 5;
+    if (x > y) {
+        printf("條件式 x > y 成立\n");
+    }
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>條件式 x > y 成立</kbd></div>
+                    </div>
+                    <div class="expert-insight">
+                        <h4>專家見解：永遠使用大括號 <code>{}</code></h4>
+                        <p>雖然 C/C++ 允許 <code>if</code> 後的單行敘述不使用大括號，但這是一個常見的錯誤來源。例如，後續增加程式碼時，很容易忘記加上括號而導致邏輯錯誤。養成總是使用大括號的習慣，可以顯著提升程式碼的可讀性與可維護性。</p>
+                    </div>
+                </div>
+
+                <div class="concept">
+                    <h3><code>if...else</code> 敘述</h3>
+                    <p><code>if...else</code> 提供二選一的路徑。當條件式成立時，執行 <code>if</code> 的區塊；不成立時，執行 <code>else</code> 的區塊。</p>
+                    <button class="toggle-btn" data-target="code2">顯示範例</button>
+                    <div id="code2" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-2">複製</button>
+                            <pre id="code-block-2"><code>#include <stdio.h>
+
+int main() {
+    int x = 5;
+    int y = 10;
+    if (x > y) {
+        printf("條件式 x > y 成立\n");
+    } else {
+        printf("條件式 x > y 不成立\n");
+    }
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>條件式 x > y 不成立</kbd></div>
+                    </div>
+                </div>
+
+                <div class="concept">
+                    <h3><code>if...else if...else</code> 敘述</h3>
+                    <p>當有多個互斥的條件需要判斷時，可以使用 <code>if...else if...else</code> 結構。它會依序檢查每個條件，一旦有條件成立，就執行對應的區塊，並跳過其餘所有判斷。</p>
+                    <button class="toggle-btn" data-target="code3">顯示範例</button>
+                    <div id="code3" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-3">複製</button>
+                            <pre id="code-block-3"><code>#include <stdio.h>
+
+int main() {
+    // 範例：根據消費金額判斷會員等級
+    unsigned int amount = 15000;
+    
+    if (amount > 50000) {
+        printf("鑽石會員\n");
+    } else if (amount > 10000) {
+        printf("白金會員\n");
+    } else if (amount > 3000) {
+        printf("黃金會員\n");
+    } else {
+        printf("普通會員\n");
+    }
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>白金會員</kbd></div>
+                    </div>
+                     <div class="expert-insight">
+                        <h4>專家見解：條件的順序很重要</h4>
+                        <p>在 <code>if...else if</code> 鏈中，條件的檢查是有順序的。應該將最嚴格或最特殊的條件放在前面。在上面的範例中，如果把 <code>amount > 3000</code> 放在第一個，那麼即使消費了 60000 元，也只會被判斷為「黃金會員」，因為該條件首先成立，後續的判斷就不會執行。</p>
+                    </div>
+                </div>
+
+                <div class="concept">
+                    <h3>條件運算子 (三元運算子) <code>?:</code></h3>
+                    <p>三元運算子是 <code>if...else</code> 的簡潔形式，適用於根據條件賦值的簡單情境。其語法為：<code>條件 ? 表達式1 : 表達式2</code>。</p>
+                    <button class="toggle-btn" data-target="code4">顯示範例</button>
+                    <div id="code4" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-4">複製</button>
+                            <pre id="code-block-4"><code>#include <stdio.h>
+
+int main() {
+    int score = 75;
+    char* result;
+
+    // 如果 score >= 60，則 result = "及格"，否則為 "不及格"
+    result = (score >= 60) ? "及格" : "不及格";
+    
+    printf("你的成績: %s\n", result);
+    return 0;
+}
+</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>你的成績: 及格</kbd></div>
+                    </div>
+                    <div class="expert-insight">
+                        <h4>專家見解：適度使用以保持可讀性</h4>
+                        <p>雖然三元運算子很方便，但過度或複雜的巢狀使用會嚴重降低程式碼的可讀性。當邏輯稍微複雜時，使用完整的 <code>if...else</code> 結構通常是更好的選擇。</p>
+                    </div>
+                </div>
+
+                <div class="concept">
+                    <h3><code>switch...case</code> 敘述</h3>
+                    <p>當需要根據一個整數型別（如 <code>int</code>, <code>char</code>）變數的多個特定值來執行不同操作時，<code>switch</code> 是比一長串 <code>if...else if</code> 更清晰、更高效的選擇。</p>
+                    <button class="toggle-btn" data-target="code5">顯示範例</button>
+                    <div id="code5" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-5">複製</button>
+                            <pre id="code-block-5"><code>#include <stdio.h>
+
+int main() {
+    // 範例：自助點餐機
+    int choice = 2;
+    
+    switch (choice) {
+        case 1:
+            printf("您選擇了：陽光牛肉麵\n");
+            break;
+        case 2:
+            printf("您選擇了：熱情雞肉捲\n");
+            break;
+        case 3:
+            printf("您選擇了：酷炫打拋豬\n");
+            break;
+        default:
+            printf("無效的選擇！\n");
+            break;
+    }
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>您選擇了：熱情雞肉捲</kbd></div>
+                    </div>
+                    <div class="expert-insight">
+                        <h4>專家見解：<code>break</code> 的重要性與穿透 (Fall-through)</h4>
+                        <ul>
+                            <li><strong><code>break</code> 不可或缺</strong>：在每個 <code>case</code> 區塊的末尾，幾乎總是要加上 <code>break;</code>。如果省略 <code>break</code>，程式會繼續執行下一個 <code>case</code> 的程式碼，直到遇到 <code>break</code> 或 <code>switch</code> 結束為止。這種行為稱為「穿透」(Fall-through)。</li>
+                            <li><strong>刻意使用穿透</strong>：在極少數情況下，可以刻意利用穿透來處理多個值對應相同操作的情境。但此時務必加上註解，明確表示這是故意為之，以避免他人誤解。</li>
+                            <li><strong><code>default</code> 的好習慣</strong>：即使你認為已經涵蓋了所有情況，也最好加上 <code>default</code> 區塊來處理非預期的值。這讓程式更健壯。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ch4-2">
+                <h2>4-2 迴圈</h2>
+                <p>迴圈指令讓程式可以重覆執行一個程式區塊。C/C++ 提供 <code>for</code>、<code>while</code> 和 <code>do...while</code> 三種主要的迴圈結構。</p>
+
+                <div class="concept">
+                    <h3><code>for</code> 迴圈</h3>
+                    <p><code>for</code> 迴圈非常適合在「已知重覆次數」的情境下使用。其結構包含三個部分：初始化、條件判斷、以及更新運算式。</p>
+                    <p>語法: <code>for (初始化; 條件; 更新) { ... }</code></p>
+                    <button class="toggle-btn" data-target="code6">顯示範例</button>
+                    <div id="code6" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-6">複製</button>
+                            <pre id="code-block-6"><code>#include <stdio.h>
+
+int main() {
+    // 執行 5 次迴圈，印出 0 到 4
+    for (int i = 0; i < 5; i++) {
+        printf("i 的值是: %d\n", i);
+    }
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>i 的值是: 0<br>i 的值是: 1<br>i 的值是: 2<br>i 的值是: 3<br>i 的值是: 4</kbd></div>
+                    </div>
+                    <div class="expert-insight">
+                        <h4>專家見解：迴圈變數的範疇 (Scope)</h4>
+                        <p>在現代 C++ (C99 標準後的 C 語言也支援) 中，建議直接在 <code>for</code> 迴圈的初始化部分宣告迴圈變數 (如 <code>for (int i = 0; ...)</code>)。這樣做的好處是，變數 <code>i</code> 的生命週期和作用域被限制在迴圈內部，迴圈結束後該變數即被銷毀，避免了命名衝突和外部誤用。</p>
+                    </div>
+                </div>
+
+                <div class="concept">
+                    <h3><code>while</code> 迴圈</h3>
+                    <p><code>while</code> 迴圈適用於「未知重覆次數」，只知道「在什麼條件下要繼續」的情境。它會在每次迴圈開始前檢查條件，若條件為真，則執行區塊。</p>
+                    <button class="toggle-btn" data-target="code7">顯示範例</button>
+                    <div id="code7" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-7">複製</button>
+                            <pre id="code-block-7"><code>#include <stdio.h>
+
+int main() {
+    // 範例：找出數字 120 的所有因數
+    int n = 120;
+    int i = 1;
+    
+    printf("%d 的所有因數: ", n);
+    while (i <= n) {
+        if (n % i == 0) {
+            printf("%d ", i);
+        }
+        i++; // 在迴圈體內更新條件變數
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>120 的所有因數: 1 2 3 4 5 6 8 10 12 15 20 24 30 40 60 120</kbd></div>
+                    </div>
+                     <div class="expert-insight">
+                        <h4>專家見解：避免無窮迴圈</h4>
+                        <p>使用 <code>while</code> 迴圈時，最關鍵的一點是「確保迴圈體內有改變條件的敘述」。在上面的範例中，如果忘記了 <code>i++;</code>，那麼 <code>i</code> 的值永遠是 1，條件 <code>i <= n</code> 永遠為真，程式就會陷入無窮迴圈，直到被強制中止。</p>
+                    </div>
+                </div>
+
+                <div class="concept">
+                    <h3><code>do...while</code> 迴圈</h3>
+                    <p><code>do...while</code> 迴圈與 <code>while</code> 類似，但它保證迴圈體「至少會被執行一次」。因為它的條件判斷是在迴圈體執行「之後」才進行。</p>
+                    <button class="toggle-btn" data-target="code8">顯示範例</button>
+                    <div id="code8" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-8">複製</button>
+                            <pre id="code-block-8"><code>#include <stdio.h>
+
+int main() {
+    // 範例：要求使用者至少輸入一次密碼
+    int password;
+    
+    do {
+        printf("請輸入密碼 (正確密碼為 1234): ");
+        scanf("%d", &password);
+    } while (password != 1234);
+    
+    printf("密碼正確，歡迎使用！\n");
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出 (互動式)：</strong><br>請輸入密碼 (正確密碼為 1234): [使用者輸入]<br>... (直到輸入 1234)<br>密碼正確，歡迎使用！</kbd></div>
+                    </div>
+                </div>
+
+                <div class="concept">
+                    <h3><code>break</code> 和 <code>continue</code></h3>
+                    <p>這兩個指令提供更精細的迴圈控制：</p>
+                    <ul>
+                        <li><strong><code>break</code></strong>: 強制且立即「跳出」整個迴圈，繼續執行迴圈之後的程式碼。</li>
+                        <li><strong><code>continue</code></strong>: 立即「跳過」本次迴圈剩餘的部分，直接開始下一次迴圈的迭代。</li>
+                    </ul>
+                    <button class="toggle-btn" data-target="code9">顯示範例</button>
+                    <div id="code9" class="hidden-code">
+                        <div class="code-container">
+                            <button class="copy-btn" data-clipboard-target="#code-block-9">複製</button>
+                            <pre id="code-block-9"><code>#include <stdio.h>
+
+int main() {
+    printf("break 範例 (找到 5 就停止):\n");
+    for (int i = 0; i < 10; i++) {
+        if (i == 5) {
+            break; // 當 i 等於 5，跳出 for 迴圈
+        }
+        printf("%d ", i);
+    }
+    printf("\n\n");
+
+    printf("continue 範例 (跳過奇數):\n");
+    for (int i = 0; i < 10; i++) {
+        if (i % 2 != 0) {
+            continue; // 如果 i 是奇數，跳過本次 printf
+        }
+        printf("%d ", i);
+    }
+    printf("\n");
+    
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="code-output"><kbd><strong>預期輸出：</strong><br>break 範例 (找到 5 就停止):<br>0 1 2 3 4 <br><br>continue 範例 (跳過奇數):<br>0 2 4 6 8</kbd></div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 處理所有切換按鈕
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        const isHidden = targetElement.classList.contains('hidden-code');
+                        targetElement.classList.toggle('hidden-code');
+                        button.textContent = isHidden ? '隱藏範例' : '顯示範例';
+                    }
+                });
+            });
+
+            // 處理所有複製按鈕
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetSelector = button.getAttribute('data-clipboard-target');
+                    const targetElement = document.querySelector(targetSelector);
+                    if (targetElement) {
+                        navigator.clipboard.writeText(targetElement.innerText)
+                            .then(() => {
+                                button.textContent = '已複製!';
+                                button.classList.add('copied');
+                                setTimeout(() => {
+                                    button.textContent = '複製';
+                                    button.classList.remove('copied');
+                                }, 2000);
+                            })
+                            .catch(err => {
+                                console.error('無法複製文字: ', err);
+                                button.textContent = '失敗';
+                            });
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

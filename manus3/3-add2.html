@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言運算式練習題詳解</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0; /* 重設 body 預設 margin */
+            padding-top: 80px; /* 為固定標題留出空間 */
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #fixed-header {
+            position: fixed; /* 固定位置 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #0056b3; /* 標題背景色 */
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000; /* 確保在其他內容之上 */
+            text-align: center;
+        }
+        #fixed-header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .content-wrapper {
+            margin: 20px; /* 內容區塊的邊距 */
+        }
+        h2, h3 {
+            color: #0056b3;
+        }
+        h2 {
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            color: #c7254e;
+        }
+        pre {
+            background-color: #e9e9e9;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        pre code {
+            display: block;
+            background-color: transparent;
+            padding: 0;
+            color: #000;
+        }
+        strong {
+            color: #d9534f;
+        }
+        .section-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .step {
+            margin-bottom: 10px;
+        }
+        .original-vars {
+            background-color: #e6f7ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .example-output {
+            background-color: #fff;
+            border-left: 5px solid #5cb85c;
+            padding: 10px;
+            margin-top: 15px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="fixed-header">
+        <h1>在 C 語言中宣告 6 個整數變數 a、b、c、d、e、f，其值分別為 1、2、3、4、5、6。請問下列的運算式，其運算後 f 的值為何？</h1>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="section-box">
+            <h2>第一部分：整數變數運算</h2>
+
+            <div class="original-vars">
+                <strong>初始變數值：</strong><br>
+                <code>a = 1</code>, <code>b = 2</code>, <code>c = 3</code>, <code>d = 4</code>, <code>e = 5</code>, <code>f = 6</code>
+            </div>
+
+            <h3>(1) <code>f = c + b * ( e - c ) / b</code></h3>
+            <div class="step">
+                1. 計算括號內的表達式：<code>( e - c )</code>
+                   <ul>
+                       <li><code>( 5 - 3 ) = 2</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 替換括號結果：<code>f = c + b * 2 / b</code>
+            </div>
+            <div class="step">
+                3. 執行乘法和除法（從左到右，優先級相同）：
+                   <ul>
+                       <li><code>b * 2 = 2 * 2 = 4</code></li>
+                       <li><code>4 / b = 4 / 2 = 2</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                4. 替換乘除結果：<code>f = c + 2</code>
+            </div>
+            <div class="step">
+                5. 執行加法：
+                   <ul>
+                       <li><code>f = 3 + 2 = 5</code></li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>f = 5</code></p>
+
+            <hr>
+
+            <h3>(2) <code>f = - f - a + b * ( - d )</code></h3>
+            <p><strong>注意：</strong> 每個子題都是獨立的，<code>f</code> 會恢復為初始值 6。</p>
+            <div class="original-vars">
+                <strong>重新設定初始變數值：</strong><br>
+                <code>a = 1</code>, <code>b = 2</code>, <code>c = 3</code>, <code>d = 4</code>, <code>e = 5</code>, <code>f = 6</code>
+            </div>
+            <div class="step">
+                1. 計算括號內的表達式：<code>( - d )</code>
+                   <ul>
+                       <li><code>( - 4 ) = -4</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 替換括號結果：<code>f = - f - a + b * -4</code>
+            </div>
+            <div class="step">
+                3. 執行乘法：
+                   <ul>
+                       <li><code>b * -4 = 2 * -4 = -8</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                4. 替換乘法結果：<code>f = - f - a + (-8)</code>
+            </div>
+            <div class="step">
+                5. 執行負號運算（從左到右）：
+                   <ul>
+                       <li><code>- f = - 6</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                6. 執行加減法（從左到右）：
+                   <ul>
+                       <li><code>-6 - a = -6 - 1 = -7</code></li>
+                       <li><code>-7 + (-8) = -15</code></li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>f = -15</code></p>
+
+            <hr>
+
+            <h3>(3) <code>f = c / b + e % c</code></h3>
+            <p><strong>注意：</strong> 每個子題都是獨立的，<code>f</code> 會恢復為初始值 6。</p>
+            <div class="original-vars">
+                <strong>重新設定初始變數值：</strong><br>
+                <code>a = 1</code>, <code>b = 2</code>, <code>c = 3</code>, <code>d = 4</code>, <code>e = 5</code>, <code>f = 6</code>
+            </div>
+            <div class="step">
+                1. 執行除法：<code>c / b</code>
+                   <ul>
+                       <li><code>3 / 2 = 1</code> (整數除法，只取整數部分)</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 執行模數運算：<code>e % c</code>
+                   <ul>
+                       <li><code>5 % 3 = 2</code> (5 除以 3 的餘數)</li>
+                   </ul>
+            </div>
+            <div class="step">
+                3. 執行加法：
+                   <ul>
+                       <li><code>f = 1 + 2 = 3</code></li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>f = 3</code></p>
+
+            <hr>
+
+            <h3>(4) <code>f = b * (d++)</code></h3>
+            <p><strong>注意：</strong> 每個子題都是獨立的，<code>f</code> 會恢復為初始值 6。</p>
+            <div class="original-vars">
+                <strong>重新設定初始變數值：</strong><br>
+                <code>a = 1</code>, <code>b = 2</code>, <code>c = 3</code>, <code>d = 4</code>, <code>e = 5</code>, <code>f = 6</code>
+            </div>
+            <div class="step">
+                1. 處理後置遞增運算子 <code>d++</code>：
+                   <ul>
+                       <li>在表達式中，<code>d</code> 的值先被<strong>使用</strong>，即 <code>4</code>。</li>
+                       <li>然後 <code>d</code> 的值<strong>遞增</strong>，<code>d</code> 變為 <code>5</code>。</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 替換 <code>d++</code> 的使用值：<code>f = b * 4</code>
+            </div>
+            <div class="step">
+                3. 執行乘法：
+                   <ul>
+                       <li><code>f = 2 * 4 = 8</code></li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>f = 8</code></p>
+
+            <hr>
+
+            <h3>(5) <code>f = c + (++e) - ( --d )</code></h3>
+            <p><strong>注意：</strong> 每個子題都是獨立的，<code>f</code> 會恢復為初始值 6。</p>
+            <div class="original-vars">
+                <strong>重新設定初始變數值：</strong><br>
+                <code>a = 1</code>, <code>b = 2</code>, <code>c = 3</code>, <code>d = 4</code>, <code>e = 5</code>, <code>f = 6</code>
+            </div>
+            <div class="step">
+                1. 處理前置遞增運算子 <code>++e</code>：
+                   <ul>
+                       <li><code>e</code> 的值先<strong>遞增</strong>，<code>e</code> 變為 <code>6</code>。</li>
+                       <li>然後 <code>e</code> 的新值 <code>6</code> 被<strong>使用</strong>。</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 處理前置遞減運算子 <code>--d</code>：
+                   <ul>
+                       <li><code>d</code> 的值先<strong>遞減</strong>，<code>d</code> 變為 <code>3</code>。</li>
+                       <li>然後 <code>d</code> 的新值 <code>3</code> 被<strong>使用</strong>。</li>
+                   </ul>
+            </div>
+            <div class="step">
+                3. 替換這些變數的新值：<code>f = c + 6 - 3</code>
+            </div>
+            <div class="step">
+                4. 執行加減法（從左到右）：
+                   <ul>
+                       <li><code>f = 3 + 6 - 3</code></li>
+                       <li><code>f = 9 - 3 = 6</code></li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>f = 6</code></p>
+
+            <hr>
+
+            <h3>(6) <code>f %= e</code></h3>
+            <p><strong>注意：</strong> 每個子題都是獨立的，<code>f</code> 會恢復為初始值 6。</p>
+            <div class="original-vars">
+                <strong>重新設定初始變數值：</strong><br>
+                <code>a = 1</code>, <code>b = 2</code>, <code>c = 3</code>, <code>d = 4</code>, <code>e = 5</code>, <code>f = 6</code>
+            </div>
+            <div class="step">
+                1. 複合賦值運算子 <code>f %= e</code> 等同於 <code>f = f % e</code>。
+            </div>
+            <div class="step">
+                2. 計算模數：<code>f % e = 6 % 5 = 1</code> (6 除以 5 的餘數)
+            </div>
+            <div class="step">
+                3. 將結果賦值給 <code>f</code>：
+                   <ul>
+                       <li><code>f = 1</code></li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>f = 1</code></p>
+
+            <hr>
+
+            <h3>(7) <code>f += (a++) * (c--) + (++e)</code></h3>
+            <p><strong>注意：</strong> 每個子題都是獨立的，<code>f</code> 會恢復為初始值 6。</p>
+            <div class="original-vars">
+                <strong>重新設定初始變數值：</strong><br>
+                <code>a = 1</code>, <code>b = 2</code>, <code>c = 3</code>, <code>d = 4</code>, <code>e = 5</code>, <code>f = 6</code>
+            </div>
+            <div class="step">
+                1. 處理遞增/遞減運算子：
+                   <ul>
+                       <li><code>(a++)</code>: <code>a</code> 先使用值 <code>1</code>，然後 <code>a</code> 變為 <code>2</code>。</li>
+                       <li><code>(c--)</code>: <code>c</code> 先使用值 <code>3</code>，然後 <code>c</code> 變為 <code>2</code>。</li>
+                       <li><code>(++e)</code>: <code>e</code> 先遞增為 <code>6</code>，然後使用值 <code>6</code>。</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 替換運算式中的使用值：<code>f += (1) * (3) + (6)</code>
+            </div>
+            <div class="step">
+                3. 執行乘法：
+                   <ul>
+                       <li><code>1 * 3 = 3</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                4. 替換乘法結果：<code>f += 3 + 6</code>
+            </div>
+            <div class="step">
+                5. 執行加法：
+                   <ul>
+                       <li><code>3 + 6 = 9</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                6. 複合賦值運算子 <code>f += 9</code> 等同於 <code>f = f + 9</code>。
+            </div>
+            <div class="step">
+                7. 計算最終的 <code>f</code> 值：
+                   <ul>
+                       <li><code>f = 6 + 9 = 15</code></li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>f = 15</code></p>
+        </div>
+
+        <hr>
+
+        <div class="section-box">
+            <h2>第二部分：位元運算</h2>
+            <p>下列 C 語言的程式片段執行後，變數 <code>x</code> 的值為何？</p>
+
+            <h3>(1) <code>char x = 3; x = x | 0x10;</code></h3>
+            <p><strong>初始值：</strong> <code>x = 3</code></p>
+            <div class="step">
+                1. 將 <code>x</code> 和 <code>0x10</code> 轉換為二進位：
+                   <ul>
+                       <li><code>x = 3</code> (十進位) = <code>0000 0011</code> (二進位)</li>
+                       <li><code>0x10</code> (十六進位) = <code>0001 0000</code> (二進位)</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 執行位元 OR 運算 <code>|</code> (對應位元只要有一個是 1，結果就是 1)：
+                <pre><code>
+  0000 0011  (x)
+| 0001 0000  (0x10)
+-----------
+  0001 0011
+                </code></pre>
+            </div>
+            <div class="step">
+                3. 將結果轉換回十進位：
+                   <ul>
+                       <li><code>0001 0011</code> (二進位) = <code>16 + 2 + 1 = 19</code> (十進位)</li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>x = 19</code></p>
+
+            <hr>
+
+            <h3>(2) <code>char x = 3; x = ~x;</code></h3>
+            <p><strong>初始值：</strong> <code>x = 3</code></p>
+            <div class="step">
+                1. 將 <code>x</code> 轉換為二進位：
+                   <ul>
+                       <li><code>x = 3</code> (十進位) = <code>0000 0011</code> (二進位)</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 執行位元 NOT 運算 <code>~</code> (逐位取反，0 變 1，1 變 0)：
+                <pre><code>
+~ 0000 0011
+-----------
+  1111 1100
+                </code></pre>
+            </div>
+            <div class="step">
+                3. 將結果 <code>1111 1100</code> 轉換回十進位。由於 <code>char</code> 預設為 <code>signed char</code>，最高位為 1 表示負數，需要使用補碼來計算：
+                   <ul>
+                       <li>補碼：<code>1111 1100</code></li>
+                       <li>減一：<code>1111 1011</code></li>
+                       <li>取反（得到原碼）：<code>0000 0100</code></li>
+                       <li>所以代表的值是 <code>-4</code>。</li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>x = -4</code></p>
+
+            <hr>
+
+            <h3>(3) <code>char x = 3; x = x ^ 0x0F;</code></h3>
+            <p><strong>初始值：</strong> <code>x = 3</code></p>
+            <div class="step">
+                1. 將 <code>x</code> 和 <code>0x0F</code> 轉換為二進位：
+                   <ul>
+                       <li><code>x = 3</code> (十進位) = <code>0000 0011</code> (二進位)</li>
+                       <li><code>0x0F</code> (十六進位) = <code>0000 1111</code> (二進位)</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 執行位元 XOR 運算 <code>^</code> (對應位元不同為 1，相同為 0)：
+                <pre><code>
+  0000 0011  (x)
+^ 0000 1111  (0x0F)
+-----------
+  0000 1100
+                </code></pre>
+            </div>
+            <div class="step">
+                3. 將結果轉換回十進位：
+                   <ul>
+                       <li><code>0000 1100</code> (二進位) = <code>8 + 4 = 12</code> (十進位)</li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>x = 12</code></p>
+
+            <hr>
+
+            <h3>(4) <code>char x = 3; x = x &lt;&lt; 2;</code></h3>
+            <p><strong>初始值：</strong> <code>x = 3</code></p>
+            <div class="step">
+                1. 將 <code>x</code> 轉換為二進位：
+                   <ul>
+                       <li><code>x = 3</code> (十進位) = <code>0000 0011</code> (二進位)</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 執行左移運算 <code>&lt;&lt; 2</code> (向左移動 2 位，右邊補 0)：
+                <pre><code>
+  0000 0011  (x)
+&lt;&lt; 2
+-----------
+  0000 1100
+                </code></pre>
+            </div>
+            <div class="step">
+                3. 將結果轉換回十進位：
+                   <ul>
+                       <li><code>0000 1100</code> (二進位) = <code>8 + 4 = 12</code> (十進位)</li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>x = 12</code></p>
+
+            <hr>
+
+            <h3>(5) <code>char x = 3; x = x &gt;&gt; 1;</code></h3>
+            <p><strong>初始值：</strong> <code>x = 3</code></p>
+            <div class="step">
+                1. 將 <code>x</code> 轉換為二進位：
+                   <ul>
+                       <li><code>x = 3</code> (十進位) = <code>0000 0011</code> (二進位)</li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 執行右移運算 <code>&gt;&gt; 1</code> (向右移動 1 位)。由於 <code>x</code> 是正數 (<code>char</code> 預設為 <code>signed char</code> 但正數的右移行為與 <code>unsigned</code> 相同)，左邊補 0：
+                <pre><code>
+  0000 0011  (x)
+&gt;&gt; 1
+-----------
+  0000 0001
+                </code></pre>
+            </div>
+            <div class="step">
+                3. 將結果轉換回十進位：
+                   <ul>
+                       <li><code>0000 0001</code> (二進位) = <code>1</code> (十進位)</li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>x = 1</code></p>
+
+            <hr>
+
+            <h3>(6) <code>char x = -3; x = x &gt;&gt; 1;</code></h3>
+            <p><strong>初始值：</strong> <code>x = -3</code></p>
+            <div class="step">
+                1. 將 <code>x = -3</code> 轉換為二進位補碼表示 (假設 <code>char</code> 為 8 位元 <code>signed</code> 類型)：
+                   <ul>
+                       <li><code>3</code> 的二進位原碼：<code>0000 0011</code></li>
+                       <li><code>3</code> 的二進位反碼：<code>1111 1100</code></li>
+                       <li><code>-3</code> 的二進位補碼 (反碼 + 1)：<code>1111 1101</code></li>
+                   </ul>
+            </div>
+            <div class="step">
+                2. 執行右移運算 <code>&gt;&gt; 1</code>。由於 <code>x</code> 是負數，且 <code>char</code> 通常是 <code>signed</code> 型別，會執行<strong>算術右移</strong>（左邊補 1 以保持負號）：
+                <pre><code>
+  1111 1101  (x)
+&gt;&gt; 1
+-----------
+  1111 1110
+                </code></pre>
+            </div>
+            <div class="step">
+                3. 將結果 <code>1111 1110</code> 轉換回十進位。這是一個負數的補碼：
+                   <ul>
+                       <li>補碼：<code>1111 1110</code></li>
+                       <li>減一：<code>1111 1101</code></li>
+                       <li>取反（得到原碼）：<code>0000 0010</code></li>
+                       <li>所以代表的值是 <code>-2</code>。</li>
+                   </ul>
+            </div>
+            <p><strong>結果：</strong> <code>x = -2</code></p>
+        </div>
+    </div>
+
+</body>
+</html>

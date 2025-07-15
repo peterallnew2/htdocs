@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言變數範圍深度解析：區域、全域與遮蔽效應</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .dark body {
+            background-color: #1f2937;
+            color: #f8fafc;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 1.5rem;
+        }
+        .dark .card {
+            background-color: #2d3748;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .note {
+            background-color: #fffbeb;
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .note {
+            background-color: #3a3a3a;
+            border-left-color: #f97316;
+        }
+        .best-practice {
+            background-color: #f0fdf4;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .best-practice {
+            background-color: #224433;
+            border-left-color: #4ade80;
+        }
+        .header {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f97316;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">C 語言變數範圍深度解析</h1>
+        <p class="text-xl text-gray-200">一個範例搞懂全域、區域與遮蔽效應 (Variable Shadowing)</p>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">範例程式碼解析</h2>
+
+            <div class="card p-6">
+                <p class="mb-4">以下是我們要分析的程式碼。它在三個不同的範圍（全域、函式 `A`、`for` 迴圈）中都定義了名為 `s` 的變數。我們的目標是預測程式最後會印出什麼結果，並理解其背後的原因。</p>
+                <div class="code-block">
+                    <pre><code>#include &lt;stdio.h&gt;
+
+<span class="text-gray-400">// 【範疇 1: 全域】在所有函式之外宣告，生命週期為整個程式</span>
+<span class="text-cyan-400">int</span> s = 2;
+
+<span class="text-cyan-400">void</span> <span class="text-yellow-400">A</span>() {
+    <span class="text-gray-400">// 【範疇 2: 函式 A 的區域】此變數 s '遮蔽' 了全域變數 s</span>
+    <span class="text-gray-400">// 它的生命週期僅限於函式 A 執行期間</span>
+    <span class="text-cyan-400">int</span> s = 1;
+
+    <span class="text-pink-400">for</span> (<span class="text-cyan-400">int</span> i = 0; i < 10; i++) {
+        <span class="text-gray-400">// 【範疇 3: for 迴圈的區域】此變數 s '遮蔽' 了函式 A 的 s 和全域 s</span>
+        <span class="text-gray-400">// 它的生命週期僅限於 '單次' 迴圈的 { } 區塊內</span>
+        <span class="text-cyan-400">int</span> s = 0;
+        s = s + 1; <span class="text-gray-400">// 這行修改的是 'for 迴圈的 s'</span>
+    } <span class="text-gray-400">// for 迴圈的 s 在這裡被銷毀，每一輪迴圈都會重複這個過程</span>
+
+    s = s + 1; <span class="text-gray-400">// 這行修改的是 '函式 A 的 s'，因為 for 迴圈的 s 已經不在範圍內</span>
+} <span class="text-gray-400">// 函式 A 的 s 在這裡被銷毀</span>
+
+<span class="text-cyan-400">int</span> <span class="text-yellow-400">main</span>() {
+    <span class="text-yellow-400">A</span>(); <span class="text-gray-400">// 呼叫函式 A</span>
+
+    <span class="text-gray-400">// 在 main 函式的範圍內，唯一可見的 s 是 '全域變數 s'</span>
+    printf(<span class="text-green-400">"%d"</span>, s);
+
+    <span class="text-pink-400">return</span> 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">變數變化追蹤比較表</h2>
+            <div class="card p-6">
+                <p class="mb-4">為了讓初學者更清楚地理解，我們將程式的執行流程拆解，並觀察在每一步中，各個 `s` 變數的值如何變化。標示為 `-` 代表該變數尚未誕生或已被銷毀。</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-gray-400">
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">執行步驟</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">位置</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600 text-center">全域 s</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600 text-center">函式 A 的 s</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600 text-center">for 迴圈的 s</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">說明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">1</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">程式啟動</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">全域變數 `s` 被建立並初始化。</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">main() -> A()</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-green-500">1</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">進入函式 A，宣告區域變數 `s` 並遮蔽全域 `s`。</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">3</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">for 迴圈 (第1次)</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-green-500">1</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-red-500">0 -> 1</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">宣告迴圈變數 `s` (遮蔽函式 `s`)，並遞增為 1。</td>
+                            </tr>
+                             <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">4</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">for 迴圈 (第2-10次)</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-green-500">1</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-red-500">0 -> 1</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">每一輪迴圈，迴圈 `s` 都重新宣告為 0，再變為 1，然後銷毀。</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">5</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">離開 for 迴圈</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-green-500">1</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">迴圈的 `s` 已被銷毀，函式 A 的 `s` 恢復可見。</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">6</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">A() 中 `s = s + 1;`</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-green-500">1 -> 2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">遞增函式 A 的區域變數 `s`。</td>
+                            </tr>
+                             <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">7</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">函式 A 結束</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">函式 A 的 `s` 被銷毀，全域 `s` 恢復可見。</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">8</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">main() -> printf()</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center font-bold text-blue-500">2</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600 text-center">-</td>
+                                <td class="p-3 border border-gray-300 dark:border-gray-600">`printf` 在 `main` 中執行，它能存取的只有全域 `s`。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">結論與最佳實踐</h2>
+            <div class="card p-6">
+                 <div class="note">
+                     <h4 class="font-bold mb-2">最終輸出結果：2</h4>
+                     <p>程式最後會印出 `2`。原因在於 `printf("%d", s);` 這行程式碼位於 `main` 函式中。在此範疇內，唯一可見的變數 `s` 就是我們一開始宣告的**全域變數 `s`**，其值從頭到尾都維持在 `2`。</p>
+                     <p class="mt-2">在函式 `A` 中所做的所有操作，都只影響到函式 `A` 內部或 `for` 迴圈內部的區域變數 `s`。一旦函式 `A` 執行完畢，這些區域變數就會被系統從記憶體中釋放，完全不影響外部的同名變數。</p>
+                 </div>
+                 <div class="best-practice mt-6">
+                    <p><strong>最佳實踐：避免使用變數遮蔽</strong></p>
+                    <p>雖然 C 語言允許變數遮蔽，但在實務開發中，這通常是一個**壞習慣**。它會：</p>
+                    <ul class="list-disc list-inside space-y-2 mt-2">
+                        <li><strong>降低可讀性：</strong> 其他工程師（或未來的你）在閱讀程式碼時，需要花費額外心力去追蹤目前作用中的是哪個變數。</li>
+                        <li><strong>引發潛在錯誤：</strong> 很容易在修改時，不小心改到錯誤範疇的變數，導致難以察覺的邏輯錯誤。</li>
+                    </ul>
+                    <p class="mt-2">一個好的習慣是為不同範疇的變數取不同的、有意義的名稱，例如 `g_totalScore` (g_ 代表 global)、`local_count` 等，以避免混淆。</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

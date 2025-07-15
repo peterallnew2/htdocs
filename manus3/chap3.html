@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言運算式與運算子 - 深度學習指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .dark body {
+            background-color: #1f2937;
+            color: #f8fafc;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+        .dark .card {
+            background-color: #2d3748;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #fffbeb;
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .note {
+            background-color: #3a3a3a;
+            border-left-color: #f97316;
+        }
+        .best-practice {
+            background-color: #f0fdf4;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.25rem;
+        }
+        .dark .best-practice {
+            background-color: #224433;
+            border-left-color: #4ade80;
+        }
+        .header {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f97316;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">C 語言運算式與運算子</h1>
+        <p class="text-xl text-gray-200">一份給初學者與專業開發者的深度學習指南</p>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Chapter 3-1 -->
+        <section id="section-3-1" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">3-1 運算式與運算子</h2>
+
+            <div class="card p-6 mb-6">
+                <h3 class="text-2xl font-semibold mb-4">基本概念</h3>
+                <p class="mb-2">在 C 語言中，<strong>運算式 (Expression)</strong> 是由<strong>運算子 (Operator)</strong> 和<strong>運算元 (Operand)</strong> 組合而成的。這就像我們數學中的算式一樣。</p>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>運算元 (Operand)</strong>: 參與運算的對象，可以是常數 (如 5, 10.0)、變數 (如 `x`, `my_variable`) 或甚至是另一個運算式的結果。</li>
+                    <li><strong>運算子 (Operator)</strong>: 執行特定操作的符號，例如加法 `+`、減法 `-`、乘法 `*`、除法 `/` 等。</li>
+                </ul>
+                <div class="code-block mt-4">
+                    <span class="text-gray-400">// 範例：一個簡單的運算式</span><br>
+                    <span class="text-cyan-400">int</span> a = <span class="text-yellow-400">5</span>;<br>
+                    <span class="text-cyan-400">int</span> b = <span class="text-yellow-400">10</span>;<br>
+                    <span class="text-cyan-400">int</span> result = a + b; <span class="text-gray-400">// "a + b" 就是一個運算式</span>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-2xl font-semibold mb-4">運算子的種類</h3>
+
+                <!-- 算術運算子 -->
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3"><span class="tag">1</span> 算術運算子 (Arithmetic Operators)</h4>
+                    <p class="mb-4">這是最基本、最常用的運算子，用於執行數學計算。</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">運算子</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">說明</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">範例</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">結果</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">+</td><td class="p-3 border border-gray-300 dark:border-gray-600">加法</td><td class="p-3 border border-gray-300 dark:border-gray-600">8 + 5</td><td class="p-3 border border-gray-300 dark:border-gray-600">13</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">-</td><td class="p-3 border border-gray-300 dark:border-gray-600">減法</td><td class="p-3 border border-gray-300 dark:border-gray-600">8 - 5</td><td class="p-3 border border-gray-300 dark:border-gray-600">3</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">*</td><td class="p-3 border border-gray-300 dark:border-gray-600">乘法</td><td class="p-3 border border-gray-300 dark:border-gray-600">8 * 5</td><td class="p-3 border border-gray-300 dark:border-gray-600">40</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">/</td><td class="p-3 border border-gray-300 dark:border-gray-600">除法</td><td class="p-3 border border-gray-300 dark:border-gray-600">8 / 5</td><td class="p-3 border border-gray-300 dark:border-gray-600">1 (整數除法，小數部分被捨去)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">/</td><td class="p-3 border border-gray-300 dark:border-gray-600">除法</td><td class="p-3 border border-gray-300 dark:border-gray-600">8.0 / 5.0</td><td class="p-3 border border-gray-300 dark:border-gray-600">1.6 (浮點數除法)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">%</td><td class="p-3 border border-gray-300 dark:border-gray-600">餘數 (Modulo)</td><td class="p-3 border border-gray-300 dark:border-gray-600">8 % 5</td><td class="p-3 border border-gray-300 dark:border-gray-600">3 (8除以5，商為1，餘數為3)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">+</td><td class="p-3 border border-gray-300 dark:border-gray-600">正號 (Unary Plus)</td><td class="p-3 border border-gray-300 dark:border-gray-600">+5</td><td class="p-3 border border-gray-300 dark:border-gray-600">5</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">-</td><td class="p-3 border border-gray-300 dark:border-gray-600">負號 (Unary Minus)</td><td class="p-3 border border-gray-300 dark:border-gray-600">-5</td><td class="p-3 border border-gray-300 dark:border-gray-600">-5</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note mt-4">
+                        <p><strong>初學者注意：</strong> 整數除法 `/` 的行為是初學者常見的錯誤來源。記住，當兩個整數相除時，結果永遠是整數，小數部分會被直接捨去，而不是四捨五入。如果你需要精確的結果，請確保至少有一個運算元是浮點數 (如 `float` 或 `double`)。</p>
+                    </div>
+                </div>
+
+                <!-- 指定運算子 -->
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3"><span class="tag">2</span> 指定運算子 (Assignment Operators)</h4>
+                    <p class="mb-4">用於將一個值賦予一個變數。最基本的是 `=`，但還有很多方便的複合指定運算子。</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">運算子</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">範例</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">等價於</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">說明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">=</td><td class="p-3 border border-gray-300 dark:border-gray-600">x = 10;</td><td class="p-3 border border-gray-300 dark:border-gray-600">N/A</td><td class="p-3 border border-gray-300 dark:border-gray-600">將 10 指定給 x</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">+=</td><td class="p-3 border border-gray-300 dark:border-gray-600">x += 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">x = x + 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">將 x 的值加上 5，再存回 x</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">-=</td><td class="p-3 border border-gray-300 dark:border-gray-600">x -= 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">x = x - 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">將 x 的值減去 5，再存回 x</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">*=</td><td class="p-3 border border-gray-300 dark:border-gray-600">x *= 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">x = x * 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">將 x 的值乘以 5，再存回 x</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">/=</td><td class="p-3 border border-gray-300 dark:border-gray-600">x /= 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">x = x / 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">將 x 的值除以 5，再存回 x</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">%=</td><td class="p-3 border border-gray-300 dark:border-gray-600">x %= 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">x = x % 5;</td><td class="p-3 border border-gray-300 dark:border-gray-600">將 x 除以 5 的餘數，再存回 x</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="best-practice mt-4">
+                        <p><strong>最佳實踐：</strong> 複合指定運算子 (如 `+=`, `-=`) 不僅讓程式碼更簡潔，也可能讓編譯器產生更有效率的機器碼。在適當的場合應優先使用它們。</p>
+                    </div>
+                </div>
+
+                <!-- 遞增/遞減運算子 -->
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3"><span class="tag">3</span> 遞增/遞減運算子 (Increment/Decrement Operators)</h4>
+                    <p class="mb-4">這兩個運算子 (`++` 和 `--`) 是 C 語言的特色之一，用於將變數的值加一或減一。它們有兩種形式：前置 (prefix) 和後置 (postfix)，這兩者的行為差異非常重要。</p>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-lg mb-2">前置 (Prefix): `++x` 或 `--x`</h5>
+                            <p><strong>規則：先改變，後使用。</strong></p>
+                            <p>運算子會先將變數 `x` 的值加一 (或減一)，然後才將<span class="font-bold text-orange-500">改變後的值</span>用於所在的運算式。</p>
+                            <div class="code-block mt-2">
+                                <span class="text-cyan-400">int</span> b = <span class="text-yellow-400">5</span>;<br>
+                                <span class="text-cyan-400">int</span> a = ++b; <span class="text-gray-400">// b 先變成 6, 然後 a 被賦值為 6</span><br>
+                                <span class="text-gray-400">// 結果: a is 6, b is 6</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-lg mb-2">後置 (Postfix): `x++` 或 `x--`</h5>
+                            <p><strong>規則：先使用，後改變。</strong></p>
+                            <p>運算子會先將變數 `x` <span class="font-bold text-orange-500">原始的值</span>用於所在的運算式，然後才將 `x` 的值加一 (或減一)。</p>
+                            <div class="code-block mt-2">
+                                <span class="text-cyan-400">int</span> b = <span class="text-yellow-400">5</span>;<br>
+                                <span class="text-cyan-400">int</span> a = b++; <span class="text-gray-400">// a 先被賦值為 5, 然後 b 才變成 6</span><br>
+                                <span class="text-gray-400">// 結果: a is 5, b is 6</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="note mt-4">
+                        <p><strong>深度解析：</strong> 前置與後置的差異在於「副作用」(side effect) 發生的時機。在 `a = ++b;` 中，`b` 的值增加這個副作用在 `b` 的值被讀取之前就完成了。在 `a = b++;` 中，副作用在 `b` 的值被讀取之後才完成。這個細微的差別在複雜的運算式或函式參數中可能會導致難以察覺的 bug。</p>
+                    </div>
+                     <div class="best-practice mt-4">
+                        <p><strong>最佳實踐：</strong> 為了程式碼的清晰與可讀性，避免在一個運算式中對同一個變數使用多次遞增/遞減運算子，例如 `c = a++ + ++a;`。這種寫法在不同的編譯器下可能有不同的行為 (Undefined Behavior)，是 C 語言中的一個大忌。</p>
+                    </div>
+                </div>
+
+                <!-- 關係運算子 -->
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3"><span class="tag">4</span> 關係運算子 (Relational Operators)</h4>
+                    <p class="mb-4">用於比較兩個運算元，結果是一個布林值 (在 C 中，`0` 代表 `false`，非 `0` (通常是 `1`) 代表 `true`)。</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">運算子</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">說明</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">範例</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">結果</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">==</td><td class="p-3 border border-gray-300 dark:border-gray-600">等於</td><td class="p-3 border border-gray-300 dark:border-gray-600">5 == 5</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">!=</td><td class="p-3 border border-gray-300 dark:border-gray-600">不等於</td><td class="p-3 border border-gray-300 dark:border-gray-600">5 != 6</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">></td><td class="p-3 border border-gray-300 dark:border-gray-600">大於</td><td class="p-3 border border-gray-300 dark:border-gray-600">6 > 5</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600"><</td><td class="p-3 border border-gray-300 dark:border-gray-600">小於</td><td class="p-3 border border-gray-300 dark:border-gray-600">5 < 6</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">>=</td><td class="p-3 border border-gray-300 dark:border-gray-600">大於等於</td><td class="p-3 border border-gray-300 dark:border-gray-600">6 >= 6</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600"><=</td><td class="p-3 border border-gray-300 dark:border-gray-600">小於等於</td><td class="p-3 border border-gray-300 dark:border-gray-600">5 <= 6</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note mt-4">
+                        <p><strong>初學者注意：</strong> 一定要分清楚指定運算子 `=` 和關係運算子 `==`！這是 C 語言初學者最常犯的錯誤之一。`if (a = 5)` 會先把 5 賦值給 a，然後判斷 `a` 的值 (也就是 5)，因為 5 是非零值，所以條件永遠為真。正確的寫法是 `if (a == 5)`。</p>
+                    </div>
+                </div>
+
+                <!-- 邏輯運算子 -->
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3"><span class="tag">5</span> 邏輯運算子 (Logical Operators)</h4>
+                    <p class="mb-4">用於組合多個關係運算式，形成更複雜的條件判斷。</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">運算子</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">說明</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">範例</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">結果</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">&&</td><td class="p-3 border border-gray-300 dark:border-gray-600">邏輯 AND (且)</td><td class="p-3 border border-gray-300 dark:border-gray-600">(5 == 5) && (6 > 5)</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">||</td><td class="p-3 border border-gray-300 dark:border-gray-600">邏輯 OR (或)</td><td class="p-3 border border-gray-300 dark:border-gray-600">(5 == 6) || (6 > 5)</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">!</td><td class="p-3 border border-gray-300 dark:border-gray-600">邏輯 NOT (非)</td><td class="p-3 border border-gray-300 dark:border-gray-600">!(5 == 6)</td><td class="p-3 border border-gray-300 dark:border-gray-600">true (1)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="best-practice mt-4">
+                        <p><strong>最佳實踐 (短路求值 Short-circuit Evaluation)：</strong> 邏輯運算子 `&&` 和 `||` 有一個非常重要的特性叫做「短路求值」。</p>
+                        <ul class="list-disc list-inside ml-4">
+                            <li>對於 `A && B`，如果 `A` 為 `false`，那麼整個運算式必定為 `false`，所以 `B` 將<span class="font-bold">不會被執行</span>。</li>
+                            <li>對於 `A || B`，如果 `A` 為 `true`，那麼整個運算式必定為 `true`，所以 `B` 將<span class="font-bold">不會被執行</span>。</li>
+                        </ul>
+                        <p class="mt-2">這個特性可以用來寫出更安全、更有效率的程式碼，例如 `if (pointer != NULL && pointer->value == 10)`，可以確保在 `pointer` 是空指標時不會去存取它。</p>
+                    </div>
+                </div>
+
+                <!-- 位元運算子 -->
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3"><span class="tag">6</span> 位元運算子 (Bitwise Operators)</h4>
+                    <p class="mb-4">直接對整數的二進位表示法進行操作。在底層程式設計、嵌入式系統、驅動程式開發中非常有用。</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">運算子</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">說明</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">範例 (以 8-bit 為例)</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">結果</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">&</td><td class="p-3 border border-gray-300 dark:border-gray-600">AND</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00001010 & 00000110`</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00000010`</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">|</td><td class="p-3 border border-gray-300 dark:border-gray-600">OR</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00001010 | 00000110`</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00001110`</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">^</td><td class="p-3 border border-gray-300 dark:border-gray-600">XOR (互斥或)</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00001010 ^ 00000110`</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00001100`</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">~</td><td class="p-3 border border-ray-300 dark:border-gray-600">NOT (1的補數)</td><td class="p-3 border border-gray-300 dark:border-gray-600">`~00001010`</td><td class="p-3 border border-gray-300 dark:border-gray-600">`11110101`</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600"><<</td><td class="p-3 border border-gray-300 dark:border-gray-600">左移 (Left Shift)</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00001010 << 2`</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00101000` (相當於乘以 2^2)</td></tr>
+                                <tr><td class="p-3 border border-gray-300 dark:border-gray-600">>></td><td class="p-3 border border-gray-300 dark:border-gray-600">右移 (Right Shift)</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00001100 >> 2`</td><td class="p-3 border border-gray-300 dark:border-gray-600">`00000011` (相當於除以 2^2)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note mt-4">
+                        <p><strong>深度解析 (右移的陷阱)：</strong> 右移 `>>` 對於 `unsigned` (無號數) 和 `signed` (有號數) 的行為可能不同。對於無號數，右移時左邊總是補 0 (邏輯右移)。對於有號數，行為是「實現定義的」(implementation-defined)，大部分現代編譯器會進行「算術右移」，即如果原數是正數則補 0，是負數則補 1，以保持其正負號。但為了程式碼的可移植性，最好不要對負數進行位元右移操作。</p>
+
+                    </div>
+                    <div class="note mt-4">
+                        <p><a href="3-add1.html"><font color="#0000A8">補充說明(1)</font></a></p>
+                        <p><a href="3-add2.html"><font color="#0000A8">範例練習說明(2)</font></a></p>
+                    </div>
+
+                </div>
+
+                <!-- 其他運算子 -->
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3"><span class="tag">7</span> 其他運算子</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">運算子</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">說明</th>
+                                    <th class="p-3 border border-gray-300 dark:border-gray-600">範例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3 border border-gray-300 dark:border-gray-600">`sizeof`</td>
+                                    <td class="p-3 border border-gray-300 dark:border-gray-600">取得一個資料型態或變數所佔用的記憶體空間大小 (以 byte 為單位)。</td>
+                                    <td class="p-3 border border-gray-300 dark:border-gray-600">`sizeof(int)` 的結果通常是 4。`sizeof(my_variable)`。</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border border-gray-300 dark:border-gray-600">`(type)`</td>
+                                    <td class="p-3 border border-gray-300 dark:border-gray-600">型態轉換運算子 (Cast Operator)，強制將一個運算式的結果轉換成指定的資料型態。</td>
+                                    <td class="p-3 border border-gray-300 dark:border-gray-600">`(double)5 / 2` 的結果是 2.5。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 運算子優先順序 -->
+        <section id="operator-precedence" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">運算子優先順序 (Operator Precedence)</h2>
+            <div class="card p-6">
+                <p class="mb-4">就像數學中的「先乘除後加減」，C 語言的運算子也有執行的優先順序。下表由上到下，優先順序由高至低排列。同一行的運算子有相同的優先順序，其執行順序由「結合性」(Associativity) 決定 (通常是從左到右)。</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-gray-700">
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">優先順序</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">運算子</th>
+                                <th class="p-3 border border-gray-300 dark:border-gray-600">結合性</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">1</td><td class="p-3 border border-gray-300 dark:border-gray-600">`()` `[]` `->` `.`</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">2</td><td class="p-3 border border-gray-300 dark:border-gray-600">`!` `~` `++` `--` `+` `-` `(type)` `*` `&` `sizeof` (一元)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由右至左</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">3</td><td class="p-3 border border-gray-300 dark:border-gray-600">`*` `/` `%`</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">4</td><td class="p-3 border border-gray-300 dark:border-gray-600">`+` `-` (二元)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">5</td><td class="p-3 border border-gray-300 dark:border-gray-600">`<<` `>>`</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">6</td><td class="p-3 border border-gray-300 dark:border-gray-600">< `<` `>=` `>`</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">7</td><td class="p-3 border border-gray-300 dark:border-gray-600">`==` `!=`</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">8</td><td class="p-3 border border-gray-300 dark:border-gray-600">`&` (位元 AND)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">9</td><td class="p-3 border border-gray-300 dark:border-gray-600">`^` (位元 XOR)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">10</td><td class="p-3 border border-gray-300 dark:border-gray-600">`|` (位元 OR)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">11</td><td class="p-3 border border-gray-300 dark:border-gray-600">`&&` (邏輯 AND)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">12</td><td class="p-3 border border-gray-300 dark:border-gray-600">`||` (邏輯 OR)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">13</td><td class="p-3 border border-gray-300 dark:border-gray-600">`?:` (三元運算子)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由右至左</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">14</td><td class="p-3 border border-gray-300 dark:border-gray-600">`=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `|=`</td><td class="p-3 border border-gray-300 dark:border-gray-600">由右至左</td></tr>
+                            <tr><td class="p-3 border border-gray-300 dark:border-gray-600">15</td><td class="p-3 border border-gray-300 dark:border-gray-600">`,` (逗號運算子)</td><td class="p-3 border border-gray-300 dark:border-gray-600">由左至右</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="best-practice mt-4">
+                    <p><strong>最佳實踐：</strong> 不要過度依賴優先順序表！即使是經驗豐富的工程師也不會去背誦整個表格。當你不確定運算順序時，最好的方法就是使用括號 `()` 來明確指定你想要的執行順序。這會讓你的程式碼意圖更清晰，更容易被他人理解，也減少了出錯的機會。</p>
+                    <div class="code-block mt-2">
+                        <span class="text-gray-400">// 不清晰的寫法</span><br>
+                        <span class="text-cyan-400">int</span> result = a + b * c;<br><br>
+                        <span class="text-gray-400">// 清晰的寫法</span><br>
+                        <span class="text-cyan-400">int</span> result = a + (b * c);
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 3-2 -->
+        <section id="section-3-2" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">3-2 資料型態轉換 (Type Conversion)</h2>
+            <div class="card p-6">
+                <p class="mb-4">在 C 語言中，當一個運算式中包含不同資料型態的運算元時，編譯器需要決定如何處理它們。這時就會發生資料型態轉換。型態轉換分為兩種：自動 (隱性) 轉換和強制 (顯性) 轉換。</p>
+
+                <div class="mb-8">
+                    <h4 class="text-xl font-bold mb-3">自動型態轉換 (Implicit Conversion)</h4>
+                    <p class="mb-2">由編譯器自動完成，通常是為了保證計算的精度，將「較小」的型態提升 (promote) 到「較大」的型態。這個規則被稱為「通用算術轉換」(Usual Arithmetic Conversions)。</p>
+                    <p class="mb-4">轉換的層級大致如下 (由低至高):</p>
+                    <p class="text-center font-mono tracking-widest">`char` -> `short` -> `int` -> `long` -> `long long` -> `float` -> `double` -> `long double`</p>
+
+                    <div class="code-block mt-4">
+                        <span class="text-cyan-400">double</span> a = 5.0;<br>
+                        <span class="text-cyan-400">int</span> b = 2;<br>
+                        <span class="text-cyan-400">double</span> result = a / b; <span class="text-gray-400">// b 的值 (2) 會被自動提升為 double 型態 (2.0)</span><br>
+                        <span class="text-gray-400">// 然後才執行 5.0 / 2.0，結果為 2.5</span>
+                    </div>
+
+                    <div class="note mt-4">
+                        <p><strong>注意資料遺失：</strong> 當一個「較大」型態的值被賦予給一個「較小」型態的變數時，也會發生自動轉換，但這通常會導致資料遺失 (data loss) 或截斷 (truncation)。</p>
+                        <div class="code-block mt-2">
+                            <span class="text-cyan-400">int</span> c;<br>
+                            <span class="text-cyan-400">double</span> result = 2.5;<br>
+                            c = result; <span class="text-gray-400">// result 的值 2.5 被轉換成 int，小數部分被捨去</span><br>
+                            <span class="text-gray-400">// c 的值最終為 2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-bold mb-3">強制型態轉換 (Explicit Conversion / Casting)</h4>
+                    <p class="mb-4">當我們需要手動控制型態轉換時，可以使用型態轉換運算子 `(type)`。這在處理整數除法時特別有用。</p>
+                    <div class="code-block">
+                        <span class="text-cyan-400">int</span> a = 5;<br>
+                        <span class="text-cyan-400">int</span> b = 2;<br>
+                        <span class="text-cyan-400">double</span> result;<br><br>
+
+                        <span class="text-gray-400">// 錯誤的示範：先計算，後轉型</span><br>
+                        result = (<span class="text-cyan-400">double</span>)(a / b); <span class="text-gray-400">// a / b (整數除法) 結果是 2，然後 2 被轉成 2.0</span><br>
+                        <span class="text-gray-400">// result 的值是 2.0</span><br><br>
+
+                        <span class="text-gray-400">// 正確的示範：先轉型，後計算</span><br>
+                        result = (<span class="text-cyan-400">double</span>)a / b; <span class="text-gray-400">// a 被強制轉為 5.0，b 自動提升為 2.0</span><br>
+                        <span class="text-gray-400">// 5.0 / 2.0 的結果是 2.5</span><br>
+                        <span class="text-gray-400">// result 的值是 2.5</span>
+                    </div>
+                    <div class="best-practice mt-4">
+                        <p><strong>最佳實踐：</strong> 強制型態轉換是一個強大的工具，但也可能隱藏錯誤。只有在你明確知道為什麼需要轉換，並且確定轉換是安全的時候才使用它。過度或不必要的轉換會讓程式碼難以理解和維護。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 練習題 -->
+        <section id="exercises" class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">互動練習題</h2>
+            <div class="card p-6">
+                <p class="mb-6">來測試一下你學會了多少！(答案在頁尾)</p>
+
+                <div class="space-y-6">
+                    <div>
+                        <p class="font-semibold mb-2">1. 運算式 `9 / 4` 的結果為何？</p>
+                        <p class="text-sm text-gray-500"> (A) 2  (B) 0  (C) 2.25  (D) 1</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">2. 變數 `x` 為 3，則程式碼 `y = ++x * 5;` 執行後，`y` 的值為何？</p>
+                        <p class="text-sm text-gray-500"> (A) 15  (B) 16  (C) 20  (D) 8</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">3. 變數 `x` 為 3，則程式碼 `y = (x++) * 5;` 執行後，`y` 的值為何？</p>
+                        <p class="text-sm text-gray-500"> (A) 15  (B) 16  (C) 20  (D) 8</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">4. 已知 `A` 為 `true`，`B` 為 `false`，下列哪一個運算式的結果為 `true`？ (提示: 注意 `&&` 和 `||` 的優先順序)</p>
+                        <p class="text-sm text-gray-500"> (A) A && B  (B) A && B || A  (C) A && B || B  (D) B || A && B</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">5. 程式碼 `int x = 0; x = sizeof(float);` 執行後，變數 `x` 的值為何？ (假設 `float` 佔 4 bytes)</p>
+                        <p class="text-sm text-gray-500"> (A) 0  (B) 1  (C) 2  (D) 4</p>
+                    </div>
+                     <div>
+                        <p class="font-semibold mb-2">6. 程式碼 `int a=5, b=2; float c = (float)a / b;` 執行後，`c` 的值為何？</p>
+                        <p class="text-sm text-gray-500"> (A) 2.5  (B) 2  (C) 2.0  (D) 0</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-500 dark:text-gray-400 py-8">
+            <h3 class="text-xl font-semibold mb-4">練習題解答</h3>
+            <p>1. (A) | 2. (C) | 3. (A) | 4. (B) | 5. (D) | 6. (A)</p>
+            <p class="mt-4">這份文件由 Gemini 根據提供的教材與設計指南生成。</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

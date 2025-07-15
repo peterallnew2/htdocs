@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C 語言中的取值符號 * 與取址符號 & 詳解</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+        }
+        h1 {
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+        /* 行內程式碼樣式 */
+        code {
+            background-color: #e9e9e9;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            color: #c7254e;
+        }
+        /* 程式碼區塊樣式 */
+        pre {
+            background-color: #272822; /* 程式碼深色背景 */
+            color: #f8f8f2; /* 程式碼預設文字顏色 */
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+            margin-bottom: 1.5em;
+        }
+        pre code {
+            display: block;
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+            font-family: Consolas, monospace;
+            white-space: pre;
+            font-size: 0.9em; /* 程式碼字體縮小 */
+        }
+
+        /* 語法高亮樣式 (手動模擬) */
+        .keyword { color: #f92672; } /* 例如：int, if, return, bool */
+        .type { color: #66d9ef; } /* 例如：std::cout, FILE */
+        .string { color: #e6db74; } /* 例如："這是一個字串" */
+        .comment { color: #75715e; } /* // 這是一個註解 */
+        .operator { color: #f8f8f2; } /* 例如：=, +, -, /, %, !, &&, ||, >>, <<, ~ */
+        .number { color: #ae81ff; } /* 例如：0, 10, 0x10 */
+        .function { color: #a6e22e; } /* 例如：main, fopen, std::cout */
+        .variable { color: #fd971f; } /* 例如：numerator, denominator, myPointer */
+        .boolean { color: #ae81ff; } /* 例如：true, false, nullptr */
+
+        strong {
+            color: #d9534f;
+        }
+        .example-output {
+            background-color: #fff;
+            border-left: 5px solid #5cb85c;
+            padding: 10px;
+            margin-top: 15px;
+            font-style: italic;
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #0056b3;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>C 語言中的取值符號 `*` 與取址符號 `&amp;` 詳解</h1>
+
+    <p>在 C 語言中，<code>*</code> 和 <code>&amp;</code> 這兩個符號在不同情境下有著截然不同的意義。它們是操作記憶體位址和值的關鍵，尤其在學習指標（Pointer）時更是核心概念。理解它們，就掌握了 C 語言記憶體操作的基礎。</p>
+
+    ---
+
+    <h2>1. 取址符號 <code>&amp;</code> (Address-of Operator)</h2>
+
+    <p>顧名思義，<strong>取址符號 <code>&amp;</code> 用來取得一個變數在記憶體中的「位址」（Address）</strong>。每個變數在被宣告並分配記憶體後，都會有一個獨一無二的記憶體位址，就像我們居住的房子都有一個特定的門牌號碼一樣。</p>
+
+    <ul>
+        <li>當 <code>&amp;</code> 放在變數名稱前面時，它的作用就是告訴編譯器：「請給我這個變數的記憶體位址」。</li>
+        <li>這個位址本身也是一個值，通常表示為一個十六進位數字。</li>
+        <li>取得的位址值，可以儲存在一個<strong>指標變數</strong>中。</li>
+    </ul>
+
+    <h3>概念圖解：</h3>
+<pre><code>
++---------+
+|  變數 x  |  &lt;-- (記憶體空間)
++---------+
+|   值 10  |
++---------+
+  ^
+  |
+  &amp;x (取得變數 x 的記憶體位址，例如：0x7ffeefbff5ac)
+</code></pre>
+
+    ---
+
+    <h2>2. 取值符號 <code>*</code> (Dereference Operator / Indirection Operator)</h2>
+
+    <p><strong>取值符號 <code>*</code> （也稱作解參考運算子或間接運算子）用來「取出」指標所指向記憶體位址中的「值」</strong>。它是 <code>&amp;</code> 運算子的反向操作。</p>
+
+    <ul>
+        <li>當 <code>*</code> 放在一個<strong>指標變數</strong>前面時，它的作用是告訴編譯器：「請到這個指標所儲存的記憶體位址去，把那個位址裡面的值取出來」。</li>
+        <li>除了取值，<code>*</code> 也可以用來修改該記憶體位址中的值。</li>
+    </ul>
+
+    <h3>概念圖解：</h3>
+<pre><code>
++-------------------+
+|  指標變數 ptr_x   |  &lt;-- (儲存記憶體位址的變數)
++-------------------+
+| 儲存位址 0x7ffeefbff5ac |
++-------------------+
+        |
+        V
+      (指向)
++----------------+
+| 記憶體位址 0x7ffeefbff5ac |
++----------------+
+|    原始變數 x 的值 10    |
++----------------+
+        ^
+        |
+        *ptr_x (取出 ptr_x 指向位址中的值，結果是 10)
+</code></pre>
+
+    ---
+
+    <h2>3. 關鍵比較與運作原理</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>特性</th>
+                <th>取址符號 `&amp;`</th>
+                <th>取值符號 `*`</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>主要功能</strong></td>
+                <td>取得變數的<strong>記憶體位址</strong></td>
+                <td>取得<strong>指標所指向位址的內容（值）</strong></td>
+            </tr>
+            <tr>
+                <td><strong>操作對象</strong></td>
+                <td><strong>非指標</strong>變數</td>
+                <td><strong>指標</strong>變數</td>
+            </tr>
+            <tr>
+                <td><strong>結果型別</strong></td>
+                <td>一個指標型別（例如：<code>int*</code>）</td>
+                <td>變數的原始型別（例如：<code>int</code>）</td>
+            </tr>
+            <tr>
+                <td><strong>理解方式</strong></td>
+                <td>「這個變數在哪裡？」</td>
+                <td>「這個地方儲存了什麼？」</td>
+            </tr>
+            <tr>
+                <td><strong>宣告時的 `*`</strong></td>
+                <td>無關，它只是一個運算子</td>
+                <td>宣告指標變數時，用來表明這是一個指標型別</td>
+            </tr>
+            <tr>
+                <td><strong>舉例</strong></td>
+                <td><code>&amp;num</code> (取得 <code>num</code> 的位址)</td>
+                <td><code>*ptr_num</code> (取得 <code>ptr_num</code> 指向的值)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><strong>運作原理：</strong></p>
+    <p>想像電腦的記憶體就像一個個連續的儲物櫃，每個儲物櫃都有一個獨特的編號（記憶體位址）。</p>
+    <ul>
+        <li>當你使用 <code>&amp;</code>，就像是問：「變數 <code>x</code> 的物品放在哪一個儲物櫃裡？」結果就是那個儲物櫃的編號。</li>
+        <li>當你使用 <code>*</code>，就像是拿著一個儲物櫃的編號（指標），然後說：「打開這個儲物櫃，把裡面的東西拿出來！」結果就是儲物櫃裡面的物品。</li>
+    </ul>
+    <p>這兩個符號是互補的：<code>&amp;</code> 得到位址，<code>*</code> 利用位址得到值。</p>
+
+    ---
+
+    <h2>4. 範例說明</h2>
+
+    <h3>範例一：基本概念演示</h3>
+    <p>這個範例展示如何取得變數位址，將其存入指標，再透過指標取回原始值。</p>
+<pre><code><span class="comment">#include &lt;stdio.h&gt;</span> <span class="comment">// 引入標準輸入輸出函式庫</span>
+
+<span class="keyword">int</span> <span class="function">main</span>() {
+    <span class="keyword">int</span> <span class="variable">number</span> <span class="operator">=</span> <span class="number">100</span>; <span class="comment">// 宣告一個整數變數並初始化為 100</span>
+    <span class="keyword">int</span> <span class="operator">*</span><span class="variable">ptr_number</span>; <span class="comment">// 宣告一個整數型態的指標變數</span>
+
+    <span class="comment">// 步驟 1: 使用 &amp; 取得變數 number 的記憶體位址，並將其賦值給指標變數 ptr_number</span>
+    <span class="variable">ptr_number</span> <span class="operator">=</span> <span class="operator">&amp;</span><span class="variable">number</span>;
+    <span class="comment">// 此時，ptr_number 儲存的就是 number 的記憶體位址</span>
+
+    <span class="comment">// 步驟 2: 使用 * 透過指標變數 ptr_number 取出其指向的記憶體位址中的值</span>
+    <span class="keyword">int</span> <span class="variable">value_from_ptr</span> <span class="operator">=</span> <span class="operator">*</span><span class="variable">ptr_number</span>;
+
+    <span class="function">printf</span>(<span class="string">"變數 number 的值: %d\n"</span>, <span class="variable">number</span>);
+    <span class="function">printf</span>(<span class="string">"變數 number 的記憶體位址: %p\n"</span>, <span class="operator">&amp;</span><span class="variable">number</span>); <span class="comment">// %p 用於印出位址</span>
+    <span class="function">printf</span>(<span class="string">"指標 ptr_number 儲存的位址: %p\n"</span>, <span class="variable">ptr_number</span>);
+    <span class="function">printf</span>(<span class="string">"透過指標 ptr_number 取出的值 (*ptr_number): %d\n"</span>, <span class="variable">value_from_ptr</span>);
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+    <div class="example-output">
+        <p><strong>可能輸出結果（記憶體位址會因系統而異）：</strong></p>
+<pre><code>
+變數 number 的值: 100
+變數 number 的記憶體位址: 0x7ffeeefbff5ac  // 這是範例位址，實際執行時會不同
+指標 ptr_number 儲存的位址: 0x7ffeeefbff5ac
+透過指標 ptr_number 取出的值 (*ptr_number): 100
+</code></pre>
+    </div>
+    <p><strong>說明：</strong>
+    這個範例清楚地展示了 <code>&amp;</code> 如何取得變數 <code>number</code> 的記憶體位址，然後將這個位址賦值給指標變數 <code>ptr_number</code>。接著，我們用 <code>*</code> 來「解參考」`ptr_number`，成功地取回了 `number` 的原始值 <code>100</code>。</p>
+
+    <h3>範例二：透過指標修改變數的值</h3>
+    <p>這個範例說明 <code>*</code> 不僅可以取值，還可以修改指標所指向記憶體位址中的值，這會直接影響原始變數。</p>
+<pre><code><span class="comment">#include &lt;stdio.h&gt;</span>
+
+<span class="keyword">int</span> <span class="function">main</span>() {
+    <span class="keyword">int</span> <span class="variable">score</span> <span class="operator">=</span> <span class="number">85</span>; <span class="comment">// 原始分數</span>
+    <span class="keyword">int</span> <span class="operator">*</span><span class="variable">ptr_score</span> <span class="operator">=</span> <span class="operator">&amp;</span><span class="variable">score</span>; <span class="comment">// 指標指向 score 的位址</span>
+
+    <span class="function">printf</span>(<span class="string">"原始 score 的值: %d\n"</span>, <span class="variable">score</span>);      <span class="comment">// 輸出 85</span>
+    <span class="function">printf</span>(<span class="string">"透過指標取出的值 (*ptr_score): %d\n"</span>, <span class="operator">*</span><span class="variable">ptr_score</span>); <span class="comment">// 輸出 85</span>
+
+    <span class="comment">// 透過指標修改 score 的值</span>
+    <span class="operator">*</span><span class="variable">ptr_score</span> <span class="operator">=</span> <span class="number">95</span>; <span class="comment">// 訪問 ptr_score 指向的位址，將其值改為 95</span>
+
+    <span class="function">printf</span>(<span class="string">"修改後 score 的值: %d\n"</span>, <span class="variable">score</span>);      <span class="comment">// 輸出 95</span>
+    <span class="function">printf</span>(<span class="string">"再次透過指標取出的值 (*ptr_score): %d\n"</span>, <span class="operator">*</span><span class="variable">ptr_score</span>); <span class="comment">// 輸出 95</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre>
+    <div class="example-output">
+        <p><strong>輸出結果：</strong></p>
+<pre><code>
+原始 score 的值: 85
+透過指標取出的值 (*ptr_score): 85
+修改後 score 的值: 95
+再次透過指標取出的值 (*ptr_score): 95
+</code></pre>
+    </div>
+    <p><strong>說明：</strong>
+    此範例突顯了指標的強大之處。透過 <code>*ptr_score = 95;</code> 這行程式碼，我們沒有直接操作 <code>score</code> 變數，而是透過指標 <code>ptr_score</code>，修改了它所指向的記憶體位址中的值。這證明了指標是訪問和修改其他變數內容的「間接」方式。</p>
+
+    <h3>範例三：函式參數中的應用 (傳址呼叫)</h3>
+    <p>在函式呼叫中，<code>&amp;</code> 和 <code>*</code> 的配合使用是實現「傳址呼叫」（pass by reference）的關鍵，允許函式修改外部變數的值。</p>
+<pre><code><span class="comment">#include &lt;stdio.h&gt;</span>
+
+<span class="comment">// 宣告一個函式，它接收一個指向整數的指標作為參數</span>
+<span class="comment">// 這裡的 *x 表明 x 是一個指標變數</span>
+<span class="keyword">void</span> <span class="function">addTen</span>(<span class="keyword">int</span> <span class="operator">*</span><span class="variable">x</span>) {
+    <span class="comment">// 使用 *x 來解參考指標 x，取到它指向的原始變數的值，然後加上 10</span>
+    <span class="comment">// 再將結果存回該記憶體位址，從而修改了原始變數</span>
+    <span class="operator">*</span><span class="variable">x</span> <span class="operator">=</span> <span class="operator">*</span><span class="variable">x</span> <span class="operator">+</span> <span class="number">10</span>;
+    <span class="function">printf</span>(<span class="string">"在函式內部，*x 的值: %d\n"</span>, <span class="operator">*</span><span class="variable">x</span>);
+}
+
+<span class="keyword">int</span> <span class="function">main</span>() {
+    <span class="keyword">int</span> <span class="variable">myNumber</span> <span class="operator">=</span> <span class="number">20</span>;
+
+    <span class="function">printf</span>(<span class="string">"呼叫函式前，myNumber 的值: %d\n"</span>, <span class="variable">myNumber</span>); <span class="comment">// 輸出 20</span>
+
+    <span class="comment">// 呼叫 addTen 函式，並傳遞 myNumber 的記憶體位址 (使用 &amp;myNumber)</span>
+    <span class="comment">// 這樣，函式 addTen 就可以直接操作 myNumber 所在的記憶體位置</span>
+    <span class="function">addTen</span>(<span class="operator">&amp;</span><span class="variable">myNumber</span>);
+
+    <span class="function">printf</span>(<span class="string">"呼叫函式後，myNumber 的值: %d\n"</span>, <span class="variable">myNumber</span>); <span class="comment">// 輸出 30</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+```</pre>
+    <div class="example-output">
+        <p><strong>輸出結果：</strong></p>
+<pre><code>
+呼叫函式前，myNumber 的值: 20
+在函式內部，*x 的值: 30
+呼叫函式後，myNumber 的值: 30
+</code></pre>
+    </div>
+    <p><strong>說明：</strong>
+    這個範例是指標在實際程式中最常見且重要的應用之一。在 <code>main</code> 函式中，我們使用 <code>&amp;myNumber</code> 將 <code>myNumber</code> 的位址傳遞給 <code>addTen</code> 函式。在 <code>addTen</code> 函式內部，參數 <code>x</code> 是一個指標，它接收了這個位址。然後，透過 <code>*x = *x + 10;</code>，函式直接操作了 <code>myNumber</code> 所在的記憶體位置，從而成功地修改了 <code>myNumber</code> 的值，而不需要函式回傳值。</p>
+
+    <p>希望這些詳細的解釋和範例能幫助您透徹理解 C 語言中 <code>*</code> 和 <code>&amp;</code> 的概念與運作原理！如果您還有其他問題，歡迎隨時提出。</p>
+
+</body>
+</html>
